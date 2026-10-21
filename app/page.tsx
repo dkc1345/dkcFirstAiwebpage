@@ -300,7 +300,7 @@ export default function Home() {
       />
 
       {/* ── Content area ─── */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+      <div className="flex-1 flex flex-col min-w-0 min-h-screen overflow-x-hidden">
         {/* Topbar */}
         <HeaderTopbar
           activeTab={activeTab}
@@ -321,12 +321,12 @@ export default function Home() {
 
         {/* Main content — tabs are always mounted; hidden via CSS so stateful
              components like the Pomodoro timer keep running across tab switches. */}
-        <main className="flex-1 page-content min-w-0">
+        <main className={`flex-1 min-w-0 ${activeTab === "aichat" ? "p-0 overflow-hidden" : "page-content"}`}>
 
           {/* dashboard */}
           <div
-            style={{ display: activeTab === "dashboard" ? undefined : "none", gap: 'var(--section-gap)' }}
-            className="w-full flex flex-col animate-fadeIn"
+            style={{ display: activeTab === "dashboard" ? undefined : "none" }}
+            className="max-w-7xl mx-auto w-full flex flex-col animate-fadeIn"
           >
             <DashboardTab
               tasks={tasks}

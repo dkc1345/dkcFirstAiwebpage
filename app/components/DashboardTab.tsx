@@ -57,7 +57,7 @@ export default function DashboardTab({
             {/* Left content */}
             <div className="max-w-lg">
               <div className="flex items-center gap-2 mb-3">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-indigo-500/15 text-indigo-400 border border-indigo-500/25">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-bold tracking-widest uppercase bg-indigo-500/15 text-indigo-400 border border-indigo-500/25">
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse-dot" />
                   {user?.role ?? "Academic Dashboard"}
                 </span>
@@ -69,7 +69,7 @@ export default function DashboardTab({
                 <span className="inline-block animate-float">{greetingEmoji}</span>
               </h1>
 
-              <p className="text-[14px] text-zinc-400 leading-relaxed mb-5">
+              <p className="text-scale-sm sm:text-scale-base text-zinc-400 leading-relaxed mb-5">
                 You have{" "}
                 <span className="font-bold text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded-md">
                   {pendingTasks.length} tasks
@@ -85,7 +85,7 @@ export default function DashboardTab({
                 <button
                   id="start-focus-btn"
                   onClick={() => go("pomodoro")}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-[13px] font-bold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-indigo-500/25 cursor-pointer"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-scale-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-indigo-500/25 cursor-pointer"
                 >
                   <Flame className="w-3.5 h-3.5" /> Start Focus Session
                   <ArrowRight className="w-3.5 h-3.5 ml-0.5" />
@@ -94,7 +94,7 @@ export default function DashboardTab({
                   <button
                     id="sign-in-btn"
                     onClick={() => { onOpenAuth(); sound.playClick(); }}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-zinc-300 text-[13px] font-semibold border border-white/[0.08] hover:border-white/[0.15] transition-all cursor-pointer"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-zinc-300 text-scale-sm font-semibold border border-white/[0.08] hover:border-white/[0.15] transition-all cursor-pointer"
                   >
                     <LogIn className="w-3.5 h-3.5" /> Sign In
                   </button>
@@ -102,7 +102,7 @@ export default function DashboardTab({
                   <button
                     id="review-homework-btn"
                     onClick={() => go("tasks")}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-zinc-300 text-[13px] font-semibold border border-white/[0.08] hover:border-indigo-500/30 transition-all cursor-pointer"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] text-zinc-300 text-scale-sm font-semibold border border-white/[0.08] hover:border-indigo-500/30 transition-all cursor-pointer"
                   >
                     <CheckSquare className="w-3.5 h-3.5" /> Review Homework ({pendingTasks.length})
                   </button>
@@ -114,23 +114,23 @@ export default function DashboardTab({
             <div className="flex sm:flex-col gap-5 sm:gap-3 sm:items-end shrink-0">
               {/* Streak */}
               <div className="text-center sm:text-right">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-600 mb-1">Study Streak</p>
+                <p className="text-2xs font-bold uppercase tracking-widest text-zinc-600 mb-1">Study Streak</p>
                 <div className="flex items-center gap-1 justify-center sm:justify-end">
                   <Flame className="w-4 h-4 text-amber-400" />
                   <span className="text-2xl font-black text-white">7</span>
-                  <span className="text-[12px] text-zinc-500 ml-0.5">days</span>
+                  <span className="text-scale-xs text-zinc-500 ml-0.5">days</span>
                 </div>
               </div>
               {/* Daily progress */}
               <div className="text-center sm:text-right">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-600 mb-1.5">Today&apos;s Goal</p>
+                <p className="text-2xs font-bold uppercase tracking-widest text-zinc-600 mb-1.5">Today&apos;s Goal</p>
                 <div className="w-28 h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
                   <div
                     className="h-full rounded-full progress-bar-gradient transition-all duration-1000"
                     style={{ width: `${studyProgress}%` }}
                   />
                 </div>
-                <p className="text-[11px] text-zinc-500 mt-1">{todayFocusMinutes}/90 min</p>
+                <p className="text-2xs text-zinc-500 mt-1">{todayFocusMinutes}/90 min</p>
               </div>
             </div>
           </div>
@@ -138,7 +138,7 @@ export default function DashboardTab({
       </div>
 
       {/* ── KPI Stat Cards ──────────────────────────── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4" style={{ gap: 'var(--card-gap)' }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style={{ gap: 'var(--card-gap)' }}>
         {[
           {
             label: "Pending Tasks", value: String(pendingTasks.length),
@@ -179,14 +179,14 @@ export default function DashboardTab({
             <div className={`absolute -right-3 -top-3 w-16 h-16 rounded-full blur-2xl opacity-25 pointer-events-none ${card.iconCls.split(" ")[1]}`} />
 
             <div className="flex items-start justify-between mb-3">
-              <p className="text-[10px] font-bold tracking-wider text-zinc-500 uppercase">{card.label}</p>
+              <p className="text-2xs font-bold tracking-wider text-zinc-500 uppercase">{card.label}</p>
               <span className={`w-8 h-8 rounded-xl flex items-center justify-center border shrink-0 transition-transform group-hover:scale-110 ${card.iconCls}`}>
                 {card.icon}
               </span>
             </div>
 
             <p className="text-[26px] font-black text-white leading-none mb-1.5">{card.value}</p>
-            <p className="text-[12px] text-zinc-500">{card.sub}</p>
+            <p className="text-scale-xs text-zinc-500">{card.sub}</p>
 
             {card.progress !== undefined && (
               <div className="mt-3.5 w-full h-1.5 rounded-full bg-white/[0.05] overflow-hidden">
@@ -222,7 +222,7 @@ export default function DashboardTab({
             <button
               id="view-all-tasks-btn"
               onClick={() => go("tasks")}
-              className="text-[12px] text-zinc-500 hover:text-indigo-400 flex items-center gap-1 transition-colors cursor-pointer font-medium"
+              className="text-scale-xs text-zinc-500 hover:text-indigo-400 flex items-center gap-1 transition-colors cursor-pointer font-medium"
             >
               View all <ChevronRight className="w-3.5 h-3.5" />
             </button>
@@ -253,25 +253,25 @@ export default function DashboardTab({
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <p className={`text-[13px] font-medium truncate transition-all ${task.completed ? "line-through text-zinc-600" : "text-zinc-200"}`}>
+                  <p className={`text-scale-sm font-medium truncate transition-all ${task.completed ? "line-through text-zinc-600" : "text-zinc-200"}`}>
                     {task.title}
                   </p>
                   <div className="flex flex-wrap items-center gap-1.5 mt-1">
                     <span
-                      className="text-[11px] font-bold px-1.5 py-0.5 rounded-md"
+                      className="text-2xs font-bold px-1.5 py-0.5 rounded-md"
                       style={{ backgroundColor: `${task.subjectColor}18`, color: task.subjectColor }}
                     >
                       {task.subject}
                     </span>
-                    <span className="text-[11px] text-zinc-600">{task.dueDate}</span>
-                    <span className="text-[11px] text-zinc-600 flex items-center gap-0.5">
+                    <span className="text-2xs text-zinc-600">{task.dueDate}</span>
+                    <span className="text-2xs text-zinc-600 flex items-center gap-0.5">
                       <Clock className="w-3 h-3" /> ~{task.estimatedMinutes}m
                     </span>
                   </div>
                 </div>
 
                 {/* Priority badge */}
-                <span className={`shrink-0 text-[10px] font-black px-2 py-1 rounded-lg uppercase tracking-widest ${task.priority === "Urgent"
+                <span className={`shrink-0 text-2xs font-black px-2 py-1 rounded-lg uppercase tracking-widest ${task.priority === "Urgent"
                   ? "bg-rose-500/12 text-rose-400 border border-rose-500/20"
                   : task.priority === "High"
                     ? "bg-amber-500/12 text-amber-400 border border-amber-500/20"
@@ -287,8 +287,8 @@ export default function DashboardTab({
                 <div className="w-14 h-14 rounded-2xl mx-auto mb-3 flex items-center justify-center bg-emerald-500/10 border border-emerald-500/20">
                   <CheckCircle2 className="w-7 h-7 text-emerald-400" />
                 </div>
-                <p className="text-[14px] font-bold text-white mb-1">All caught up!</p>
-                <p className="text-[12px] text-zinc-500">No pending homework tasks. Great work!</p>
+                <p className="text-scale-base font-bold text-white mb-1">All caught up!</p>
+                <p className="text-scale-xs text-zinc-500">No pending homework tasks. Great work!</p>
               </div>
             )}
           </div>
@@ -307,7 +307,7 @@ export default function DashboardTab({
                 <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
                   <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
                 </div>
-                <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-zinc-500">Daily Mindset</span>
+                <span className="text-2xs font-bold uppercase tracking-[0.1em] text-zinc-500">Daily Mindset</span>
               </div>
               <button
                 id="shuffle-quote-btn"
@@ -322,7 +322,7 @@ export default function DashboardTab({
             <blockquote className="text-[13px] text-zinc-300 italic leading-relaxed border-l-2 border-indigo-500/50 pl-3.5 mb-2.5">
               &ldquo;{currentQuote.text}&rdquo;
             </blockquote>
-            <p className="text-right text-[12px] font-semibold text-indigo-400">— {currentQuote.author}</p>
+            <p className="text-right text-scale-xs font-semibold text-indigo-400">— {currentQuote.author}</p>
           </div>
 
           {/* Campus Bulletin */}
@@ -354,7 +354,7 @@ export default function DashboardTab({
                       {a.date}
                     </span>
                   </div>
-                  <p className="text-[11px] text-zinc-500 leading-relaxed">{a.desc}</p>
+                  <p className="text-2xs text-zinc-500 leading-relaxed">{a.desc}</p>
                 </div>
               ))}
             </div>
@@ -366,7 +366,7 @@ export default function DashboardTab({
       <div className="min-w-0">
         <div className="flex items-center gap-2 mb-3.5">
           <Zap className="w-3.5 h-3.5 text-indigo-400" />
-          <p className="text-[11px] font-bold tracking-[0.12em] uppercase text-zinc-600">Quick Access</p>
+          <p className="text-2xs font-bold tracking-[0.12em] uppercase text-zinc-600">Quick Access</p>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4" style={{ gap: 'var(--card-gap)' }}>
           {[
@@ -384,7 +384,7 @@ export default function DashboardTab({
               <div className={`w-11 h-11 rounded-2xl flex items-center justify-center border transition-transform group-hover:scale-110 group-hover:rotate-3 ${q.iconBg}`}>
                 {q.icon}
               </div>
-              <span className="text-[12px] font-semibold text-zinc-400 group-hover:text-zinc-200 transition-colors">{q.label}</span>
+              <span className="text-scale-xs font-semibold text-zinc-400 group-hover:text-zinc-200 transition-colors">{q.label}</span>
             </button>
           ))}
         </div>

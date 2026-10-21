@@ -1,14 +1,23 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { sound } from "../audio";
 import { TabKey } from "./Navbar";
 import { UserProfile } from "./AuthModal";
 import {
-  LayoutDashboard, CheckSquare, Timer, BookOpen,
-  Calculator, Compass, Calendar, FileText,
-  LogOut, Palette, Zap, GraduationCap,
+  LayoutDashboard,
+  CheckSquare,
+  Timer,
+  BookOpen,
+  Calculator,
+  Compass,
+  Calendar,
+  FileText,
+  Palette,
+  ChevronRight,
+  Menu,
+  GraduationCap,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -23,78 +32,27 @@ interface SidebarProps {
   onOpenSettings: () => void;
 }
 
-const nav: {
+interface NavItemConfig {
   key: TabKey;
   label: string;
-  icon: React.ReactNode;
-  badge?: "task";
-  iconActive: string;
-  iconInactive: string;
-}[] = [
-  {
-    key: "dashboard",
-    label: "Dashboard",
-    icon: <LayoutDashboard className="w-[15px] h-[15px]" />,
-    iconActive: "text-white",
-    iconInactive: "text-indigo-400/70 group-hover:text-indigo-300",
-  },
-  {
-    key: "tasks",
-    label: "Tasks & Homework",
-    icon: <CheckSquare className="w-[15px] h-[15px]" />,
-    badge: "task",
-    iconActive: "text-white",
-    iconInactive: "text-rose-400/70 group-hover:text-rose-300",
-  },
-  {
-    key: "pomodoro",
-    label: "Focus Lab",
-    icon: <Timer className="w-[15px] h-[15px]" />,
-    iconActive: "text-white",
-    iconInactive: "text-amber-400/70 group-hover:text-amber-300",
-  },
-  {
-    key: "flashcards",
-    label: "Study & Quiz",
-    icon: <BookOpen className="w-[15px] h-[15px]" />,
-    iconActive: "text-white",
-    iconInactive: "text-cyan-400/70 group-hover:text-cyan-300",
-  },
-  {
-    key: "gpa",
-    label: "GPA Analytics",
-    icon: <Calculator className="w-[15px] h-[15px]" />,
-    iconActive: "text-white",
-    iconInactive: "text-emerald-400/70 group-hover:text-emerald-300",
-  },
-  {
-    key: "stem",
-    label: "STEM Toolkit",
-    icon: <Compass className="w-[15px] h-[15px]" />,
-    iconActive: "text-white",
-    iconInactive: "text-purple-400/70 group-hover:text-purple-300",
-  },
-  {
-    key: "schedule",
-    label: "Class Schedule",
-    icon: <Calendar className="w-[15px] h-[15px]" />,
-    iconActive: "text-white",
-    iconInactive: "text-blue-400/70 group-hover:text-blue-300",
-  },
-  {
-    key: "notes",
-    label: "Scratchpad",
-    icon: <FileText className="w-[15px] h-[15px]" />,
-    iconActive: "text-white",
-    iconInactive: "text-pink-400/70 group-hover:text-pink-300",
-  },
-];
+  icon: (active: boolean) => React.ReactNode;
+  badge?: "task" | "static";
+  badgeCount?: number;
+  badgeColor?: string;
+}
 
 export default function Sidebar({
-  activeTab, setActiveTab, taskCount,
-  user, onOpenAuth, onSignOut,
-  isOpen, setIsOpen, onOpenSettings,
+  activeTab,
+  setActiveTab,
+  taskCount,
+  user,
+  onOpenAuth,
+  onSignOut,
+  isOpen,
+  setIsOpen,
+  onOpenSettings,
 }: SidebarProps) {
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   const go = (key: TabKey) => {
     setActiveTab(key);
@@ -102,121 +60,306 @@ export default function Sidebar({
     setIsOpen(false);
   };
 
-  const sidebarBody = (
-    <div className="flex flex-col h-full">
+  const navGroups: {
+    sectionTitle: string;
+    items: NavItemConfig[];
+  }[] = [
+      {
+        sectionTitle: "NAVIGATION",
+        items: [
+          {
+            key: "dashboard",
+            label: "Dashboard",
+            icon: () => <LayoutDashboard className="w-[18px] h-[18px]" strokeWidth={1.8} />,
+          },
+          {
+            key: "tasks",
+            label: "Tasks & Homework",
+            icon: () => <CheckSquare className="w-[18px] h-[18px]" strokeWidth={1.8} />,
+            badge: "task",
+            badgeColor: "amber",
+          },
+          {
+            key: "pomodoro",
+            label: "Focus Lab",
+            icon: () => <Timer className="w-[18px] h-[18px]" strokeWidth={1.8} />,
+          },
+          {
+            key: "flashcards",
+            label: "Study & Quiz",
+            icon: () => <BookOpen className="w-[18px] h-[18px]" strokeWidth={1.8} />,
+          },
+          {
+            key: "gpa",
+            label: "GPA Analytics",
+            icon: () => <Calculator className="w-[18px] h-[18px]" strokeWidth={1.8} />,
+          },
+          {
+            key: "stem",
+            label: "STEM Toolkit",
+            icon: () => <Compass className="w-[18px] h-[18px]" strokeWidth={1.8} />,
+          },
+        ],
+      },
+      {
+        sectionTitle: "INSIGHT",
+        items: [
+          {
+            key: "schedule",
+            label: "Class Schedule",
+            icon: () => <Calendar className="w-[18px] h-[18px]" strokeWidth={1.8} />,
+          },
+          {
+            key: "notes",
+            label: "Scratchpad",
+            icon: () => <FileText className="w-[18px] h-[18px]" strokeWidth={1.8} />,
+          },
+        ],
+      },
+    ];
 
-      {/* ── Logo ───────────────────────────────────── */}
-      <div
-        onClick={() => go("dashboard")}
-        className="flex items-center gap-3 px-5 h-[var(--topbar-h)] border-b border-[var(--border)] cursor-pointer group shrink-0"
-      >
-        <div className="relative w-9 h-9 shrink-0">
-          <div className="w-9 h-9 rounded-xl overflow-hidden ring-2 ring-indigo-500/30 group-hover:ring-indigo-500/60 transition-all duration-300 shadow-lg shadow-indigo-500/10">
-            <Image
-              src={user?.avatar || "/scholar_avatar.jpg"}
-              alt="Logo"
-              width={36} height={36}
-              unoptimized
-              className="object-cover"
-            />
-          </div>
-        </div>
-        <div className="min-w-0">
-          <p className="font-bold text-[14px] text-[var(--text)] leading-tight tracking-tight">ScholarSync</p>
-          <p className="text-[11px] text-[var(--text-subtle)] mt-0.5 flex items-center gap-1">
-            <Zap className="w-2.5 h-2.5 text-indigo-400" />
-            Academic Hub
-          </p>
-        </div>
+  const getBadgeClasses = (color?: string) => {
+    switch (color) {
+      case "amber":
+        return "bg-[#f59e0b] text-white";
+      case "emerald":
+        return "bg-[#10b981] text-white";
+      case "cyan":
+        return "bg-[#06b6d4] text-white";
+      case "orange":
+        return "bg-[#fb923c] text-white";
+      case "blue":
+        return "bg-[#3b82f6] text-white";
+      case "rose":
+        return "bg-[#f43f5e] text-white";
+      case "purple":
+        return "bg-[#8b5cf6] text-white";
+      default:
+        return "bg-[#6366f1] text-white";
+    }
+  };
+
+  const getDotColor = (color?: string) => {
+    switch (color) {
+      case "amber":
+        return "bg-[#f59e0b]";
+      case "emerald":
+        return "bg-[#10b981]";
+      case "cyan":
+        return "bg-[#06b6d4]";
+      case "orange":
+        return "bg-[#fb923c]";
+      case "blue":
+        return "bg-[#3b82f6]";
+      case "rose":
+        return "bg-[#f43f5e]";
+      case "purple":
+        return "bg-[#8b5cf6]";
+      default:
+        return "bg-[#6366f1]";
+    }
+  };
+
+  const renderContent = (collapsed: boolean) => (
+    <div className="flex flex-col h-full bg-[var(--bg-card)] text-[var(--text)] select-none">
+      {/* ── Header: Brand Logo & Collapse Trigger ───────────────────── */}
+      <div className={`flex items-center ${collapsed ? "justify-center" : "justify-between"} h-[var(--topbar-h)] px-4 shrink-0 border-b border-[var(--border)]`}>
+        {collapsed ? (
+          <button
+            onClick={() => setIsCollapsed(false)}
+            className="flex flex-col items-center gap-1 cursor-pointer group"
+            title="Expand sidebar"
+          >
+            <div className="p-1.5 rounded-xl text-[var(--text-muted)] group-hover:text-[var(--text)] group-hover:bg-black/5 dark:group-hover:bg-white/5 transition-all">
+              <Menu className="w-5 h-5" />
+            </div>
+            <span className="font-extrabold text-scale-sm tracking-tight text-[var(--text)]">
+              Sc<span className="text-indigo-400">.</span>
+            </span>
+          </button>
+        ) : (
+          <>
+            <div
+              onClick={() => go("dashboard")}
+              className="flex items-center gap-2 cursor-pointer group"
+            >
+              <span className="text-scale-md font-black tracking-tight text-[var(--text)] group-hover:text-indigo-400 transition-colors">
+                ScholarSync
+              </span>
+            </div>
+            <button
+              onClick={() => setIsCollapsed(true)}
+              className="p-1.5 rounded-xl text-[var(--text-subtle)] hover:text-[var(--text)] hover:bg-black/5 dark:hover:bg-white/5 transition-all cursor-pointer"
+              title="Collapse sidebar"
+            >
+              <Menu className="w-4 h-4" />
+            </button>
+          </>
+        )}
       </div>
 
-      {/* ── Navigation ─────────────────────────────── */}
-      <nav className="flex-1 overflow-y-auto py-4 px-2.5 space-y-0.5">
-        <p className="px-3 mb-3 text-[10px] font-bold tracking-[0.14em] text-[var(--text-subtle)] uppercase">
-          Navigation
-        </p>
-        {nav.map((item) => {
-          const active = activeTab === item.key;
-          return (
-            <button
-              key={item.key}
-              onClick={() => go(item.key)}
-              className={`
-                w-full flex items-center justify-between px-3 py-2.5 rounded-xl
-                text-[13px] font-medium transition-all duration-150 group cursor-pointer
-                relative
-                ${active
-                  ? "sidebar-active-item bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-lg shadow-indigo-500/20"
-                  : "text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-neutral-800/60 dark:hover:bg-zinc-800/70"
-                }
-              `}
-            >
-              <span className="flex items-center gap-2.5">
-                <span className={`transition-all duration-150 ${active ? item.iconActive : item.iconInactive}`}>
-                  {item.icon}
-                </span>
-                {item.label}
-              </span>
-              {item.badge === "task" && taskCount > 0 && (
-                <span className={`
-                  px-1.5 py-0.5 rounded-lg text-[10px] font-bold leading-none
-                  ${active
-                    ? "bg-white/25 text-white"
-                    : "bg-rose-500/15 text-rose-400 border border-rose-500/20"
-                  }
-                `}>
-                  {taskCount}
-                </span>
-              )}
-            </button>
-          );
-        })}
+      {/* ── Navigation Groups ─────────────────────────────── */}
+      <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-5 scrollbar-none">
+        {navGroups.map((group) => (
+          <div key={group.sectionTitle} className="space-y-1">
+            {!collapsed && (
+              <p className="px-3 mb-2 text-2xs font-bold tracking-[0.14em] text-[var(--text-subtle)] uppercase">
+                {group.sectionTitle}
+              </p>
+            )}
+
+            {group.items.map((item) => {
+              const active = activeTab === item.key;
+              const hasBadge =
+                item.badge === "task"
+                  ? taskCount > 0
+                  : item.badge === "static" && item.badgeCount !== undefined;
+              const badgeValue =
+                item.badge === "task" ? taskCount : item.badgeCount;
+
+              return (
+                <button
+                  key={item.key}
+                  onClick={() => go(item.key)}
+                  title={collapsed ? item.label : undefined}
+                  className={`
+                    w-full flex items-center ${collapsed ? "justify-center" : "justify-start gap-[10px]"}
+                    ${collapsed ? "h-11 px-0" : "px-3.5 py-2.5"} rounded-xl
+                    text-scale-sm font-medium transition-all duration-150 cursor-pointer relative group
+                    ${active
+                      ? "text-[var(--text)] font-semibold bg-indigo-500/10 dark:bg-white/[0.08] shadow-sm ring-1 ring-indigo-500/30 dark:ring-white/[0.12]"
+                      : "text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-black/[0.03] dark:hover:bg-white/[0.04]"
+                    }
+                  `}
+                >
+                  {/* Left Icon & Label */}
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span
+                      className={`shrink-0 transition-colors ${active
+                          ? "text-indigo-500 dark:text-indigo-400"
+                          : "text-[var(--text-muted)] group-hover:text-[var(--text)]"
+                        }`}
+                    >
+                      {item.icon(active)}
+                    </span>
+                    {!collapsed && (
+                      <span className="whitespace-nowrap">{item.label}</span>
+                    )}
+                  </div>
+
+                  {/* Badge or indicator */}
+                  {!collapsed && hasBadge && badgeValue !== undefined && (
+                    <span
+                      className={`
+                        ml-auto min-w-[20px] px-1.5 py-0.5 rounded-full text-[11px] font-bold tracking-tight text-center leading-tight
+                        shadow-sm transition-transform group-hover:scale-105 shrink-0
+                        ${getBadgeClasses(item.badgeColor)}
+                      `}
+                    >
+                      {badgeValue}
+                    </span>
+                  )}
+
+                  {/* Dot indicator when collapsed */}
+                  {collapsed && hasBadge && (
+                    <span
+                      className={`
+                        absolute top-2.5 right-2.5 w-2 h-2 rounded-full ring-2 ring-[var(--bg-card)]
+                        ${getDotColor(item.badgeColor)}
+                      `}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        ))}
       </nav>
 
-      {/* ── Theme Toggle ───────────────────────────── */}
-      <div className="px-2.5 pt-2 pb-1 border-t border-[var(--border)] shrink-0">
+      {/* ── Theme Button ─────────────────────────── */}
+      <div className={`px-3 py-2 border-t border-[var(--border)] shrink-0 ${collapsed ? "flex justify-center" : ""}`}>
         <button
-          onClick={() => { sound.playClick(); onOpenSettings(); setIsOpen(false); }}
-          className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] font-medium text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-neutral-800/60 dark:hover:bg-zinc-800/70 transition-all duration-150 group cursor-pointer"
+          onClick={() => {
+            sound.playClick();
+            onOpenSettings();
+            setIsOpen(false);
+          }}
+          className={`
+            flex items-center ${collapsed ? "justify-center w-11 h-11" : "justify-between w-full px-3 py-2"}
+            rounded-xl text-scale-xs font-medium text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-black/5 dark:hover:bg-white/5 transition-all cursor-pointer group
+          `}
+          title="Themes & Appearance"
         >
-          <span className="flex items-center gap-2.5">
-            <span className="text-[var(--text-subtle)] group-hover:text-indigo-400 group-hover:rotate-12 transition-all duration-200">
-              <Palette className="w-[15px] h-[15px]" />
+          <div className="flex items-center gap-2.5 min-w-0">
+            <Palette className="w-4 h-4 text-indigo-400 group-hover:rotate-12 transition-transform duration-200 shrink-0" />
+            {!collapsed && <span className="whitespace-nowrap">Themes & Colors</span>}
+          </div>
+          {!collapsed && (
+            <span className="text-[10px] font-bold text-indigo-400 px-1.5 py-0.5 rounded-md bg-indigo-500/10 border border-indigo-500/20 shrink-0">
+              5
             </span>
-            Theme & Colors
-          </span>
-          <span className="text-[10px] font-bold text-indigo-400 px-2 py-0.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20">
-            5 Styles
-          </span>
+          )}
         </button>
       </div>
 
-      {/* ── User Footer ────────────────────────────── */}
-      <div className="border-t border-[var(--border)] p-3 shrink-0">
+      {/* ── Profile Card ─────────────── */}
+      <div className="p-3 border-t border-[var(--border)] shrink-0">
         {user ? (
-          <div className="flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl bg-white/[0.03] border border-[var(--border)] hover:border-[var(--border-focus)]/20 transition-colors">
-            <div className="status-online shrink-0 w-8 h-8 rounded-full overflow-hidden ring-2 ring-emerald-500/30">
-              <Image src={user.avatar} alt="Avatar" width={32} height={32} unoptimized className="object-cover" />
+          <div
+            onClick={() => {
+              onOpenAuth();
+              sound.playClick();
+            }}
+            className={`
+              flex items-center ${collapsed ? "justify-center p-1.5" : "gap-3 p-2.5"}
+              rounded-xl bg-[var(--bg-input)] border border-[var(--border)] hover:border-indigo-500/30
+              hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-all cursor-pointer group relative overflow-hidden
+            `}
+            title={`Account: ${user.name}`}
+          >
+            {/* Avatar */}
+            <div className="relative shrink-0 w-8 h-8 rounded-full overflow-hidden ring-2 ring-indigo-500/30 group-hover:ring-indigo-500/60 transition-all">
+              <Image
+                src={user.avatar || "/scholar_avatar.jpg"}
+                alt="Avatar"
+                width={32}
+                height={32}
+                unoptimized
+                className="w-full h-full object-cover"
+              />
             </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-[13px] font-semibold text-[var(--text)] truncate leading-none">{user.name}</p>
-              <p className="text-[11px] text-[var(--text-muted)] truncate mt-0.5">{user.role}</p>
-            </div>
-            <button
-              onClick={() => { onSignOut(); sound.playClick(); }}
-              className="p-1.5 rounded-lg text-[var(--text-subtle)] hover:text-rose-400 hover:bg-rose-500/10 transition-all shrink-0 cursor-pointer"
-              title="Sign out"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-            </button>
+
+            {/* Profile Info & Action Arrow */}
+            {!collapsed && (
+              <>
+                <div className="min-w-0 flex-1">
+                  <p className="text-scale-sm font-bold text-[var(--text)] truncate leading-tight">
+                    {user.name}
+                  </p>
+                  <p className="text-2xs text-[var(--text-subtle)] truncate mt-0.5">
+                    {user.email}
+                  </p>
+                </div>
+                <div className="w-6 h-6 rounded-full flex items-center justify-center border border-[var(--border)] bg-[var(--bg-card)] group-hover:border-indigo-400 text-[var(--text-muted)] group-hover:text-indigo-400 transition-colors shrink-0">
+                  <ChevronRight className="w-3 h-3" />
+                </div>
+              </>
+            )}
           </div>
         ) : (
           <button
-            onClick={() => { onOpenAuth(); sound.playClick(); }}
-            className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-[13px] font-semibold transition-all shadow-lg shadow-indigo-500/20 cursor-pointer"
+            onClick={() => {
+              onOpenAuth();
+              sound.playClick();
+            }}
+            className={`
+              w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl
+              bg-indigo-600 hover:bg-indigo-500 text-white text-[13px] font-semibold
+              transition-all shadow-md shadow-indigo-600/20 cursor-pointer
+            `}
           >
-            <GraduationCap className="w-3.5 h-3.5" />
-            Sign In to ScholarSync
+            <GraduationCap className="w-4 h-4 shrink-0" />
+            {!collapsed && <span>Sign In</span>}
           </button>
         )}
       </div>
@@ -225,28 +368,35 @@ export default function Sidebar({
 
   return (
     <>
-      {/* ── Desktop Sidebar ── */}
-      <aside className="hidden lg:flex flex-col w-[var(--sidebar-w)] shrink-0 h-screen sticky top-0 bg-[var(--bg-sidebar)] border-r border-[var(--border)] z-30 transition-colors duration-300">
-        {sidebarBody}
+      {/* ── Desktop Straight Edge Full-Height Sidebar ────────────────────────── */}
+      <aside
+        className={`
+          hidden lg:flex flex-col shrink-0 h-screen sticky top-0 z-30
+          border-r border-[var(--border)] bg-[var(--bg-card)]
+          transition-all duration-300 ease-in-out
+          ${isCollapsed ? "w-[72px]" : "w-[260px]"}
+        `}
+      >
+        {renderContent(isCollapsed)}
       </aside>
 
-      {/* ── Mobile Overlay ── */}
+      {/* ── Mobile Overlay & Drawer ─────────────────────────────────── */}
       {isOpen && (
         <div
           onClick={() => setIsOpen(false)}
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden transition-opacity"
         />
       )}
 
       <aside
         className={`
-          fixed inset-y-0 left-0 z-50 flex flex-col w-[var(--sidebar-w)]
-          bg-[var(--bg-sidebar)] border-r border-[var(--border)]
-          transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] lg:hidden
-          ${isOpen ? "translate-x-0 shadow-2xl shadow-black/40" : "-translate-x-full"}
+          fixed inset-y-0 left-0 z-50 flex flex-col w-[270px]
+          bg-[var(--bg-card)] border-r border-[var(--border)] shadow-2xl
+          transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] lg:hidden
+          ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        {sidebarBody}
+        {renderContent(false)}
       </aside>
     </>
   );

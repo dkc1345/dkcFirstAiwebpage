@@ -87,23 +87,33 @@ export default function HeaderTopbar({
       <div className="flex-1 min-w-0 flex items-center gap-2.5">
         <span className="text-xl leading-none hidden sm:block animate-float">{emoji}</span>
         <div className="min-w-0">
-          <h1 className="text-[15px] font-bold text-[var(--text)] truncate leading-none">
+          <h1 className="text-scale-md font-bold text-[var(--text)] truncate leading-none">
             {label}
           </h1>
-          <p className="text-[11px] text-[var(--text-subtle)] hidden sm:block mt-0.5 truncate">
+          <p className="text-2xs text-[var(--text-subtle)] hidden sm:block mt-0.5 truncate">
             {desc}
             {timeStr && <span className="ml-2 font-mono text-[var(--text-subtle)]/70">· {timeStr}</span>}
           </p>
         </div>
       </div>
 
-      {/* ── Search bar (desktop only) ─── */}
+      {/* ── Search bar (desktop and mobile) ─── */}
+      <button
+        id="command-palette-btn-mobile"
+        onClick={onOpenPalette}
+        className="md:hidden shrink-0 p-2 rounded-lg text-[var(--text-muted)] hover:text-indigo-400 hover:bg-white/[0.06] transition-colors cursor-pointer"
+        title="Quick search (Cmd+K)"
+        aria-label="Search"
+      >
+        <Search className="w-4 h-4" />
+      </button>
+
       <button
         id="command-palette-btn"
         onClick={onOpenPalette}
         className="
           hidden md:flex items-center gap-2.5 px-3.5 py-2 rounded-xl shrink-0 w-52 cursor-pointer
-          bg-white/[0.04] border border-[var(--border)] text-[var(--text-muted)] text-[13px]
+          bg-white/[0.04] border border-[var(--border)] text-[var(--text-muted)] text-scale-xs
           hover:border-indigo-500/40 hover:text-[var(--text)] hover:bg-white/[0.06]
           transition-all duration-200
         "

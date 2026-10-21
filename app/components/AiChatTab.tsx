@@ -478,13 +478,20 @@ export default function AiChatTab({ onExit }: AiChatTabProps) {
   const [inputMsg, setInputMsg] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [showScrollBtn, setShowScrollBtn] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+
+  // Auto-open sidebar on wide screens (desktop) and keep closed on mobile/tablet
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth >= 1024) {
+      setSidebarOpen(true);
+    }
+  }, []);
 
   // Load saved history
   useEffect(() => {
@@ -495,7 +502,7 @@ export default function AiChatTab({ onExit }: AiChatTabProps) {
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        if (sidebarOpen && window.innerWidth < 640) {
+        if (sidebarOpen && window.innerWidth < 1024) {
           setSidebarOpen(false);
         } else if (onExit) {
           e.preventDefault();
@@ -701,12 +708,48 @@ export default function AiChatTab({ onExit }: AiChatTabProps) {
           padding: 14px 12px;
           gap: 10px;
         }
+        .chat-sidebar-head-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          width: 100%;
+        }
+        .chat-sidebar-close-btn {
+          display: none;
+          align-items: center;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+          border-radius: 10px;
+          background: var(--bg-card);
+          border: 1px solid var(--border);
+          color: var(--text-muted);
+          cursor: pointer;
+          flex-shrink: 0;
+          transition: background 0.15s, color 0.15s;
+        }
+        .chat-sidebar-close-btn:hover {
+          background: var(--bg-card-hover);
+          color: var(--text);
+        }
+        .chat-sidebar-backdrop {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.65);
+          backdrop-filter: blur(4px);
+          z-index: 45;
+          animation: fadeIn 0.2s ease-out;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
         .chat-new-btn {
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 8px;
-          width: 100%;
+          flex: 1;
           padding: 10px 14px;
           border-radius: 10px;
           background: var(--accent);
@@ -1721,46 +1764,187 @@ export default function AiChatTab({ onExit }: AiChatTabProps) {
           color: var(--text-muted);
         }
 
-        /* ── Mobile responsive ── */
-        @media (max-width: 640px) {
+        /* ── Tablet & Mobile responsive (<= 1024px) ── */
+        @media (max-width: 1024px) {
           .chat-sidebar {
-            position: absolute;
+            position: fixed;
             left: 0;
-            top: 0;
-            height: 100%;
+            top: var(--topbar-h);
+            bottom: 0;
+            height: calc(100vh - var(--topbar-h));
+            width: 280px;
+            max-width: 85vw;
             z-index: 50;
-            box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+            box-shadow: 8px 0 32px rgba(0, 0, 0, 0.45);
+            transform: translateX(0);
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
           }
           .chat-sidebar.closed {
+            transform: translateX(-100%);
+            width: 280px;
+            min-width: 280px;
+            opacity: 0;
+            pointer-events: none;
+            display: flex;
+          }
+          .chat-sidebar.open {
+            transform: translateX(0);
+            width: 280px;
+            min-width: 280px;
+            opacity: 1;
+            pointer-events: auto;
+          }
+          .chat-sidebar-inner {
+            width: 100%;
+          }
+          .chat-sidebar-close-btn {
+            display: flex;
+          }
+          .chat-topbar {
+            padding: 8px 12px;
+          }
+          .chat-messages {
+            padding: 20px 14px;
+            gap: 20px;
+          }
+        }
+
+        /* ── Mobile specific (<= 640px) ── */
+        @media (max-width: 640px) {
+          .chat-topbar {
+            padding: 8px 10px;
+            gap: 8px;
+          }
+          .chat-topbar-left {
+            gap: 8px;
+          }
+          .chat-bot-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+          }
+          .chat-bot-name {
+            font-size: 13px;
+          }
+          .chat-tutor-badge {
             display: none;
           }
-          .chat-messages { padding: 16px 12px; gap: 18px; }
-          .chat-user-content, .chat-ai-content { max-width: 92%; }
-          .chat-welcome { padding: 24px 12px; }
-          .chat-welcome-title { font-size: 22px; }
-          .chat-welcome-sub { font-size: 13px; }
-          .chat-topbar-exit-text { display: none; }
-          .chat-beginner-tips { flex-direction: column; align-items: flex-start; }
+          .chat-bot-status {
+            font-size: 10px;
+          }
+          .chat-topbar-exit-text {
+            display: none;
+          }
+          .chat-topbar-newbtn span {
+            display: none;
+          }
+          .chat-topbar-newbtn {
+            padding: 7px 9px;
+          }
+          .chat-topbar-exitbtn {
+            padding: 6px 10px;
+          }
+          .chat-messages {
+            padding: 14px 10px;
+            gap: 16px;
+          }
+          .chat-user-content, .chat-ai-content {
+            max-width: 95%;
+          }
+          .chat-user-bubble {
+            padding: 10px 14px;
+            font-size: 13.5px;
+          }
+          .chat-ai-bubble {
+            padding: 12px 14px;
+            font-size: 13.5px;
+          }
+          .chat-welcome {
+            padding: 20px 10px;
+          }
+          .chat-welcome-title {
+            font-size: 20px;
+            line-height: 1.25;
+          }
+          .chat-welcome-sub {
+            font-size: 12.5px;
+            margin-bottom: 16px;
+          }
+          .chat-categories-bar {
+            gap: 5px;
+            margin-bottom: 14px;
+          }
+          .chat-category-btn {
+            font-size: 11px;
+            padding: 5px 10px;
+          }
+          .chat-input-area {
+            padding: 8px 10px 10px;
+          }
+          .chat-input-box {
+            padding: 8px 10px;
+            gap: 8px;
+            border-radius: 12px;
+          }
+          .chat-textarea {
+            font-size: 13.5px;
+          }
+          .chat-send-btn, .chat-stop-btn {
+            width: 34px;
+            height: 34px;
+          }
+          .chat-input-hint {
+            display: none;
+          }
+          .chat-beginner-tips {
+            flex-direction: column;
+            align-items: flex-start;
+          }
         }
       `}</style>
 
       <div className="chat-root" role="region" aria-label="ScholarBot AI Workspace">
+        {/* ── Mobile/Tablet Backdrop Overlay ─────── */}
+        {sidebarOpen && (
+          <div
+            className="chat-sidebar-backdrop"
+            onClick={() => setSidebarOpen(false)}
+            aria-hidden="true"
+          />
+        )}
+
         {/* ── Sidebar (Conversations) ──────────────── */}
         <div
           id="chat-history-sidebar"
-          className={`chat-sidebar ${sidebarOpen ? "" : "closed"}`}
+          className={`chat-sidebar ${sidebarOpen ? "open" : "closed"}`}
           aria-hidden={!sidebarOpen}
         >
           <div className="chat-sidebar-inner">
-            <button
-              type="button"
-              className="chat-new-btn"
-              onClick={startNewChat}
-              aria-label="Start a new chat conversation"
-            >
-              <Plus className="w-4 h-4" />
-              <span>New Conversation</span>
-            </button>
+            <div className="chat-sidebar-head-row">
+              <button
+                type="button"
+                className="chat-new-btn"
+                onClick={() => {
+                  startNewChat();
+                  if (typeof window !== "undefined" && window.innerWidth < 1024) {
+                    setSidebarOpen(false);
+                  }
+                }}
+                aria-label="Start a new chat conversation"
+              >
+                <Plus className="w-4 h-4" />
+                <span>New Conversation</span>
+              </button>
+              <button
+                type="button"
+                className="chat-sidebar-close-btn"
+                onClick={() => setSidebarOpen(false)}
+                title="Close sidebar"
+                aria-label="Close conversation sidebar"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
 
             <div className="chat-conv-list" role="list" aria-label="Past conversations">
               {conversations.length === 0 ? (
@@ -1774,11 +1958,19 @@ export default function AiChatTab({ onExit }: AiChatTabProps) {
                     role="button"
                     tabIndex={0}
                     className={`chat-conv-item ${activeConvId === conv.id ? "active" : ""}`}
-                    onClick={() => loadConversation(conv.id)}
+                    onClick={() => {
+                      loadConversation(conv.id);
+                      if (typeof window !== "undefined" && window.innerWidth < 1024) {
+                        setSidebarOpen(false);
+                      }
+                    }}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === " ") {
                         e.preventDefault();
                         loadConversation(conv.id);
+                        if (typeof window !== "undefined" && window.innerWidth < 1024) {
+                          setSidebarOpen(false);
+                        }
                       }
                     }}
                     aria-label={`Open conversation: ${conv.title}`}

@@ -124,7 +124,7 @@ export default function TasksTab({
               {tasks.length} Total
             </span>
           </div>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-scale-sm text-slate-400 mt-1">
             Organize coursework, track deadlines, and crush your academic goals.
           </p>
         </div>
@@ -134,7 +134,7 @@ export default function TasksTab({
             setIsModalOpen(true);
             sound.playClick();
           }}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm shadow-lg shadow-indigo-600/30 transition-all hover:scale-[1.02] shrink-0"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-scale-sm shadow-lg shadow-indigo-600/30 transition-all hover:scale-[1.02] shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>New Assignment</span>
@@ -143,7 +143,7 @@ export default function TasksTab({
 
       {/* Progress Card */}
       <div className="glass-panel p-5">
-        <div className="flex items-center justify-between text-xs sm:text-sm font-semibold">
+        <div className="flex items-center justify-between text-scale-xs sm:text-scale-sm font-semibold">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-cyan-400" />
             <span className="text-white">Completion Progress</span>
@@ -170,7 +170,7 @@ export default function TasksTab({
               placeholder="Search homework, topics, or notes..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-4 pr-10 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 placeholder-slate-500"
+              className="w-full pl-4 pr-10 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-white text-scale-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 placeholder-slate-500"
             />
             <Search className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           </div>
@@ -184,11 +184,10 @@ export default function TasksTab({
                   setSelectedStatus(status);
                   sound.playClick();
                 }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  selectedStatus === status
+                className={`px-3 py-1.5 rounded-lg text-2xs font-semibold transition-all ${selectedStatus === status
                     ? "bg-indigo-600 text-white shadow-sm"
                     : "text-slate-400 hover:text-white"
-                }`}
+                  }`}
               >
                 {status}
               </button>
@@ -197,18 +196,17 @@ export default function TasksTab({
         </div>
 
         {/* Subject Filter Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 text-scale-xs">
           <span className="text-slate-500 font-medium shrink-0">Subject:</span>
           <button
             onClick={() => {
               setSelectedSubject("All");
               sound.playClick();
             }}
-            className={`px-3 py-1 rounded-lg font-medium whitespace-nowrap transition-colors ${
-              selectedSubject === "All"
+            className={`px-3 py-1 rounded-lg font-medium whitespace-nowrap transition-colors ${selectedSubject === "All"
                 ? "bg-white/20 text-white border border-white/30"
                 : "bg-white/[0.03] text-slate-400 hover:bg-white/[0.08]"
-            }`}
+              }`}
           >
             All Subjects
           </button>
@@ -219,11 +217,10 @@ export default function TasksTab({
                 setSelectedSubject(s.name);
                 sound.playClick();
               }}
-              className={`px-3 py-1 rounded-lg font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-                selectedSubject === s.name
+              className={`px-3 py-1 rounded-lg font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 ${selectedSubject === s.name
                   ? "bg-indigo-500/20 text-indigo-300 border border-indigo-500/40"
                   : "bg-white/[0.03] text-slate-400 hover:bg-white/[0.08]"
-              }`}
+                }`}
             >
               <span className="w-2 h-2 rounded-full" style={{ backgroundColor: s.color }} />
               {s.name}
@@ -237,18 +234,16 @@ export default function TasksTab({
         {filteredTasks.map((task) => (
           <div
             key={task.id}
-            className={`glass-panel p-4 transition-all duration-200 group flex items-start justify-between gap-4 ${
-              task.completed ? "opacity-60 bg-white/[0.02]" : "hover:border-indigo-500/30"
-            }`}
+            className={`glass-panel p-4 transition-all duration-200 group flex items-start justify-between gap-4 ${task.completed ? "opacity-60 bg-white/[0.02]" : "hover:border-indigo-500/30"
+              }`}
           >
             <div className="flex items-start gap-3.5 min-w-0 flex-1">
               <button
                 onClick={() => handleToggle(task.id)}
-                className={`mt-1 w-6 h-6 rounded-lg border flex items-center justify-center transition-all ${
-                  task.completed
+                className={`mt-1 w-6 h-6 rounded-lg border flex items-center justify-center transition-all ${task.completed
                     ? "bg-emerald-500/20 border-emerald-500 text-emerald-400"
                     : "border-slate-500 hover:border-indigo-400 bg-white/[0.03]"
-                }`}
+                  }`}
               >
                 {task.completed && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
               </button>
@@ -256,15 +251,14 @@ export default function TasksTab({
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span
-                    className={`text-base font-semibold transition-all ${
-                      task.completed ? "line-through text-slate-400" : "text-white"
-                    }`}
+                    className={`text-base font-semibold transition-all ${task.completed ? "line-through text-slate-400" : "text-white"
+                      }`}
                   >
                     {task.title}
                   </span>
 
                   <span
-                    className="text-[11px] font-semibold px-2 py-0.5 rounded-md"
+                    className="text-2xs font-semibold px-2 py-0.5 rounded-md"
                     style={{
                       backgroundColor: `${task.subjectColor}20`,
                       color: task.subjectColor,
@@ -275,13 +269,12 @@ export default function TasksTab({
                   </span>
 
                   <span
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ${
-                      task.priority === "Urgent"
+                    className={`text-2xs font-bold px-2 py-0.5 rounded uppercase tracking-wider ${task.priority === "Urgent"
                         ? "bg-rose-500/20 text-rose-300 border border-rose-500/30"
                         : task.priority === "High"
-                        ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
-                        : "bg-blue-500/20 text-blue-300 border border-blue-500/30"
-                    }`}
+                          ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                          : "bg-blue-500/20 text-blue-300 border border-blue-500/30"
+                      }`}
                   >
                     {task.priority}
                   </span>

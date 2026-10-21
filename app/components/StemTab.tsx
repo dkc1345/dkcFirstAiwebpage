@@ -114,11 +114,10 @@ export default function StemTab() {
               setTool(t.id as any);
               sound.playClick();
             }}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${
-              tool === t.id
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${tool === t.id
                 ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30"
                 : "bg-white/[0.04] text-slate-400 hover:text-white hover:bg-white/[0.08]"
-            }`}
+              }`}
           >
             {t.icon}
             <span>{t.label}</span>
@@ -213,8 +212,8 @@ export default function StemTab() {
                     {discriminant > 0
                       ? "2 distinct real roots"
                       : discriminant === 0
-                      ? "1 repeated real root"
-                      : "2 complex conjugate roots"}
+                        ? "1 repeated real root"
+                        : "2 complex conjugate roots"}
                   </span>
                 </div>
 
@@ -382,21 +381,19 @@ export default function StemTab() {
               <div className="grid grid-cols-2 gap-2">
                 <button
                   onClick={() => setCurveType("sqrt")}
-                  className={`p-3 rounded-xl border text-xs font-semibold transition-all ${
-                    curveType === "sqrt"
+                  className={`p-3 rounded-xl border text-xs font-semibold transition-all ${curveType === "sqrt"
                       ? "bg-indigo-600/30 border-indigo-400 text-white"
                       : "bg-white/[0.02] border-white/5 text-slate-400"
-                  }`}
+                    }`}
                 >
                   Square Root Curve (10 × √Score)
                 </button>
                 <button
                   onClick={() => setCurveType("linear")}
-                  className={`p-3 rounded-xl border text-xs font-semibold transition-all ${
-                    curveType === "linear"
+                  className={`p-3 rounded-xl border text-xs font-semibold transition-all ${curveType === "linear"
                       ? "bg-indigo-600/30 border-indigo-400 text-white"
                       : "bg-white/[0.02] border-white/5 text-slate-400"
-                  }`}
+                    }`}
                 >
                   Flat Point Curve (+pts)
                 </button>
@@ -471,11 +468,10 @@ export default function StemTab() {
               <button
                 key={c.id}
                 onClick={() => setUnitCategory(c.id as any)}
-                className={`py-2 px-3 rounded-xl text-xs font-semibold transition-all ${
-                  unitCategory === c.id
+                className={`py-2 px-3 rounded-xl text-xs font-semibold transition-all ${unitCategory === c.id
                     ? "bg-cyan-500 text-slate-950 font-bold"
                     : "bg-white/[0.04] text-slate-400 hover:text-white"
-                }`}
+                  }`}
               >
                 {c.label}
               </button>

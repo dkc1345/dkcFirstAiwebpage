@@ -52,11 +52,10 @@ export default function ScheduleTab() {
                 setSelectedDay(day);
                 sound.playClick();
               }}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-                selectedDay === day
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${selectedDay === day
                   ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"
                   : "text-slate-400 hover:text-white"
-              }`}
+                }`}
             >
               {day}
             </button>
@@ -91,11 +90,10 @@ export default function ScheduleTab() {
                 setSimulatedPeriod(p);
                 sound.playClick();
               }}
-              className={`w-7 h-7 rounded-lg font-mono font-bold transition-all ${
-                simulatedPeriod === p
+              className={`w-7 h-7 rounded-lg font-mono font-bold transition-all ${simulatedPeriod === p
                   ? "bg-indigo-600 text-white"
                   : "bg-white/[0.05] text-slate-400 hover:text-white"
-              }`}
+                }`}
             >
               {p}
             </button>
@@ -114,11 +112,10 @@ export default function ScheduleTab() {
                 setSelectedPeriodDetail(item);
                 sound.playClick();
               }}
-              className={`glass-panel p-4 sm:p-5 transition-all duration-200 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden group ${
-                isCurrent
+              className={`glass-panel p-4 sm:p-5 transition-all duration-200 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden group ${isCurrent
                   ? "border-indigo-500/50 bg-indigo-950/30 shadow-lg shadow-indigo-500/10 ring-1 ring-indigo-400/40"
                   : "hover:border-white/20"
-              }`}
+                }`}
             >
               {isCurrent && (
                 <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-gradient-to-b from-indigo-400 to-cyan-400" />
@@ -127,11 +124,10 @@ export default function ScheduleTab() {
               <div className="flex items-start sm:items-center gap-4">
                 {/* Period Badge */}
                 <div
-                  className={`w-12 h-12 rounded-2xl flex flex-col items-center justify-center shrink-0 border ${
-                    isCurrent
+                  className={`w-12 h-12 rounded-2xl flex flex-col items-center justify-center shrink-0 border ${isCurrent
                       ? "bg-indigo-600 border-indigo-400 text-white"
                       : "bg-white/[0.04] border-white/10 text-slate-300"
-                  }`}
+                    }`}
                 >
                   <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 leading-none">
                     Period
@@ -145,13 +141,12 @@ export default function ScheduleTab() {
                       {item.course}
                     </h3>
                     <span
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                        item.category === "STEM"
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${item.category === "STEM"
                           ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/30"
                           : item.category === "Humanities"
-                          ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
-                          : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                      }`}
+                            ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
+                            : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
+                        }`}
                     >
                       {item.category}
                     </span>

@@ -127,7 +127,7 @@ export default function PomodoroTab({
   useEffect(() => {
     setIsRunning(false);
     setIsEditingTime(false);
-    
+
     // Always restore the default standard duration when switching mode
     const defaultMins = DEFAULT_STANDARD_DURATIONS[mode];
     setDurations((prev) => ({ ...prev, [mode]: defaultMins }));
@@ -472,11 +472,10 @@ export default function PomodoroTab({
                   ? { backgroundColor: "var(--accent)", color: "#ffffff" }
                   : undefined
               }
-              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                mode === "focus"
+              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${mode === "focus"
                   ? "shadow-lg shadow-indigo-600/20"
                   : "text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-card-hover)]"
-              }`}
+                }`}
             >
               Focus Sprint ({durations.focus}m)
             </button>
@@ -490,11 +489,10 @@ export default function PomodoroTab({
                   ? { backgroundColor: "var(--cyan)", color: "#09090b" }
                   : undefined
               }
-              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                mode === "shortBreak"
+              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${mode === "shortBreak"
                   ? "shadow-lg shadow-cyan-600/20 font-bold"
                   : "text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-card-hover)]"
-              }`}
+                }`}
             >
               Short Break ({durations.shortBreak}m)
             </button>
@@ -508,11 +506,10 @@ export default function PomodoroTab({
                   ? { backgroundColor: "var(--accent)", color: "#ffffff" }
                   : undefined
               }
-              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                mode === "longBreak"
+              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${mode === "longBreak"
                   ? "shadow-lg shadow-purple-600/20"
                   : "text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-card-hover)]"
-              }`}
+                }`}
             >
               Long Rest ({durations.longBreak}m)
             </button>
@@ -526,11 +523,10 @@ export default function PomodoroTab({
                   ? { backgroundColor: "var(--amber)", color: "#09090b" }
                   : undefined
               }
-              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
-                mode === "unlimited"
+              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${mode === "unlimited"
                   ? "font-bold shadow-lg shadow-amber-500/25"
                   : "text-amber-500 hover:text-amber-400 hover:bg-[var(--bg-card-hover)]"
-              }`}
+                }`}
             >
               <InfinityIcon className="w-4 h-4" />
               <span>Unlimited (∞)</span>
@@ -548,11 +544,10 @@ export default function PomodoroTab({
                 <div className="flex items-center gap-1 bg-black/20 p-0.5 rounded-lg border border-white/5">
                   <button
                     onClick={handleSelectCountUp}
-                    className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
-                      unlimitedType === "countup"
+                    className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${unlimitedType === "countup"
                         ? "bg-amber-500 text-slate-950 shadow-sm"
                         : "text-[var(--text-muted)] hover:text-[var(--text)]"
-                    }`}
+                      }`}
                   >
                     Count Up (∞ Endless)
                   </button>
@@ -563,11 +558,10 @@ export default function PomodoroTab({
                       setTimeLeft(durations.unlimited * 60);
                       setIsRunning(false);
                     }}
-                    className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
-                      unlimitedType === "countdown"
+                    className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${unlimitedType === "countdown"
                         ? "bg-amber-500 text-slate-950 shadow-sm"
                         : "text-[var(--text-muted)] hover:text-[var(--text)]"
-                    }`}
+                      }`}
                   >
                     Custom Countdown
                   </button>
@@ -581,11 +575,10 @@ export default function PomodoroTab({
                   <button
                     key={mins}
                     onClick={() => handleSelectPreset(mins)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all ${
-                      unlimitedType === "countdown" && durations.unlimited === mins
+                    className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all ${unlimitedType === "countdown" && durations.unlimited === mins
                         ? "bg-amber-500/20 border-amber-500/50 text-amber-400 font-bold"
                         : "bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-card-hover)]"
-                    }`}
+                      }`}
                   >
                     {mins}m
                   </button>
@@ -639,10 +632,10 @@ export default function PomodoroTab({
                   mode === "focus"
                     ? "var(--accent)"
                     : mode === "shortBreak"
-                    ? "var(--cyan)"
-                    : mode === "longBreak"
-                    ? "var(--accent)"
-                    : "var(--amber)"
+                      ? "var(--cyan)"
+                      : mode === "longBreak"
+                        ? "var(--accent)"
+                        : "var(--amber)"
                 }
                 strokeWidth="12"
                 strokeLinecap="round"
@@ -710,23 +703,22 @@ export default function PomodoroTab({
 
               <span className="text-xs uppercase tracking-widest font-semibold mt-2 text-[var(--text-muted)] flex items-center gap-1.5">
                 <span
-                  className={`w-2 h-2 rounded-full ${
-                    isRunning
+                  className={`w-2 h-2 rounded-full ${isRunning
                       ? mode === "unlimited"
                         ? "bg-amber-400 animate-ping"
                         : "bg-emerald-400 animate-ping"
                       : "bg-slate-400 opacity-60"
-                  }`}
+                    }`}
                 />
                 {mode === "focus"
                   ? "Deep Study Block"
                   : mode === "shortBreak"
-                  ? "Recharge Time"
-                  : mode === "longBreak"
-                  ? "Rest & Hydrate"
-                  : unlimitedType === "countup"
-                  ? "∞ Unlimited Flow Stream"
-                  : `Custom Focus (${durations.unlimited}m)`}
+                    ? "Recharge Time"
+                    : mode === "longBreak"
+                      ? "Rest & Hydrate"
+                      : unlimitedType === "countup"
+                        ? "∞ Unlimited Flow Stream"
+                        : `Custom Focus (${durations.unlimited}m)`}
               </span>
             </div>
           </div>
@@ -771,8 +763,8 @@ export default function PomodoroTab({
                 backgroundColor: isRunning
                   ? "var(--amber)"
                   : mode === "unlimited"
-                  ? "var(--amber)"
-                  : "var(--accent)",
+                    ? "var(--amber)"
+                    : "var(--accent)",
                 color: isRunning || mode === "unlimited" ? "#09090b" : "#ffffff",
               }}
               className="px-8 py-3.5 rounded-2xl font-bold text-base flex items-center gap-2.5 transition-all shadow-xl hover:scale-105 cursor-pointer hover:opacity-90"
@@ -807,11 +799,10 @@ export default function PomodoroTab({
                   ? "Finish & Log Session"
                   : "Skip / Complete Sprint"
               }
-              className={`p-3 rounded-2xl border transition-all hover:scale-105 cursor-pointer ${
-                mode === "unlimited" && unlimitedType === "countup" && timeLeft >= 30
+              className={`p-3 rounded-2xl border transition-all hover:scale-105 cursor-pointer ${mode === "unlimited" && unlimitedType === "countup" && timeLeft >= 30
                   ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-500 hover:bg-emerald-500/30"
                   : "bg-[var(--bg-input)] border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-card-hover)]"
-              }`}
+                }`}
             >
               {mode === "unlimited" && unlimitedType === "countup" && timeLeft >= 30 ? (
                 <Check className="w-5 h-5 text-emerald-500" />
@@ -846,11 +837,10 @@ export default function PomodoroTab({
               </div>
               <button
                 onClick={toggleAmbientSound}
-                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  isAmbientPlaying
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${isAmbientPlaying
                     ? "bg-[var(--cyan)] text-slate-950"
                     : "bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-card-hover)]"
-                }`}
+                  }`}
               >
                 {isAmbientPlaying ? "Playing" : "Start Sound"}
               </button>
@@ -870,11 +860,10 @@ export default function PomodoroTab({
                 <button
                   key={s.id}
                   onClick={() => handleAmbientChange(s.id as "rain" | "binaural" | "whitenoise")}
-                  className={`p-2.5 rounded-xl text-xs font-semibold text-center border transition-all cursor-pointer ${
-                    ambientType === s.id
+                  className={`p-2.5 rounded-xl text-xs font-semibold text-center border transition-all cursor-pointer ${ambientType === s.id
                       ? "border-[var(--cyan)] bg-[var(--cyan)]/15 text-[var(--cyan)] font-bold"
                       : "bg-[var(--bg-input)] border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-card-hover)]"
-                  }`}
+                    }`}
                 >
                   {s.label}
                 </button>

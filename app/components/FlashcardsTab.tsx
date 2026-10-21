@@ -157,11 +157,10 @@ export default function FlashcardsTab({ decks }: FlashcardsTabProps) {
               setMode("flashcards");
               sound.playClick();
             }}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
-              mode === "flashcards"
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${mode === "flashcards"
                 ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"
                 : "text-slate-400 hover:text-white"
-            }`}
+              }`}
           >
             <BookOpen className="w-4 h-4" />
             <span>Flashcards</span>
@@ -171,11 +170,10 @@ export default function FlashcardsTab({ decks }: FlashcardsTabProps) {
               setMode("quiz");
               resetQuiz();
             }}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
-              mode === "quiz"
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${mode === "quiz"
                 ? "bg-cyan-600 text-white shadow-md shadow-cyan-600/30"
                 : "text-slate-400 hover:text-white"
-            }`}
+              }`}
           >
             <ListCheck className="w-4 h-4" />
             <span>Quiz Mode</span>
@@ -198,11 +196,10 @@ export default function FlashcardsTab({ decks }: FlashcardsTabProps) {
                 resetQuiz();
                 sound.playClick();
               }}
-              className={`p-3.5 rounded-2xl text-left border transition-all duration-200 relative group overflow-hidden ${
-                isSelected
+              className={`p-3.5 rounded-2xl text-left border transition-all duration-200 relative group overflow-hidden ${isSelected
                   ? "bg-indigo-950/40 border-indigo-500/50 shadow-lg shadow-indigo-500/10 ring-1 ring-indigo-400/40"
                   : "bg-white/[0.03] border-white/5 hover:bg-white/[0.06] hover:border-white/20"
-              }`}
+                }`}
             >
               <div className="flex items-center justify-between">
                 <span className="text-2xl">{deck.icon}</span>
@@ -246,15 +243,14 @@ export default function FlashcardsTab({ decks }: FlashcardsTabProps) {
           </div>
 
           {/* Interactive 3D Flip Card */}
-          <div className="max-w-2xl mx-auto">
+          <div className="w-full max-w-2xl mx-auto overflow-hidden py-1">
             <div
               onClick={handleFlip}
               className="relative w-full h-80 sm:h-96 cursor-pointer select-none perspective-1000 group"
             >
               <div
-                className={`relative w-full h-full rounded-3xl transition-transform duration-500 transform-style-3d shadow-2xl ${
-                  isFlipped ? "rotate-y-180" : ""
-                }`}
+                className={`relative w-full h-full rounded-3xl transition-transform duration-500 transform-style-3d shadow-2xl ${isFlipped ? "rotate-y-180" : ""
+                  }`}
               >
                 {/* Front Side */}
                 <div className="flashcard-face absolute inset-0 w-full h-full rounded-3xl p-8 flex flex-col justify-between backface-hidden border border-white/15 bg-gradient-to-br from-slate-900/90 via-indigo-950/40 to-slate-900/90 backdrop-blur-xl">
@@ -412,8 +408,8 @@ export default function FlashcardsTab({ decks }: FlashcardsTabProps) {
                   {quizScore === activeQuizList.length
                     ? "Grade: A+ (Outstanding Mastery!)"
                     : quizScore >= activeQuizList.length / 2
-                    ? "Grade: B (Solid Performance)"
-                    : "Grade: Needs Targeted Review"}
+                      ? "Grade: B (Solid Performance)"
+                      : "Grade: Needs Targeted Review"}
                 </div>
               </div>
 
