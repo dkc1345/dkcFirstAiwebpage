@@ -30,6 +30,8 @@ interface SidebarProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   onOpenSettings: () => void;
+  isCollapsed?: boolean;
+  setIsCollapsed?: (collapsed: boolean) => void;
 }
 
 interface NavItemConfig {
@@ -51,8 +53,12 @@ export default function Sidebar({
   isOpen,
   setIsOpen,
   onOpenSettings,
+  isCollapsed: controlledCollapsed,
+  setIsCollapsed: setControlledCollapsed,
 }: SidebarProps) {
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [internalCollapsed, setInternalCollapsed] = useState(true);
+  const isCollapsed = controlledCollapsed !== undefined ? controlledCollapsed : internalCollapsed;
+  const setIsCollapsed = setControlledCollapsed || setInternalCollapsed;
 
   const go = (key: TabKey) => {
     setActiveTab(key);
@@ -373,7 +379,7 @@ export default function Sidebar({
         className={`
           hidden lg:flex flex-col shrink-0 h-screen sticky top-0 z-30
           border-r border-[var(--border)] bg-[var(--bg-card)]
-          transition-all duration-300 ease-in-out
+          transition-all duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] will-change-[width]
           ${isCollapsed ? "w-[72px]" : "w-[260px]"}
         `}
       >

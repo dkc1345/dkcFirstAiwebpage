@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Search, Menu, Command, Palette } from "lucide-react";
+import { Search, Menu, Command } from "lucide-react";
 import { TabKey } from "./Navbar";
 import { UserProfile } from "./AuthModal";
 import { sound } from "../audio";
@@ -126,17 +126,6 @@ export default function HeaderTopbar({
       </button>
 
 
-
-      {/* ── Settings / Themes ─── */}
-      <button
-        id="settings-btn"
-        onClick={() => { sound.playClick(); onOpenSettings(); }}
-        className="shrink-0 p-2 rounded-lg text-[var(--text-muted)] hover:text-indigo-400 hover:bg-indigo-500/10 transition-all cursor-pointer"
-        title="Appearance & Pomodoro Settings"
-        aria-label="Settings"
-      >
-        <Palette className="w-4 h-4" />
-      </button>
 
       {/* ── Notifications (functional bell) ─── */}
       <NotificationCenter

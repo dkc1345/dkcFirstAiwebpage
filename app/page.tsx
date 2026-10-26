@@ -54,6 +54,7 @@ export default function Home() {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
   const [isAIOpen, setIsAIOpen] = useState<boolean>(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [currentTheme, setCurrentTheme] = useState<ThemeId>("dark");
   const [showGridPattern, setShowGridPattern] = useState<boolean>(true);
@@ -296,6 +297,8 @@ export default function Home() {
         onSignOut={handleSignOut}
         isOpen={isSidebarOpen}
         setIsOpen={setIsSidebarOpen}
+        isCollapsed={isSidebarCollapsed}
+        setIsCollapsed={setIsSidebarCollapsed}
         onOpenSettings={() => setIsSettingsOpen(true)}
       />
 
@@ -305,7 +308,14 @@ export default function Home() {
         <HeaderTopbar
           activeTab={activeTab}
           user={user}
-          onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+          onToggleSidebar={() => {
+            // If on mobile, toggle mobile drawer. If on desktop, toggle collapsed state
+            if (typeof window !== "undefined" && window.innerWidth >= 1024) {
+              setIsSidebarCollapsed(!isSidebarCollapsed);
+            } else {
+              setIsSidebarOpen(!isSidebarOpen);
+            }
+          }}
           onOpenAI={() => setIsAIOpen(true)}
           onOpenPalette={() => setIsCommandPaletteOpen(true)}
           onOpenSettings={() => setIsSettingsOpen(true)}
@@ -321,7 +331,13 @@ export default function Home() {
 
         {/* Main content — tabs are always mounted; hidden via CSS so stateful
              components like the Pomodoro timer keep running across tab switches. */}
-        <main className={`flex-1 min-w-0 ${activeTab === "aichat" ? "p-0 overflow-hidden" : "page-content"}`}>
+        <main
+          onClick={() => {
+            if (!isSidebarCollapsed) setIsSidebarCollapsed(true);
+            if (isSidebarOpen) setIsSidebarOpen(false);
+          }}
+          className={`flex-1 min-w-0 transition-all duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${activeTab === "aichat" ? "p-0 overflow-hidden" : "page-content"}`}
+        >
 
           {/* dashboard */}
           <div

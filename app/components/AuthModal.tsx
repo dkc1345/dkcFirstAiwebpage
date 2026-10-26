@@ -3,10 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { sound } from "../audio";
 import {
-  Sparkles,
   X,
   Check,
-  ArrowRight,
   Eye,
   EyeOff,
   AlertCircle,
@@ -232,456 +230,410 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fadeIn overflow-y-auto">
-      {/* Clean modern modal container */}
-      <div
-        style={{
-          backgroundColor: "var(--bg-card)",
-          borderColor: "var(--border)",
-          color: "var(--text)",
-        }}
-        className="relative w-full max-w-[420px] rounded-2xl border shadow-2xl p-6 sm:p-7 my-auto transition-all"
-      >
-        {/* Close Button */}
-        <button
-          onClick={() => {
-            sound.playClick();
-            onClose();
-          }}
-          style={{ color: "var(--text-muted)" }}
-          className="absolute top-4 right-4 p-2 rounded-xl hover:opacity-80 transition-opacity cursor-pointer"
-          aria-label="Close"
-        >
-          <X className="w-4 h-4" />
-        </button>
-
-        {/* Header Title */}
-        <div className="text-center mb-5">
-          <div
-            style={{
-              backgroundColor: "rgba(99, 102, 241, 0.12)",
-              borderColor: "rgba(99, 102, 241, 0.25)",
-              color: "var(--accent)",
-            }}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-semibold mb-2.5"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            <span>ScholarSync Portal</span>
-          </div>
-          <h2 className="text-2xl font-bold tracking-tight" style={{ color: "var(--text)" }}>
-            {authMode === "signin" ? "Sign in to ScholarSync" : "Create your account"}
-          </h2>
-          <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
-            {authMode === "signin"
-              ? "Welcome back! Enter your student credentials"
-              : "Set up your student profile in seconds"}
-          </p>
-        </div>
-
-        {/* Tab Switcher (Segmented Control) */}
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto animate-fadeIn"
+      style={{ backgroundColor: "var(--bg)" }}
+    >
+      {/* Ambient glow blobs */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
         <div
-          style={{
-            backgroundColor: "var(--bg-input)",
-            borderColor: "var(--border)",
-          }}
-          className="grid grid-cols-2 p-1 rounded-xl border mb-4"
-        >
-          <button
-            type="button"
-            onClick={() => {
-              setAuthMode("signin");
-              setErrorMsg("");
-              setSuccessMsg("");
-              sound.playClick();
-            }}
-            style={{
-              backgroundColor: authMode === "signin" ? "var(--accent)" : "transparent",
-              color: authMode === "signin" ? "#ffffff" : "var(--text-muted)",
-            }}
-            className="py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer shadow-sm"
-          >
-            Sign In
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setAuthMode("signup");
-              setErrorMsg("");
-              setSuccessMsg("");
-              sound.playClick();
-            }}
-            style={{
-              backgroundColor: authMode === "signup" ? "var(--accent)" : "transparent",
-              color: authMode === "signup" ? "#ffffff" : "var(--text-muted)",
-            }}
-            className="py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer shadow-sm"
-          >
-            Create Account
-          </button>
-        </div>
+          className="absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full opacity-20 blur-[120px]"
+          style={{ backgroundColor: "var(--accent)" }}
+        />
+        <div
+          className="absolute -bottom-32 -right-32 w-[480px] h-[480px] rounded-full opacity-15 blur-[100px]"
+          style={{ backgroundColor: "var(--cyan)" }}
+        />
+      </div>
 
-        {/* Quick Saved Account Selector */}
-        {registeredAccounts.length > 0 && (
-          <div className="mb-4">
+      {/* ═══ Main sliding-panel card ═══ */}
+      <div
+        className="relative z-10 w-full max-w-[820px] my-auto"
+        style={{
+          height: "580px",
+          overflow: "hidden",
+          borderRadius: "24px",
+          border: "1px solid var(--border)",
+          boxShadow: "0 24px 64px rgba(0,0,0,0.4), 0 0 0 1px var(--border)",
+          background: "var(--bg-card)",
+        }}
+      >
+
+        {/* ── SIGN IN FORM (permanently left half) ── */}
+        <div
+          className="absolute inset-y-0 left-0 flex flex-col justify-center px-10 py-8 overflow-y-auto"
+          style={{
+            width: "50%",
+            opacity: authMode === "signin" ? 1 : 0,
+            transform: authMode === "signin" ? "translateX(0)" : "translateX(-28px)",
+            transition: "opacity 0.35s ease, transform 0.35s ease",
+            transitionDelay: authMode === "signin" ? "0.38s" : "0s",
+            pointerEvents: authMode === "signin" ? "auto" : "none",
+          }}
+        >
+          <h2 className="text-[26px] font-bold tracking-tight mb-1" style={{ color: "var(--text)" }}>
+            Sign In
+          </h2>
+          <p className="text-[13px] mb-5" style={{ color: "var(--text-muted)" }}>
+            or use your email account
+          </p>
+
+          {/* Social buttons */}
+          <div className="flex items-center gap-2 mb-4">
             <button
               type="button"
-              onClick={() => setShowAccountList(!showAccountList)}
-              style={{
-                backgroundColor: "var(--bg-input)",
-                borderColor: "var(--border)",
-                color: "var(--text-muted)",
-              }}
-              className="w-full flex items-center justify-between px-3 py-2 rounded-xl border text-xs transition-all cursor-pointer hover:opacity-90"
+              onClick={handleGoogleSignIn}
+              disabled={isLoading}
+              className="flex-1 flex items-center justify-center py-2.5 rounded-xl transition-all cursor-pointer hover:opacity-80 active:scale-95 disabled:opacity-50"
+              style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)" }}
+              title="Continue with Google"
             >
-              <span className="flex items-center gap-2">
-                <Users className="w-3.5 h-3.5 text-indigo-400" />
-                <span style={{ color: "var(--text)" }}>
-                  {showAccountList ? "Choose account to autofill:" : `Saved accounts (${registeredAccounts.length})`}
-                </span>
-              </span>
-              <span className="flex items-center gap-1 text-[11px] font-semibold" style={{ color: "var(--accent)" }}>
-                {showAccountList ? "Close" : "Select"}
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showAccountList ? "rotate-180" : ""}`} />
-              </span>
+              <svg className="w-5 h-5" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
             </button>
+            <button
+              type="button"
+              disabled={isLoading}
+              className="flex-1 flex items-center justify-center py-2.5 rounded-xl transition-all cursor-pointer hover:opacity-80 active:scale-95 disabled:opacity-50"
+              style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)" }}
+              title="Continue with Facebook"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#1877F2">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+            </button>
+          </div>
 
-            {showAccountList && (
-              <div
-                style={{
-                  backgroundColor: "var(--bg-card-hover)",
-                  borderColor: "var(--border)",
-                }}
-                className="mt-2 p-1.5 rounded-xl border shadow-lg space-y-1 max-h-40 overflow-y-auto"
+          {/* Divider */}
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex-1 h-px" style={{ backgroundColor: "var(--border)" }} />
+            <span className="text-[11px] font-medium" style={{ color: "var(--text-subtle)" }}>or</span>
+            <div className="flex-1 h-px" style={{ backgroundColor: "var(--border)" }} />
+          </div>
+
+          {/* Alerts */}
+          {errorMsg && authMode === "signin" && (
+            <div className="mb-3 p-2.5 rounded-xl flex items-center gap-2 text-[12px] font-medium"
+              style={{ background: "rgba(251,113,133,0.1)", border: "1px solid rgba(251,113,133,0.2)", color: "#fb7185" }}>
+              <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+              <span>{errorMsg}</span>
+            </div>
+          )}
+          {successMsg && authMode === "signin" && (
+            <div className="mb-3 p-2.5 rounded-xl flex items-center gap-2 text-[12px] font-medium"
+              style={{ background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.2)", color: "#34d399" }}>
+              <Check className="w-3.5 h-3.5 shrink-0" />
+              <span>{successMsg}</span>
+            </div>
+          )}
+
+          {/* Saved accounts */}
+          {registeredAccounts.length > 0 && (
+            <div className="mb-3">
+              <button
+                type="button"
+                onClick={() => setShowAccountList(!showAccountList)}
+                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12px] transition-all cursor-pointer hover:opacity-90"
+                style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-muted)" }}
               >
-                {registeredAccounts.map((acc) => (
-                  <button
-                    key={acc.id}
-                    type="button"
-                    onClick={() => handleSelectSavedAccount(acc)}
-                    style={{ borderColor: "var(--border)" }}
-                    className="w-full text-left p-2 rounded-lg border hover:opacity-90 flex items-center gap-2.5 transition-colors cursor-pointer group"
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={acc.avatar}
-                      alt={acc.name}
-                      className="w-7 h-7 rounded-full object-cover border shrink-0"
-                      style={{ borderColor: "var(--border)" }}
-                    />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold truncate" style={{ color: "var(--text)" }}>
-                        {acc.name}
-                      </p>
-                      <p className="text-[11px] truncate" style={{ color: "var(--text-muted)" }}>
-                        {acc.email}
-                      </p>
-                    </div>
-                    <span
-                      style={{
-                        backgroundColor: "rgba(99, 102, 241, 0.15)",
-                        color: "var(--accent)",
-                      }}
-                      className="text-[10px] font-semibold px-2 py-0.5 rounded-md"
-                    >
-                      Fill
-                    </span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Google One-Click Button */}
-        <button
-          type="button"
-          onClick={handleGoogleSignIn}
-          disabled={isLoading}
-          style={{
-            backgroundColor: "var(--bg-input)",
-            borderColor: "var(--border)",
-            color: "var(--text)",
-          }}
-          className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border font-semibold text-xs transition-all active:scale-[0.99] disabled:opacity-60 cursor-pointer mb-4 hover:opacity-90 shadow-sm"
-        >
-          <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
-            <path
-              fill="#4285F4"
-              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-            />
-            <path
-              fill="#34A853"
-              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-            />
-            <path
-              fill="#FBBC05"
-              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
-            />
-            <path
-              fill="#EA4335"
-              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
-            />
-          </svg>
-          <span>Continue with Google</span>
-        </button>
-
-        {/* Clean Divider */}
-        <div className="relative flex items-center justify-center my-4">
-          <div style={{ borderColor: "var(--border)" }} className="border-t w-full" />
-          <span
-            style={{
-              backgroundColor: "var(--bg-card)",
-              color: "var(--text-subtle)",
-            }}
-            className="px-3 text-[11px] uppercase tracking-wider font-semibold whitespace-nowrap"
-          >
-            or with email
-          </span>
-          <div style={{ borderColor: "var(--border)" }} className="border-t w-full" />
-        </div>
-
-        {/* Feedback Alerts */}
-        {errorMsg && (
-          <div className="mb-3.5 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs flex items-center gap-2 animate-fadeIn font-medium">
-            <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
-            <span>{errorMsg}</span>
-          </div>
-        )}
-
-        {successMsg && (
-          <div className="mb-3.5 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs flex items-center gap-2 animate-fadeIn font-medium">
-            <Check className="w-4 h-4 shrink-0 text-emerald-400" />
-            <span>{successMsg}</span>
-          </div>
-        )}
-
-        {/* Main Authentication Form — Clear hints & placeholders, zero icon overlap */}
-        <form onSubmit={handleEmailAuth} className="space-y-3.5">
-          {authMode === "signup" && (
-            <>
-              {/* Full Name */}
-              <div>
-                <label className="block text-xs font-semibold mb-1" style={{ color: "var(--text)" }}>
-                  Full Name <span className="text-rose-400">*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Jordan Smith"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  style={{
-                    backgroundColor: "var(--bg-input)",
-                    borderColor: "var(--border)",
-                    color: "var(--text)",
-                    padding: "10px 14px",
-                  }}
-                  className="w-full rounded-xl border text-xs sm:text-sm focus:outline-none transition-all placeholder:text-zinc-500"
+                <span className="flex items-center gap-2">
+                  <Users className="w-3.5 h-3.5" style={{ color: "var(--accent)" }} />
+                  <span style={{ color: "var(--text)" }}>
+                    {showAccountList ? "Choose to autofill:" : `Saved (${registeredAccounts.length})`}
+                  </span>
+                </span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 transition-transform ${showAccountList ? "rotate-180" : ""}`}
+                  style={{ color: "var(--accent)" }}
                 />
-              </div>
-
-              {/* Academic Grade */}
-              <div>
-                <label className="block text-xs font-semibold mb-1" style={{ color: "var(--text)" }}>
-                  Academic Grade
-                </label>
-                <div className="relative">
-                  <select
-                    value={schoolGrade}
-                    onChange={(e) => setSchoolGrade(e.target.value)}
-                    style={{
-                      backgroundColor: "var(--bg-input)",
-                      borderColor: "var(--border)",
-                      color: "var(--text)",
-                      padding: "10px 36px 10px 14px",
-                    }}
-                    className="w-full rounded-xl border text-xs sm:text-sm focus:outline-none transition-all appearance-none cursor-pointer"
-                  >
-                    <option value="Grade 9 (Freshman)">Grade 9 (Freshman)</option>
-                    <option value="Grade 10 (Sophomore)">Grade 10 (Sophomore)</option>
-                    <option value="Grade 11 (Junior)">Grade 11 (Junior)</option>
-                    <option value="Grade 12 (Senior)">Grade 12 (Senior)</option>
-                    <option value="Undergraduate College">Undergraduate College</option>
-                    <option value="Graduate / Honors Scholar">Graduate / Honors Scholar</option>
-                  </select>
-                  <ChevronDown className="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "var(--text-subtle)" }} />
-                </div>
-              </div>
-
-              {/* Avatar Selection */}
-              <div>
-                <label className="block text-xs font-semibold mb-1" style={{ color: "var(--text)" }}>
-                  Select Avatar
-                </label>
-                <div className="flex items-center gap-2.5 py-1">
-                  {AVATAR_OPTIONS.map((av, idx) => (
+              </button>
+              {showAccountList && (
+                <div className="mt-1.5 p-1 rounded-xl max-h-28 overflow-y-auto"
+                  style={{ backgroundColor: "var(--bg-card-hover)", border: "1px solid var(--border)" }}>
+                  {registeredAccounts.map((acc) => (
                     <button
-                      key={idx}
+                      key={acc.id}
                       type="button"
-                      onClick={() => setSelectedAvatar(av.url)}
-                      style={{
-                        borderColor: selectedAvatar === av.url ? "var(--accent)" : "transparent",
-                      }}
-                      className={`relative rounded-full p-0.5 border-2 transition-all cursor-pointer ${
-                        selectedAvatar === av.url ? "scale-110 shadow-sm" : "opacity-60 hover:opacity-100"
-                      }`}
+                      onClick={() => handleSelectSavedAccount(acc)}
+                      className="w-full text-left p-1.5 rounded-lg flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={av.url}
-                        alt={av.label}
-                        className="w-8 h-8 rounded-full object-cover"
-                      />
+                      <img src={acc.avatar} alt={acc.name} className="w-6 h-6 rounded-full object-cover" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[11px] font-semibold truncate" style={{ color: "var(--text)" }}>{acc.name}</p>
+                        <p className="text-[10px] truncate" style={{ color: "var(--text-muted)" }}>{acc.email}</p>
+                      </div>
                     </button>
                   ))}
                 </div>
-              </div>
-            </>
+              )}
+            </div>
           )}
 
-          {/* Student Email */}
-          <div>
-            <label className="block text-xs font-semibold mb-1" style={{ color: "var(--text)" }}>
-              Student Email <span className="text-rose-400">*</span>
-            </label>
+          <form onSubmit={handleEmailAuth} className="space-y-2.5">
             <input
               type="email"
               required
-              placeholder="e.g. student@school.edu"
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              style={{
-                backgroundColor: "var(--bg-input)",
-                borderColor: "var(--border)",
-                color: "var(--text)",
-                padding: "10px 14px",
-              }}
-              className="w-full rounded-xl border text-xs sm:text-sm focus:outline-none transition-all placeholder:text-zinc-500"
+              className="w-full rounded-xl text-[13px] focus:outline-none transition-all placeholder:opacity-50"
+              style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text)", padding: "10px 14px" }}
             />
-          </div>
-
-          {/* Password */}
-          <div>
-            <div className="flex items-center justify-between mb-1">
-              <label className="block text-xs font-semibold" style={{ color: "var(--text)" }}>
-                Password <span className="text-rose-400">*</span>
-              </label>
-              <span className="text-[11px]" style={{ color: "var(--text-subtle)" }}>
-                Min 6 characters
-              </span>
-            </div>
-            <div className="relative flex items-center">
+            <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 required
-                placeholder="Enter your password (at least 6 characters)"
+                placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                style={{
-                  backgroundColor: "var(--bg-input)",
-                  borderColor: "var(--border)",
-                  color: "var(--text)",
-                  padding: "10px 42px 10px 14px",
-                }}
-                className="w-full rounded-xl border text-xs sm:text-sm focus:outline-none transition-all placeholder:text-zinc-500"
+                className="w-full rounded-xl text-[13px] focus:outline-none transition-all placeholder:opacity-50"
+                style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text)", padding: "10px 40px 10px 14px" }}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer hover:opacity-70 transition-opacity"
                 style={{ color: "var(--text-subtle)" }}
-                className="absolute right-3.5 p-1 rounded-lg hover:opacity-80 cursor-pointer transition-opacity"
                 aria-label="Toggle password visibility"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
-          </div>
+            <div className="text-right -mt-1">
+              <span className="text-[11px] cursor-pointer hover:underline" style={{ color: "var(--accent)" }}>
+                Forgot your password?
+              </span>
+            </div>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-2.5 rounded-xl font-bold text-[13px] tracking-wide uppercase transition-all hover:opacity-90 active:scale-[0.99] cursor-pointer disabled:opacity-60"
+              style={{ backgroundColor: "var(--text)", color: "var(--bg)" }}
+            >
+              {isLoading ? "Please wait…" : "Sign In"}
+            </button>
+          </form>
+        </div>
 
-          {/* Confirm Password (Signup only) */}
-          {authMode === "signup" && (
-            <div>
-              <label className="block text-xs font-semibold mb-1" style={{ color: "var(--text)" }}>
-                Confirm Password <span className="text-rose-400">*</span>
-              </label>
-              <input
-                type={showPassword ? "text" : "password"}
-                required
-                placeholder="Re-enter your password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                style={{
-                  backgroundColor: "var(--bg-input)",
-                  borderColor: "var(--border)",
-                  color: "var(--text)",
-                  padding: "10px 14px",
-                }}
-                className="w-full rounded-xl border text-xs sm:text-sm focus:outline-none transition-all placeholder:text-zinc-500"
-              />
+        {/* ── SIGN UP FORM (permanently right half) ── */}
+        <div
+          className="absolute inset-y-0 right-0 flex flex-col justify-center px-10 py-8 overflow-y-auto"
+          style={{
+            width: "50%",
+            opacity: authMode === "signup" ? 1 : 0,
+            transform: authMode === "signup" ? "translateX(0)" : "translateX(28px)",
+            transition: "opacity 0.35s ease, transform 0.35s ease",
+            transitionDelay: authMode === "signup" ? "0.38s" : "0s",
+            pointerEvents: authMode === "signup" ? "auto" : "none",
+          }}
+        >
+          <h2 className="text-[26px] font-bold tracking-tight mb-1" style={{ color: "var(--text)" }}>
+            Create Account
+          </h2>
+          <p className="text-[13px] mb-4" style={{ color: "var(--text-muted)" }}>
+            or use your email for registration
+          </p>
+
+          {/* Alerts */}
+          {errorMsg && authMode === "signup" && (
+            <div className="mb-3 p-2.5 rounded-xl flex items-center gap-2 text-[12px] font-medium"
+              style={{ background: "rgba(251,113,133,0.1)", border: "1px solid rgba(251,113,133,0.2)", color: "#fb7185" }}>
+              <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+              <span>{errorMsg}</span>
+            </div>
+          )}
+          {successMsg && authMode === "signup" && (
+            <div className="mb-3 p-2.5 rounded-xl flex items-center gap-2 text-[12px] font-medium"
+              style={{ background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.2)", color: "#34d399" }}>
+              <Check className="w-3.5 h-3.5 shrink-0" />
+              <span>{successMsg}</span>
             </div>
           )}
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={isLoading}
-            style={{
-              backgroundColor: "var(--accent)",
-              color: "#ffffff",
-            }}
-            className="w-full py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm shadow-md transition-all hover:opacity-95 active:scale-[0.99] flex items-center justify-center gap-2 mt-4 cursor-pointer disabled:opacity-60"
-          >
-            {isLoading ? (
-              <span>Please wait...</span>
-            ) : (
-              <>
-                <span>{authMode === "signin" ? "Sign In to ScholarSync" : "Complete Registration"}</span>
-                <ArrowRight className="w-4 h-4" />
-              </>
-            )}
-          </button>
-        </form>
+          <form onSubmit={handleEmailAuth} className="space-y-2.5">
+            <input
+              type="text"
+              required
+              placeholder="Full Name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="w-full rounded-xl text-[13px] focus:outline-none transition-all placeholder:opacity-50"
+              style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text)", padding: "10px 14px" }}
+            />
+            <div className="relative">
+              <select
+                value={schoolGrade}
+                onChange={(e) => setSchoolGrade(e.target.value)}
+                className="w-full rounded-xl text-[13px] focus:outline-none transition-all appearance-none cursor-pointer"
+                style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text)", padding: "10px 36px 10px 14px" }}
+              >
+                <option value="Grade 9 (Freshman)">Grade 9 (Freshman)</option>
+                <option value="Grade 10 (Sophomore)">Grade 10 (Sophomore)</option>
+                <option value="Grade 11 (Junior)">Grade 11 (Junior)</option>
+                <option value="Grade 12 (Senior)">Grade 12 (Senior)</option>
+                <option value="Undergraduate College">Undergraduate College</option>
+                <option value="Graduate / Honors Scholar">Graduate / Honors Scholar</option>
+              </select>
+              <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "var(--text-subtle)" }} />
+            </div>
 
-        {/* Footer Switcher */}
+            {/* Avatar picker */}
+            <div className="flex items-center gap-2">
+              {AVATAR_OPTIONS.map((av, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setSelectedAvatar(av.url)}
+                  className={`rounded-full p-0.5 border-2 transition-all cursor-pointer ${selectedAvatar === av.url ? "scale-110" : "opacity-50 hover:opacity-90"}`}
+                  style={{ borderColor: selectedAvatar === av.url ? "var(--accent)" : "transparent" }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={av.url} alt={av.label} className="w-7 h-7 rounded-full object-cover" />
+                </button>
+              ))}
+            </div>
+
+            <input
+              type="email"
+              required
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full rounded-xl text-[13px] focus:outline-none transition-all placeholder:opacity-50"
+              style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text)", padding: "10px 14px" }}
+            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                required
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-xl text-[13px] focus:outline-none transition-all placeholder:opacity-50"
+                style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text)", padding: "10px 40px 10px 14px" }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer hover:opacity-70 transition-opacity"
+                style={{ color: "var(--text-subtle)" }}
+                aria-label="Toggle password visibility"
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+            <input
+              type={showPassword ? "text" : "password"}
+              required
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full rounded-xl text-[13px] focus:outline-none transition-all placeholder:opacity-50"
+              style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text)", padding: "10px 14px" }}
+            />
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-2.5 rounded-xl font-bold text-[13px] tracking-wide uppercase transition-all hover:opacity-90 active:scale-[0.99] cursor-pointer disabled:opacity-60"
+              style={{ backgroundColor: "var(--text)", color: "var(--bg)" }}
+            >
+              {isLoading ? "Please wait…" : "Sign Up"}
+            </button>
+          </form>
+        </div>
+
+        {/* ══════════════════════════════════════════
+            SLIDING GRADIENT OVERLAY PANEL
+            signin → panel sits on RIGHT (left: 50%)
+            signup → panel slides to LEFT (left: 0%)
+        ══════════════════════════════════════════ */}
         <div
-          style={{ borderColor: "var(--border)" }}
-          className="mt-5 pt-4 border-t text-center text-xs"
+          style={{
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            width: "50%",
+            left: authMode === "signin" ? "50%" : "0%",
+            transition: "left 0.72s cubic-bezier(0.77, 0, 0.175, 1)",
+            background: "linear-gradient(135deg, var(--accent) 0%, var(--cyan) 100%)",
+            zIndex: 20,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "40px 32px",
+            textAlign: "center",
+          }}
         >
+          {/* Close button */}
+          <button
+            onClick={() => { sound.playClick(); onClose(); }}
+            className="absolute top-4 right-4 p-1.5 rounded-lg hover:opacity-70 transition-opacity cursor-pointer"
+            style={{ color: "rgba(255,255,255,0.85)" }}
+            aria-label="Close"
+          >
+            <X className="w-4 h-4" />
+          </button>
+
+          {/* Decorative ring shapes */}
+          <div style={{
+            position: "absolute", width: "280px", height: "280px", borderRadius: "50%",
+            border: "2px solid rgba(255,255,255,0.12)", top: "-90px", right: "-90px", pointerEvents: "none",
+          }} />
+          <div style={{
+            position: "absolute", width: "200px", height: "200px", borderRadius: "50%",
+            border: "2px solid rgba(255,255,255,0.08)", bottom: "-70px", left: "-70px", pointerEvents: "none",
+          }} />
+          <div style={{
+            position: "absolute", width: "120px", height: "120px", borderRadius: "50%",
+            border: "2px solid rgba(255,255,255,0.08)", bottom: "20%", right: "-30px", pointerEvents: "none",
+          }} />
+
+          {/* Panel content — fades between states */}
           {authMode === "signin" ? (
-            <p style={{ color: "var(--text-muted)" }}>
-              Don&apos;t have a student account?{" "}
+            <div key="panel-signin" style={{ animation: "fadeIn 0.5s ease 0.45s both" }}>
+              <div className="text-5xl mb-5" style={{ filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.25))" }}>📖</div>
+              <h3 className="text-[24px] font-bold text-white mb-3">Hello, Friend!</h3>
+              <p className="text-white/75 text-[13px] leading-relaxed mb-8 max-w-[220px] mx-auto">
+                Enter your personal details and start your journey with ScholarSync
+              </p>
               <button
                 type="button"
-                onClick={() => {
-                  setAuthMode("signup");
-                  setErrorMsg("");
-                  setSuccessMsg("");
-                  sound.playClick();
-                }}
-                style={{ color: "var(--accent)" }}
-                className="font-bold hover:underline cursor-pointer ml-1"
+                onClick={() => { setAuthMode("signup"); setErrorMsg(""); setSuccessMsg(""); sound.playClick(); }}
+                className="px-9 py-2.5 rounded-full font-bold text-[12px] uppercase tracking-widest transition-all duration-200 cursor-pointer active:scale-95"
+                style={{ border: "2px solid rgba(255,255,255,0.9)", color: "white", backgroundColor: "transparent" }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "white"; e.currentTarget.style.color = "var(--accent)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "white"; }}
               >
-                Sign up
+                Sign Up
               </button>
-            </p>
+            </div>
           ) : (
-            <p style={{ color: "var(--text-muted)" }}>
-              Already registered your account?{" "}
+            <div key="panel-signup" style={{ animation: "fadeIn 0.5s ease 0.45s both" }}>
+              <div className="text-5xl mb-5" style={{ filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.25))" }}>🎓</div>
+              <h3 className="text-[24px] font-bold text-white mb-3">Welcome Back!</h3>
+              <p className="text-white/75 text-[13px] leading-relaxed mb-8 max-w-[220px] mx-auto">
+                To stay connected please login with your personal info
+              </p>
               <button
                 type="button"
-                onClick={() => {
-                  setAuthMode("signin");
-                  setErrorMsg("");
-                  setSuccessMsg("");
-                  sound.playClick();
-                }}
-                style={{ color: "var(--accent)" }}
-                className="font-bold hover:underline cursor-pointer ml-1"
+                onClick={() => { setAuthMode("signin"); setErrorMsg(""); setSuccessMsg(""); sound.playClick(); }}
+                className="px-9 py-2.5 rounded-full font-bold text-[12px] uppercase tracking-widest transition-all duration-200 cursor-pointer active:scale-95"
+                style={{ border: "2px solid rgba(255,255,255,0.9)", color: "white", backgroundColor: "transparent" }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "white"; e.currentTarget.style.color = "var(--accent)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "white"; }}
               >
-                Sign in
+                Sign In
               </button>
-            </p>
+            </div>
           )}
         </div>
+
       </div>
     </div>
   );
