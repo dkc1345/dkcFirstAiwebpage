@@ -200,7 +200,7 @@ export default function Home() {
       "success",
       `Switched to ${p.name}`,
       `Workspace loaded for ${p.email} (${accountData.tasks.length} tasks, ${accountData.courses.length} courses).`,
-      "👋",
+      "✓",
       { label: "Go to Dashboard", tab: "dashboard" }
     );
   };
@@ -211,50 +211,50 @@ export default function Home() {
     setTasks([]);
     setCourses([]);
     setTodayFocusMinutes(0);
-    pushNotif("info", "Signed out", "You have been signed out. Account workspace cleared.", "🔐");
+    pushNotif("info", "Signed out", "You have been signed out. Account workspace cleared.", "—");
   };
 
   const handleAddTask = (newTask: Omit<Task, "id">) => {
     setTasks((prev) => [{ ...newTask, id: `task-${Date.now()}` }, ...prev]);
-    pushNotif("task", "Task Added", `"${newTask.title}" added to your task list.`, "📋", { label: "View Tasks", tab: "tasks" });
+    pushNotif("task", "Task Added", `"${newTask.title}" added to your task list.`, "+", { label: "View Tasks", tab: "tasks" });
   };
   const handleToggleTask = (id: string) => {
     const target = tasks.find((t) => t.id === id);
     if (target && !target.completed) {
-      pushNotif("success", "Task Completed! 🎉", `"${target.title}" marked as done. Great work!`, "✅", { label: "View Tasks", tab: "tasks" });
+      pushNotif("success", "Task Completed", `"${target.title}" marked as done. Great work!`, "✓", { label: "View Tasks", tab: "tasks" });
     }
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)));
   };
   const handleDeleteTask = (id: string) => {
     const task = tasks.find((t) => t.id === id);
     setTasks((prev) => prev.filter((t) => t.id !== id));
-    if (task) pushNotif("warning", "Task Deleted", `"${task.title}" was removed from your list.`, "🗑️");
+    if (task) pushNotif("warning", "Task Deleted", `"${task.title}" was removed from your list.`, "✕");
   };
 
   const handleAddCourse = (newCourse: Omit<CourseGrade, "id">) => {
     setCourses((prev) => [...prev, { ...newCourse, id: `course-${Date.now()}` }]);
-    pushNotif("gpa", "Course Added", `${newCourse.name} (${newCourse.type}) added to your GPA tracker.`, "📚", { label: "View GPA", tab: "gpa" });
+    pushNotif("gpa", "Course Added", `${newCourse.name} (${newCourse.type}) added to your GPA tracker.`, "+", { label: "View GPA", tab: "gpa" });
   };
   const handleDeleteCourse = (id: string) => {
     const course = courses.find((c) => c.id === id);
     setCourses((prev) => prev.filter((c) => c.id !== id));
-    if (course) pushNotif("warning", "Course Removed", `${course.name} was removed from your GPA tracker.`, "🗑️");
+    if (course) pushNotif("warning", "Course Removed", `${course.name} was removed from your GPA tracker.`, "✕");
   };
   const handleUpdateCourseGrade = (id: string, grade: string) => {
     const course = courses.find((c) => c.id === id);
     if (course) {
-      pushNotif("gpa", "Grade Updated", `${course.name} grade updated to ${grade}.`, "📊", { label: "View GPA", tab: "gpa" });
+      pushNotif("gpa", "Grade Updated", `${course.name} grade updated to ${grade}.`, "↗", { label: "View GPA", tab: "gpa" });
     }
     setCourses((prev) => prev.map((c) => (c.id === id ? { ...c, grade } : c)));
   };
   const handleUpdateCourseType = (id: string, type: "AP" | "Honors" | "Regular") => setCourses((prev) => prev.map((c) => c.id === id ? { ...c, type } : c));
   const handleAddFocusMinutes = (minutes: number) => {
     setTodayFocusMinutes((prev) => prev + minutes);
-    pushNotif("focus", "Focus Session Logged! 🎯", `+${minutes} min added to deep focus.`, "⏱️", { label: "Go to Focus Lab", tab: "pomodoro" });
+    pushNotif("focus", "Focus Session Logged", `+${minutes} min added to deep focus.`, "●", { label: "Go to Focus Lab", tab: "pomodoro" });
   };
   const handleUpdatePomodoroPresets = useCallback((presets: PomodoroPresets) => {
     setPomodoroPresets(presets);
-    pushNotif("info", "Pomodoro Preset Updated", `Timer set to "${presets.presetName}" — ${presets.focus}m focus, ${presets.shortBreak}m break.`, "⚙️", { label: "Open Focus Lab", tab: "pomodoro" });
+    pushNotif("info", "Pomodoro Preset Updated", `Timer set to "${presets.presetName}" — ${presets.focus}m focus, ${presets.shortBreak}m break.`, "⚙", { label: "Open Focus Lab", tab: "pomodoro" });
     try {
       localStorage.setItem("scholarsync_pomodoro_presets", JSON.stringify(presets));
     } catch { }
@@ -266,7 +266,7 @@ export default function Home() {
     localStorage.removeItem("scholarsync_courses");
     localStorage.removeItem("scholarsync_focus");
     localStorage.removeItem("scholarsync_pomodoro_presets");
-    pushNotif("warning", "Data Reset", "All tasks, courses, and focus data have been reset to defaults.", "🔄");
+    pushNotif("warning", "Data Reset", "All tasks, courses, and focus data have been reset to defaults.", "↺");
   };
 
   // GPA calculation

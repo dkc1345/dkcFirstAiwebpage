@@ -181,7 +181,7 @@ interface Drawable {
 }
 \`\`\`
 
-💡 **Key Takeaway:** OOP helps manage complexity through modularity, reusability, and clear separation of concerns.`;
+**Key Takeaway:** OOP helps manage complexity through modularity, reusability, and clear separation of concerns.`;
   }
 
   // ─ Stack vs Queue ─
@@ -218,7 +218,7 @@ print(queue.popleft())  # → 1  (first in, first out)
 print(queue.popleft())  # → 2
 \`\`\`
 
-💡 **Memory trick:** Stack = like a pile of plates (take from the top). Queue = like a line at a counter (first person in line gets served first).`;
+**Memory trick:** Stack = like a pile of plates (take from the top). Queue = like a line at a counter (first person in line gets served first).`;
   }
 
   // ─ Prime number check ─
@@ -570,7 +570,7 @@ Here's what I can assist with in this area:
 - *"Write a Python/Java program that does [X]"*
 - *"Give me a reviewer for [subject]"*
 
-📚 My knowledge covers: BSIT, BSCS, BSCpE, Programming (Python/Java/C/JavaScript), Databases, Networking, OS, AI/ML, and more.`;
+**Scope:** My knowledge covers BSIT, BSCS, BSCpE, Programming (Python/Java/C/JavaScript), Databases, Networking, OS, AI/ML, and more.`;
 }
 
 // ─── Streaming token emitter ────────────────────────────────────────────────

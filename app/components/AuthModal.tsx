@@ -10,6 +10,8 @@ import {
   AlertCircle,
   Users,
   ChevronDown,
+  Sparkles,
+  GraduationCap,
 } from "lucide-react";
 import {
   SavedAccount,
@@ -231,37 +233,38 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto animate-fadeIn"
-      style={{ backgroundColor: "var(--bg)" }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto animate-fadeIn backdrop-blur-md"
+      style={{ backgroundColor: "rgba(0, 0, 0, 0.65)" }}
     >
       {/* Ambient glow blobs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
         <div
-          className="absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full opacity-20 blur-[120px]"
+          className="absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full opacity-25 blur-[120px]"
           style={{ backgroundColor: "var(--accent)" }}
         />
         <div
-          className="absolute -bottom-32 -right-32 w-[480px] h-[480px] rounded-full opacity-15 blur-[100px]"
+          className="absolute -bottom-32 -right-32 w-[480px] h-[480px] rounded-full opacity-20 blur-[100px]"
           style={{ backgroundColor: "var(--cyan)" }}
         />
       </div>
 
       {/* ═══ Main sliding-panel card ═══ */}
       <div
-        className="relative z-10 w-full max-w-[820px] my-auto"
+        className="relative z-10 w-full max-w-[840px] my-auto"
         style={{
+          minHeight: "560px",
           height: "580px",
           overflow: "hidden",
-          borderRadius: "24px",
+          borderRadius: "28px",
           border: "1px solid var(--border)",
-          boxShadow: "0 24px 64px rgba(0,0,0,0.4), 0 0 0 1px var(--border)",
+          boxShadow: "0 25px 60px -15px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border)",
           background: "var(--bg-card)",
         }}
       >
 
         {/* ── SIGN IN FORM (permanently left half) ── */}
         <div
-          className="absolute inset-y-0 left-0 flex flex-col justify-center px-10 py-8 overflow-y-auto"
+          className="absolute inset-y-0 left-0 flex flex-col justify-center px-8 sm:px-10 py-8 overflow-y-auto"
           style={{
             width: "50%",
             opacity: authMode === "signin" ? 1 : 0,
@@ -271,20 +274,20 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
             pointerEvents: authMode === "signin" ? "auto" : "none",
           }}
         >
-          <h2 className="text-[26px] font-bold tracking-tight mb-1" style={{ color: "var(--text)" }}>
+          <h2 className="text-2xl sm:text-[28px] font-extrabold tracking-tight mb-1" style={{ color: "var(--text)" }}>
             Sign In
           </h2>
-          <p className="text-[13px] mb-5" style={{ color: "var(--text-muted)" }}>
+          <p className="text-xs sm:text-[13px] mb-5 font-normal" style={{ color: "var(--text-muted)" }}>
             or use your email account
           </p>
 
           {/* Social buttons */}
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2.5 mb-4">
             <button
               type="button"
               onClick={handleGoogleSignIn}
               disabled={isLoading}
-              className="flex-1 flex items-center justify-center py-2.5 rounded-xl transition-all cursor-pointer hover:opacity-80 active:scale-95 disabled:opacity-50"
+              className="flex-1 flex items-center justify-center py-2.5 rounded-xl transition-all cursor-pointer hover:border-indigo-400/40 active:scale-95 disabled:opacity-50"
               style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)" }}
               title="Continue with Google"
             >
@@ -298,7 +301,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
             <button
               type="button"
               disabled={isLoading}
-              className="flex-1 flex items-center justify-center py-2.5 rounded-xl transition-all cursor-pointer hover:opacity-80 active:scale-95 disabled:opacity-50"
+              className="flex-1 flex items-center justify-center py-2.5 rounded-xl transition-all cursor-pointer hover:border-indigo-400/40 active:scale-95 disabled:opacity-50"
               style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)" }}
               title="Continue with Facebook"
             >
@@ -311,7 +314,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
           {/* Divider */}
           <div className="flex items-center gap-3 mb-4">
             <div className="flex-1 h-px" style={{ backgroundColor: "var(--border)" }} />
-            <span className="text-[11px] font-medium" style={{ color: "var(--text-subtle)" }}>or</span>
+            <span className="text-[11px] font-medium uppercase tracking-wider" style={{ color: "var(--text-subtle)" }}>or</span>
             <div className="flex-1 h-px" style={{ backgroundColor: "var(--border)" }} />
           </div>
 
@@ -337,13 +340,13 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
               <button
                 type="button"
                 onClick={() => setShowAccountList(!showAccountList)}
-                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12px] transition-all cursor-pointer hover:opacity-90"
+                className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[12px] transition-all cursor-pointer hover:border-indigo-400/40"
                 style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text-muted)" }}
               >
                 <span className="flex items-center gap-2">
                   <Users className="w-3.5 h-3.5" style={{ color: "var(--accent)" }} />
                   <span style={{ color: "var(--text)" }}>
-                    {showAccountList ? "Choose to autofill:" : `Saved (${registeredAccounts.length})`}
+                    {showAccountList ? "Choose to autofill:" : `Saved accounts (${registeredAccounts.length})`}
                   </span>
                 </span>
                 <ChevronDown
@@ -359,7 +362,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
                       key={acc.id}
                       type="button"
                       onClick={() => handleSelectSavedAccount(acc)}
-                      className="w-full text-left p-1.5 rounded-lg flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
+                      className="w-full text-left p-1.5 rounded-lg flex items-center gap-2 cursor-pointer hover:bg-white/5 transition-colors"
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={acc.avatar} alt={acc.name} className="w-6 h-6 rounded-full object-cover" />
@@ -374,15 +377,15 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
             </div>
           )}
 
-          <form onSubmit={handleEmailAuth} className="space-y-2.5">
+          <form onSubmit={handleEmailAuth} className="space-y-3">
             <input
               type="email"
               required
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-xl text-[13px] focus:outline-none transition-all placeholder:opacity-50"
-              style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text)", padding: "10px 14px" }}
+              className="w-full rounded-xl text-[13px] focus:outline-none focus:border-[var(--border-focus)] transition-all placeholder:text-[var(--text-muted)] placeholder:opacity-60"
+              style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text)", padding: "11px 14px" }}
             />
             <div className="relative">
               <input
@@ -391,38 +394,38 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl text-[13px] focus:outline-none transition-all placeholder:opacity-50"
-                style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text)", padding: "10px 40px 10px 14px" }}
+                className="w-full rounded-xl text-[13px] focus:outline-none focus:border-[var(--border-focus)] transition-all placeholder:text-[var(--text-muted)] placeholder:opacity-60"
+                style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text)", padding: "11px 40px 11px 14px" }}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer hover:opacity-70 transition-opacity"
+                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer hover:text-white transition-colors"
                 style={{ color: "var(--text-subtle)" }}
                 aria-label="Toggle password visibility"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
-            <div className="text-right -mt-1">
-              <span className="text-[11px] cursor-pointer hover:underline" style={{ color: "var(--accent)" }}>
+            <div className="text-right -mt-0.5">
+              <span className="text-[11px] font-medium cursor-pointer hover:underline" style={{ color: "var(--accent)" }}>
                 Forgot your password?
               </span>
             </div>
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-2.5 rounded-xl font-bold text-[13px] tracking-wide uppercase transition-all hover:opacity-90 active:scale-[0.99] cursor-pointer disabled:opacity-60"
-              style={{ backgroundColor: "var(--text)", color: "var(--bg)" }}
+              className="w-full py-3 rounded-xl font-bold text-[13px] tracking-wider uppercase transition-all duration-200 hover:brightness-110 active:scale-[0.99] cursor-pointer disabled:opacity-60 shadow-md"
+              style={{ backgroundColor: "var(--accent)", color: "#ffffff" }}
             >
-              {isLoading ? "Please wait…" : "Sign In"}
+              {isLoading ? "Signing in…" : "Sign In"}
             </button>
           </form>
         </div>
 
         {/* ── SIGN UP FORM (permanently right half) ── */}
         <div
-          className="absolute inset-y-0 right-0 flex flex-col justify-center px-10 py-8 overflow-y-auto"
+          className="absolute inset-y-0 right-0 flex flex-col justify-center px-8 sm:px-10 py-8 overflow-y-auto"
           style={{
             width: "50%",
             opacity: authMode === "signup" ? 1 : 0,
@@ -432,10 +435,10 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
             pointerEvents: authMode === "signup" ? "auto" : "none",
           }}
         >
-          <h2 className="text-[26px] font-bold tracking-tight mb-1" style={{ color: "var(--text)" }}>
+          <h2 className="text-2xl sm:text-[28px] font-extrabold tracking-tight mb-1" style={{ color: "var(--text)" }}>
             Create Account
           </h2>
-          <p className="text-[13px] mb-4" style={{ color: "var(--text-muted)" }}>
+          <p className="text-xs sm:text-[13px] mb-4 font-normal" style={{ color: "var(--text-muted)" }}>
             or use your email for registration
           </p>
 
@@ -462,14 +465,14 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
               placeholder="Full Name"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full rounded-xl text-[13px] focus:outline-none transition-all placeholder:opacity-50"
+              className="w-full rounded-xl text-[13px] focus:outline-none focus:border-[var(--border-focus)] transition-all placeholder:text-[var(--text-muted)] placeholder:opacity-60"
               style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text)", padding: "10px 14px" }}
             />
             <div className="relative">
               <select
                 value={schoolGrade}
                 onChange={(e) => setSchoolGrade(e.target.value)}
-                className="w-full rounded-xl text-[13px] focus:outline-none transition-all appearance-none cursor-pointer"
+                className="w-full rounded-xl text-[13px] focus:outline-none focus:border-[var(--border-focus)] transition-all appearance-none cursor-pointer"
                 style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text)", padding: "10px 36px 10px 14px" }}
               >
                 <option value="Grade 9 (Freshman)">Grade 9 (Freshman)</option>
@@ -483,17 +486,17 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
             </div>
 
             {/* Avatar picker */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 py-0.5">
               {AVATAR_OPTIONS.map((av, idx) => (
                 <button
                   key={idx}
                   type="button"
                   onClick={() => setSelectedAvatar(av.url)}
-                  className={`rounded-full p-0.5 border-2 transition-all cursor-pointer ${selectedAvatar === av.url ? "scale-110" : "opacity-50 hover:opacity-90"}`}
+                  className={`rounded-full p-0.5 border-2 transition-all cursor-pointer ${selectedAvatar === av.url ? "scale-110" : "opacity-60 hover:opacity-100"}`}
                   style={{ borderColor: selectedAvatar === av.url ? "var(--accent)" : "transparent" }}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={av.url} alt={av.label} className="w-7 h-7 rounded-full object-cover" />
+                  <img src={av.url} alt={av.label} className="w-7 h-7 rounded-full object-cover shadow-sm" />
                 </button>
               ))}
             </div>
@@ -504,7 +507,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-xl text-[13px] focus:outline-none transition-all placeholder:opacity-50"
+              className="w-full rounded-xl text-[13px] focus:outline-none focus:border-[var(--border-focus)] transition-all placeholder:text-[var(--text-muted)] placeholder:opacity-60"
               style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text)", padding: "10px 14px" }}
             />
             <div className="relative">
@@ -514,13 +517,13 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl text-[13px] focus:outline-none transition-all placeholder:opacity-50"
+                className="w-full rounded-xl text-[13px] focus:outline-none focus:border-[var(--border-focus)] transition-all placeholder:text-[var(--text-muted)] placeholder:opacity-60"
                 style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text)", padding: "10px 40px 10px 14px" }}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer hover:opacity-70 transition-opacity"
+                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer hover:text-white transition-colors"
                 style={{ color: "var(--text-subtle)" }}
                 aria-label="Toggle password visibility"
               >
@@ -533,16 +536,16 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
               placeholder="Confirm Password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full rounded-xl text-[13px] focus:outline-none transition-all placeholder:opacity-50"
+              className="w-full rounded-xl text-[13px] focus:outline-none focus:border-[var(--border-focus)] transition-all placeholder:text-[var(--text-muted)] placeholder:opacity-60"
               style={{ backgroundColor: "var(--bg-input)", border: "1px solid var(--border)", color: "var(--text)", padding: "10px 14px" }}
             />
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-2.5 rounded-xl font-bold text-[13px] tracking-wide uppercase transition-all hover:opacity-90 active:scale-[0.99] cursor-pointer disabled:opacity-60"
-              style={{ backgroundColor: "var(--text)", color: "var(--bg)" }}
+              className="w-full py-3 rounded-xl font-bold text-[13px] tracking-wider uppercase transition-all duration-200 hover:brightness-110 active:scale-[0.99] cursor-pointer disabled:opacity-60 shadow-md"
+              style={{ backgroundColor: "var(--accent)", color: "#ffffff" }}
             >
-              {isLoading ? "Please wait…" : "Sign Up"}
+              {isLoading ? "Creating account…" : "Sign Up"}
             </button>
           </form>
         </div>
@@ -560,7 +563,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
             width: "50%",
             left: authMode === "signin" ? "50%" : "0%",
             transition: "left 0.72s cubic-bezier(0.77, 0, 0.175, 1)",
-            background: "linear-gradient(135deg, var(--accent) 0%, var(--cyan) 100%)",
+            background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%)",
             zIndex: 20,
             display: "flex",
             flexDirection: "column",
@@ -573,59 +576,62 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
           {/* Close button */}
           <button
             onClick={() => { sound.playClick(); onClose(); }}
-            className="absolute top-4 right-4 p-1.5 rounded-lg hover:opacity-70 transition-opacity cursor-pointer"
-            style={{ color: "rgba(255,255,255,0.85)" }}
-            aria-label="Close"
+            className="absolute top-4 right-4 p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white/90 hover:text-white transition-all cursor-pointer backdrop-blur-sm"
+            aria-label="Close modal"
           >
             <X className="w-4 h-4" />
           </button>
 
-          {/* Decorative ring shapes */}
+          {/* Decorative geometric background rings */}
           <div style={{
-            position: "absolute", width: "280px", height: "280px", borderRadius: "50%",
-            border: "2px solid rgba(255,255,255,0.12)", top: "-90px", right: "-90px", pointerEvents: "none",
+            position: "absolute", width: "320px", height: "320px", borderRadius: "50%",
+            border: "2px solid rgba(255,255,255,0.12)", top: "-100px", right: "-100px", pointerEvents: "none",
           }} />
           <div style={{
-            position: "absolute", width: "200px", height: "200px", borderRadius: "50%",
-            border: "2px solid rgba(255,255,255,0.08)", bottom: "-70px", left: "-70px", pointerEvents: "none",
+            position: "absolute", width: "240px", height: "240px", borderRadius: "50%",
+            border: "2px solid rgba(255,255,255,0.08)", bottom: "-80px", left: "-80px", pointerEvents: "none",
           }} />
           <div style={{
-            position: "absolute", width: "120px", height: "120px", borderRadius: "50%",
-            border: "2px solid rgba(255,255,255,0.08)", bottom: "20%", right: "-30px", pointerEvents: "none",
+            position: "absolute", width: "160px", height: "160px", borderRadius: "50%",
+            border: "2px solid rgba(255,255,255,0.08)", bottom: "15%", right: "-40px", pointerEvents: "none",
           }} />
 
           {/* Panel content — fades between states */}
           {authMode === "signin" ? (
-            <div key="panel-signin" style={{ animation: "fadeIn 0.5s ease 0.45s both" }}>
-              <div className="text-5xl mb-5" style={{ filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.25))" }}>📖</div>
-              <h3 className="text-[24px] font-bold text-white mb-3">Hello, Friend!</h3>
-              <p className="text-white/75 text-[13px] leading-relaxed mb-8 max-w-[220px] mx-auto">
+            <div key="panel-signin" style={{ animation: "fadeIn 0.5s ease 0.45s both" }} className="flex flex-col items-center">
+              <div className="w-16 h-16 rounded-2xl mx-auto mb-5 flex items-center justify-center bg-white/15 border border-white/25 backdrop-blur-md shadow-xl shadow-blue-900/20">
+                <Sparkles className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl sm:text-[26px] font-extrabold text-white mb-2 tracking-tight">Hello, Friend!</h3>
+              <p className="text-blue-100/85 text-xs sm:text-[13px] leading-relaxed mb-8 max-w-[240px] mx-auto font-normal">
                 Enter your personal details and start your journey with ScholarSync
               </p>
               <button
                 type="button"
                 onClick={() => { setAuthMode("signup"); setErrorMsg(""); setSuccessMsg(""); sound.playClick(); }}
-                className="px-9 py-2.5 rounded-full font-bold text-[12px] uppercase tracking-widest transition-all duration-200 cursor-pointer active:scale-95"
-                style={{ border: "2px solid rgba(255,255,255,0.9)", color: "white", backgroundColor: "transparent" }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "white"; e.currentTarget.style.color = "var(--accent)"; }}
+                className="px-9 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest transition-all duration-200 cursor-pointer active:scale-95 shadow-sm"
+                style={{ border: "2px solid rgba(255,255,255,0.95)", color: "#ffffff", backgroundColor: "transparent" }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "white"; e.currentTarget.style.color = "#2563eb"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "white"; }}
               >
                 Sign Up
               </button>
             </div>
           ) : (
-            <div key="panel-signup" style={{ animation: "fadeIn 0.5s ease 0.45s both" }}>
-              <div className="text-5xl mb-5" style={{ filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.25))" }}>🎓</div>
-              <h3 className="text-[24px] font-bold text-white mb-3">Welcome Back!</h3>
-              <p className="text-white/75 text-[13px] leading-relaxed mb-8 max-w-[220px] mx-auto">
+            <div key="panel-signup" style={{ animation: "fadeIn 0.5s ease 0.45s both" }} className="flex flex-col items-center">
+              <div className="w-16 h-16 rounded-2xl mx-auto mb-5 flex items-center justify-center bg-white/15 border border-white/25 backdrop-blur-md shadow-xl shadow-blue-900/20">
+                <GraduationCap className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl sm:text-[26px] font-extrabold text-white mb-2 tracking-tight">Welcome Back!</h3>
+              <p className="text-blue-100/85 text-xs sm:text-[13px] leading-relaxed mb-8 max-w-[240px] mx-auto font-normal">
                 To stay connected please login with your personal info
               </p>
               <button
                 type="button"
                 onClick={() => { setAuthMode("signin"); setErrorMsg(""); setSuccessMsg(""); sound.playClick(); }}
-                className="px-9 py-2.5 rounded-full font-bold text-[12px] uppercase tracking-widest transition-all duration-200 cursor-pointer active:scale-95"
-                style={{ border: "2px solid rgba(255,255,255,0.9)", color: "white", backgroundColor: "transparent" }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "white"; e.currentTarget.style.color = "var(--accent)"; }}
+                className="px-9 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest transition-all duration-200 cursor-pointer active:scale-95 shadow-sm"
+                style={{ border: "2px solid rgba(255,255,255,0.95)", color: "#ffffff", backgroundColor: "transparent" }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "white"; e.currentTarget.style.color = "#2563eb"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "white"; }}
               >
                 Sign In

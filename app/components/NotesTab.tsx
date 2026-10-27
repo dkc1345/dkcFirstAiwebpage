@@ -138,15 +138,17 @@ export default function NotesTab({ userEmail }: NotesTabProps) {
   const readTimeMin = Math.ceil(words / 200);
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col min-w-0" style={{ gap: 'var(--section-gap)' }}>
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-2">
-            <FileText className="w-8 h-8 text-amber-400" />
-            Study Scratchpad & Notes
+          <h1 className="text-scale-3xl font-extrabold text-white flex items-center gap-3">
+            <span className="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+              <FileText className="w-5 h-5 text-amber-400" />
+            </span>
+            Study Scratchpad &amp; Notes
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-scale-sm text-[var(--text-muted)] mt-1.5">
             Markdown-ready note taker with automatic cloud-local synchronization and academic templates.
           </p>
         </div>
@@ -172,53 +174,53 @@ export default function NotesTab({ userEmail }: NotesTabProps) {
       </div>
 
       {/* Template Selectors */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-        <span className="text-slate-400 font-semibold shrink-0">Study Templates:</span>
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 text-scale-xs">
+        <span className="text-[var(--text-muted)] font-semibold shrink-0">Study Templates:</span>
         <button
           onClick={() => loadTemplate("cornell")}
-          className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] text-indigo-300 border border-indigo-500/20 whitespace-nowrap transition-colors"
+          className="px-3 py-1.5 rounded-lg bg-[var(--bg-input)] hover:bg-[var(--bg-card-hover)] text-indigo-400 border border-indigo-500/20 hover:border-indigo-500/40 whitespace-nowrap transition-colors"
         >
-          📝 Cornell Method
+          Cornell Method
         </button>
         <button
           onClick={() => loadTemplate("cheatsheet")}
-          className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] text-cyan-300 border border-cyan-500/20 whitespace-nowrap transition-colors"
+          className="px-3 py-1.5 rounded-lg bg-[var(--bg-input)] hover:bg-[var(--bg-card-hover)] text-cyan-400 border border-cyan-500/20 hover:border-cyan-500/40 whitespace-nowrap transition-colors"
         >
-          ⚡ Exam Formula Sheet
+          Exam Formula Sheet
         </button>
         <button
           onClick={() => loadTemplate("lab")}
-          className="px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] text-emerald-300 border border-emerald-500/20 whitespace-nowrap transition-colors"
+          className="px-3 py-1.5 rounded-lg bg-[var(--bg-input)] hover:bg-[var(--bg-card-hover)] text-emerald-400 border border-emerald-500/20 hover:border-emerald-500/40 whitespace-nowrap transition-colors"
         >
-          🔬 Science Lab Framework
+          Science Lab Framework
         </button>
       </div>
 
       {/* Editor Panel */}
-      <div className="glass-panel p-4 sm:p-6 space-y-4">
+      <div className="glass-panel space-y-4" style={{ padding: 'var(--card-padding)' }}>
         <textarea
           value={content}
           onChange={handleChange}
           rows={18}
           placeholder="Jot down formulas, lecture insights, essay outlines, or study reminders..."
-          className="w-full p-4 rounded-xl bg-white/[0.02] border border-white/10 text-slate-100 font-mono text-xs sm:text-sm leading-relaxed focus:outline-none focus:border-indigo-400/50 resize-y"
+          className="w-full p-4 rounded-xl bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text)] font-mono text-scale-xs sm:text-scale-sm leading-relaxed focus:outline-none focus:border-[var(--border-focus)] focus:ring-1 focus:ring-[var(--border-focus)] resize-y"
         />
 
-        <div className="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-white/5">
+        <div className="flex items-center justify-between text-scale-xs text-[var(--text-muted)] pt-2 border-t border-[var(--border)]">
           <div className="flex items-center gap-4">
             <span>
-              Words: <strong className="text-slate-200">{words}</strong>
+              Words: <strong className="text-[var(--text)]">{words}</strong>
             </span>
             <span>
-              Characters: <strong className="text-slate-200">{chars}</strong>
+              Characters: <strong className="text-[var(--text)]">{chars}</strong>
             </span>
             <span>
-              Reading Time: ~<strong className="text-slate-200">{readTimeMin} min</strong>
+              Reading Time: ~<strong className="text-[var(--text)]">{readTimeMin} min</strong>
             </span>
           </div>
 
-          <span className="text-emerald-400 text-[11px] font-medium flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-emerald-400 text-2xs font-medium flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
             Auto-saved locally
           </span>
         </div>

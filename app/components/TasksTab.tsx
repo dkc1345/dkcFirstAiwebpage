@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import confetti from "canvas-confetti";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import { sound } from "../audio";
 import { Task } from "../schoolData";
 import {
@@ -29,6 +31,8 @@ export default function TasksTab({
   onToggleTask,
   onDeleteTask,
 }: TasksTabProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
   const [search, setSearch] = useState("");
   const [selectedSubject, setSelectedSubject] = useState<string>("All");
   const [selectedStatus, setSelectedStatus] = useState<"All" | "Pending" | "Completed">("All");
@@ -111,20 +115,49 @@ export default function TasksTab({
   const completedCount = tasks.filter((t) => t.completed).length;
   const progressPercent = tasks.length ? Math.round((completedCount / tasks.length) * 100) : 0;
 
+  useGSAP(
+    () => {
+      // Animate progress bar with smooth elastic ease
+      if (progressBarRef.current) {
+        gsap.to(progressBarRef.current, {
+          width: `${progressPercent}%`,
+          duration: 0.9,
+          ease: "power2.out",
+        });
+      }
+
+      // Stagger entrance of task cards
+      gsap.fromTo(
+        ".task-item-card",
+        { opacity: 0, y: 14, scale: 0.98 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          stagger: 0.05,
+          duration: 0.45,
+          ease: "power2.out",
+          clearProps: "transform,opacity",
+        }
+      );
+    },
+    { dependencies: [selectedSubject, selectedStatus, tasks.length], scope: containerRef }
+  );
+
   return (
-    <div className="space-y-6">
+    <div ref={containerRef} className="flex flex-col min-w-0" style={{ gap: 'var(--section-gap)' }}>
       {/* Top Header & Quick Add */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
-              Homework & Assignment Hub
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-scale-3xl font-extrabold text-white whitespace-nowrap">
+              Homework &amp; Assignment Hub
             </h1>
-            <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+            <span className="px-2 py-0.5 rounded-full text-2xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 shrink-0">
               {tasks.length} Total
             </span>
           </div>
-          <p className="text-scale-sm text-slate-400 mt-1">
+          <p className="text-scale-sm text-[var(--text-muted)] mt-1.5">
             Organize coursework, track deadlines, and crush your academic goals.
           </p>
         </div>
@@ -142,26 +175,27 @@ export default function TasksTab({
       </div>
 
       {/* Progress Card */}
-      <div className="glass-panel p-5">
+      <div className="glass-panel" style={{ padding: 'var(--card-padding)' }}>
         <div className="flex items-center justify-between text-scale-xs sm:text-scale-sm font-semibold">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span className="text-white">Completion Progress</span>
+            <Sparkles className="w-4 h-4 text-cyan-400 shrink-0" />
+            <span className="text-[var(--text)]">Completion Progress</span>
           </div>
-          <span className="text-cyan-400">
-            {completedCount} of {tasks.length} assignments finished ({progressPercent}%)
+          <span className="text-cyan-400 shrink-0">
+            {completedCount} of {tasks.length} finished ({progressPercent}%)
           </span>
         </div>
-        <div className="mt-3 w-full bg-white/5 rounded-full h-3 overflow-hidden p-0.5 border border-white/10">
+        <div className="mt-3 w-full bg-white/5 rounded-full h-2.5 overflow-hidden border border-white/10">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-emerald-400 transition-all duration-700"
+            ref={progressBarRef}
+            className="h-full rounded-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-emerald-400"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="glass-panel p-4 space-y-3">
+      <div className="glass-panel space-y-3" style={{ padding: 'var(--card-padding)' }}>
         <div className="flex flex-col md:flex-row gap-3">
           {/* Search Input */}
           <div className="relative flex-1">
@@ -170,9 +204,9 @@ export default function TasksTab({
               placeholder="Search homework, topics, or notes..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-4 pr-10 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-white text-scale-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 placeholder-slate-500"
+              className="w-full pl-4 pr-10 py-2.5 rounded-xl bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text)] text-scale-sm focus:outline-none focus:border-[var(--border-focus)] focus:ring-1 focus:ring-[var(--border-focus)] placeholder:text-[var(--text-subtle)]"
             />
-            <Search className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+            <Search className="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--text-subtle)] pointer-events-none" />
           </div>
 
           {/* Status Tabs */}
@@ -186,7 +220,7 @@ export default function TasksTab({
                 }}
                 className={`px-3 py-1.5 rounded-lg text-2xs font-semibold transition-all ${selectedStatus === status
                     ? "bg-indigo-600 text-white shadow-sm"
-                    : "text-slate-400 hover:text-white"
+                    : "text-[var(--text-muted)] hover:text-[var(--text)]"
                   }`}
               >
                 {status}
@@ -197,7 +231,7 @@ export default function TasksTab({
 
         {/* Subject Filter Pills */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1 text-scale-xs">
-          <span className="text-slate-500 font-medium shrink-0">Subject:</span>
+          <span className="text-[var(--text-muted)] font-medium shrink-0">Subject:</span>
           <button
             onClick={() => {
               setSelectedSubject("All");
@@ -205,7 +239,7 @@ export default function TasksTab({
             }}
             className={`px-3 py-1 rounded-lg font-medium whitespace-nowrap transition-colors ${selectedSubject === "All"
                 ? "bg-white/20 text-white border border-white/30"
-                : "bg-white/[0.03] text-slate-400 hover:bg-white/[0.08]"
+                : "bg-white/[0.03] text-[var(--text-muted)] hover:bg-white/[0.08]"
               }`}
           >
             All Subjects
@@ -219,10 +253,10 @@ export default function TasksTab({
               }}
               className={`px-3 py-1 rounded-lg font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 ${selectedSubject === s.name
                   ? "bg-indigo-500/20 text-indigo-300 border border-indigo-500/40"
-                  : "bg-white/[0.03] text-slate-400 hover:bg-white/[0.08]"
+                  : "bg-white/[0.03] text-[var(--text-muted)] hover:bg-white/[0.08]"
                 }`}
             >
-              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: s.color }} />
+              <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: s.color }} />
               {s.name}
             </button>
           ))}
@@ -234,7 +268,7 @@ export default function TasksTab({
         {filteredTasks.map((task) => (
           <div
             key={task.id}
-            className={`glass-panel p-4 transition-all duration-200 group flex items-start justify-between gap-4 ${task.completed ? "opacity-60 bg-white/[0.02]" : "hover:border-indigo-500/30"
+            className={`task-item-card glass-panel p-4 transition-all duration-200 group flex items-start justify-between gap-4 ${task.completed ? "opacity-60 bg-white/[0.02]" : "hover:border-indigo-500/30"
               }`}
           >
             <div className="flex items-start gap-3.5 min-w-0 flex-1">

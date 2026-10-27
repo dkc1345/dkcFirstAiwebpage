@@ -30,21 +30,23 @@ export default function ScheduleTab() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col min-w-0" style={{ gap: 'var(--section-gap)' }}>
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-2">
-            <Calendar className="w-8 h-8 text-purple-400" />
-            Class Schedule & Bell Timetable
+          <h1 className="text-scale-3xl font-extrabold text-white flex items-center gap-3">
+            <span className="w-10 h-10 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
+              <Calendar className="w-5 h-5 text-purple-400" />
+            </span>
+            Class Schedule &amp; Bell Timetable
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-scale-sm text-[var(--text-muted)] mt-1.5">
             Track daily classroom rotations, teacher contact information, and active study periods.
           </p>
         </div>
 
         {/* Day of Week Selector */}
-        <div className="flex items-center gap-1 bg-white/[0.04] p-1.5 rounded-2xl border border-white/10 overflow-x-auto scrollbar-none">
+        <div className="flex items-center gap-1 bg-white/[0.04] p-1.5 rounded-2xl border border-[var(--border)] overflow-x-auto scrollbar-none">
           {days.map((day) => (
             <button
               key={day}
@@ -52,9 +54,9 @@ export default function ScheduleTab() {
                 setSelectedDay(day);
                 sound.playClick();
               }}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${selectedDay === day
+              className={`px-3.5 py-1.5 rounded-xl text-scale-xs font-semibold whitespace-nowrap transition-all ${selectedDay === day
                   ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"
-                  : "text-slate-400 hover:text-white"
+                  : "text-[var(--text-muted)] hover:text-[var(--text)]"
                 }`}
             >
               {day}
@@ -64,25 +66,25 @@ export default function ScheduleTab() {
       </div>
 
       {/* Live / Simulated Current Period Banner */}
-      <div className="glass-panel p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-indigo-950/40 via-purple-950/20 to-slate-900">
+      <div className="glass-panel flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-indigo-950/40 via-purple-950/20 to-slate-900" style={{ padding: 'var(--card-padding)' }}>
         <div className="flex items-center gap-3">
-          <span className="relative flex h-3 w-3">
+          <span className="relative flex h-3 w-3 shrink-0">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
           </span>
           <div>
-            <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
+            <span className="text-2xs font-bold text-emerald-400 uppercase tracking-widest">
               Simulated Bell Schedule
             </span>
-            <p className="text-sm font-semibold text-white">
+            <p className="text-scale-sm font-semibold text-[var(--text)] mt-0.5">
               Currently Highlighting: Period {simulatedPeriod || 1} — AP Calculus BC
             </p>
           </div>
         </div>
 
         {/* Simulation switcher for testing */}
-        <div className="flex items-center gap-1.5 text-xs">
-          <span className="text-slate-400">Simulate Period:</span>
+        <div className="flex items-center gap-1.5 text-scale-xs">
+          <span className="text-[var(--text-muted)] shrink-0">Simulate Period:</span>
           {[1, 2, 3, 4, 5, 6, 7].map((p) => (
             <button
               key={p}
@@ -92,7 +94,7 @@ export default function ScheduleTab() {
               }}
               className={`w-7 h-7 rounded-lg font-mono font-bold transition-all ${simulatedPeriod === p
                   ? "bg-indigo-600 text-white"
-                  : "bg-white/[0.05] text-slate-400 hover:text-white"
+                  : "bg-white/[0.05] text-[var(--text-muted)] hover:text-[var(--text)]"
                 }`}
             >
               {p}
@@ -190,13 +192,13 @@ export default function ScheduleTab() {
       </div>
 
       {/* Teacher Directory & Office Hours */}
-      <div className="glass-panel p-6 space-y-4">
-        <div className="flex items-center justify-between border-b border-white/10 pb-3">
+      <div className="glass-panel space-y-4" style={{ padding: 'var(--card-padding)' }}>
+        <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
           <div className="flex items-center gap-2">
             <GraduationCap className="w-5 h-5 text-indigo-400" />
-            <h3 className="text-base font-bold text-white">Faculty Directory & Help Hours</h3>
+            <h3 className="text-scale-lg font-bold text-[var(--text)]">Faculty Directory &amp; Help Hours</h3>
           </div>
-          <span className="text-xs text-slate-400">Semester 1 Faculty</span>
+          <span className="text-scale-xs text-[var(--text-muted)]">Semester 1 Faculty</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -267,7 +269,7 @@ export default function ScheduleTab() {
             </div>
 
             <div className="p-3.5 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-xs text-indigo-200">
-              💡 <strong>Upcoming:</strong> Midterm exam review materials available on the student portal. Don't forget your scientific calculator!
+              <strong>Upcoming:</strong> Midterm exam review materials available on the student portal. Don&apos;t forget your scientific calculator!
             </div>
 
             <div className="pt-2 flex justify-end">

@@ -211,14 +211,14 @@ export default function PomodoroTab({
       onAddFocusMinutes(minutesToAdd);
       setCompletedSessions((c) => c + 1);
       showToast(`Sprint complete! +${minutesToAdd}m added to total focus!`);
-      onNotify?.("focus", "🎯 Focus Sprint Complete!", `You crushed a ${minutesToAdd}-minute deep work block. +${minutesToAdd}m added to today's total. Time for a break!`, "⏱️");
+      onNotify?.("focus", "Focus Sprint Complete", `You crushed a ${minutesToAdd}-minute deep work block. +${minutesToAdd}m added to today's total. Time for a break!`, "●");
       if (mode === "focus") {
         setMode("shortBreak");
       }
     } else {
       setMode("focus");
       showToast("Break finished! Time for next deep sprint.");
-      onNotify?.("success", "☕ Break Over — Back to Work!", "Your rest period ended. Time to start the next focus sprint!", "✅");
+      onNotify?.("success", "Break Over — Back to Work", "Your rest period ended. Time to start the next focus sprint!", "✓");
     }
   };
 
@@ -235,7 +235,7 @@ export default function PomodoroTab({
       colors: ["#f59e0b", "#10b981", "#6366f1", "#06b6d4"],
     });
     showToast(`Great session! +${minutesFocused}m logged to your day!`);
-    onNotify?.("streak", "🔥 Unlimited Session Logged!", `Incredible! You focused for ${minutesFocused} minutes non-stop. +${minutesFocused}m added to today's total!`, "∞");
+    onNotify?.("streak", "Unlimited Session Logged", `Incredible! You focused for ${minutesFocused} minutes non-stop. +${minutesFocused}m added to today's total!`, "∞");
     setTimeLeft(0);
   };
 
@@ -270,12 +270,12 @@ export default function PomodoroTab({
     if (mode === "unlimited" && unlimitedType === "countup") {
       setTimeLeft(0);
       showToast("Timer reset to 00:00");
-      if (wasRunning) onNotify?.("warning", "🔄 Session Reset", "Your unlimited flow timer was reset back to 00:00.", "🔄");
+      if (wasRunning) onNotify?.("warning", "Session Reset", "Your unlimited flow timer was reset back to 00:00.", "↺");
     } else {
       const targetSecs = defaultMin * 60;
       setTimeLeft(targetSecs);
       showToast(`Timer reset to default ${defaultMin}m`);
-      if (wasRunning) onNotify?.("warning", "🔄 Timer Reset", `The ${mode === "focus" ? "focus sprint" : mode === "shortBreak" ? "short break" : "long rest"} timer was reset to default ${defaultMin} minutes.`, "🔄");
+      if (wasRunning) onNotify?.("warning", "Timer Reset", `The ${mode === "focus" ? "focus sprint" : mode === "shortBreak" ? "short break" : "long rest"} timer was reset to default ${defaultMin} minutes.`, "↺");
     }
   };
 
@@ -386,12 +386,12 @@ export default function PomodoroTab({
     if (isAmbientPlaying) {
       sound.stopAmbient();
       setIsAmbientPlaying(false);
-      onNotify?.("info", "🔇 Ambient Sound Stopped", "Soundscape paused. Click \"Start Sound\" to resume focus audio.", "🎵");
+      onNotify?.("info", "Ambient Sound Stopped", "Soundscape paused. Click \"Start Sound\" to resume focus audio.", "■");
     } else {
       sound.startAmbient(ambientType, ambientVolume);
       setIsAmbientPlaying(true);
-      const soundName = ambientType === "rain" ? "🌧️ Rainfall" : ambientType === "binaural" ? "🧠 Alpha 432Hz Binaural" : "💨 White Noise";
-      onNotify?.("info", `🎵 Ambient Sound On — ${soundName}`, `${soundName} is now playing at ${Math.round(ambientVolume * 100)}% volume to boost your focus flow.`, "🎵");
+      const soundName = ambientType === "rain" ? "Rainfall" : ambientType === "binaural" ? "Alpha 432Hz Binaural" : "White Noise";
+      onNotify?.("info", `Ambient Sound On — ${soundName}`, `${soundName} is now playing at ${Math.round(ambientVolume * 100)}% volume to boost your focus flow.`, "▶");
     }
   };
 
@@ -853,9 +853,9 @@ export default function PomodoroTab({
             {/* Sound options */}
             <div className="grid grid-cols-3 gap-2">
               {[
-                { id: "rain", label: "🌧️ Rainfall" },
-                { id: "binaural", label: "🧠 Alpha 432Hz" },
-                { id: "whitenoise", label: "💨 White Noise" },
+                { id: "rain", label: "Rainfall" },
+                { id: "binaural", label: "Alpha 432Hz" },
+                { id: "whitenoise", label: "White Noise" },
               ].map((s) => (
                 <button
                   key={s.id}

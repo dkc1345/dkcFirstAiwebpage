@@ -1,6 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import { sound } from "../audio";
 import { Task, motivationalQuotes } from "../schoolData";
 import { TabKey } from "./Navbar";
@@ -10,6 +12,7 @@ import {
   BookOpen, CheckCircle2, Calendar, Compass,
   BellRing, Lightbulb, CheckSquare, LogIn,
   TrendingUp, ChevronRight, Flame, Zap, RotateCcw,
+  Sun, Moon,
 } from "lucide-react";
 
 interface DashboardProps {
@@ -28,6 +31,7 @@ export default function DashboardTab({
   weightedGpa, unweightedGpa, todayFocusMinutes,
   user, onOpenAuth,
 }: DashboardProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [quoteIdx, setQuoteIdx] = useState(0);
   const pendingTasks = tasks.filter((t) => !t.completed);
   const completedTasks = tasks.filter((t) => t.completed);
@@ -35,18 +39,44 @@ export default function DashboardTab({
 
   const go = (tab: TabKey) => { setActiveTab(tab); sound.playClick(); };
 
+  useGSAP(
+    () => {
+      // Animate Hero banner
+      gsap.fromTo(
+        ".dashboard-hero-banner",
+        { opacity: 0, y: -16 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+      );
+
+      // Stagger animate stat cards
+      gsap.fromTo(
+        ".dashboard-kpi-card",
+        { opacity: 0, y: 20, scale: 0.95 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          stagger: 0.08,
+          duration: 0.5,
+          ease: "back.out(1.2)",
+          clearProps: "transform,opacity",
+        }
+      );
+    },
+    { scope: containerRef }
+  );
+
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
-  const greetingEmoji = hour < 12 ? "🌅" : hour < 17 ? "☀️" : "🌙";
 
   const studyProgress = Math.min((todayFocusMinutes / 90) * 100, 100);
   const taskProgress = tasks.length ? (completedTasks.length / tasks.length) * 100 : 0;
 
   return (
-    <div className="flex flex-col min-w-0 animate-fadeIn" style={{ gap: 'var(--section-gap)' }}>
+    <div ref={containerRef} className="flex flex-col min-w-0 animate-fadeIn" style={{ gap: 'var(--section-gap)' }}>
 
       {/* ── Hero Welcome Banner ───────────────────────── */}
-      <div className="relative overflow-hidden border-b border-white/[0.07] bg-gradient-to-br from-indigo-950/60 via-[var(--bg-card)] to-[var(--bg-card)]">
+      <div className="dashboard-hero-banner relative overflow-hidden border-b border-white/[0.07] bg-gradient-to-br from-indigo-950/60 via-[var(--bg-card)] to-[var(--bg-card)]">
         {/* Decorative ambient glows */}
         <div className="absolute -right-16 -top-16 w-72 h-72 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -left-8 bottom-0 w-48 h-48 bg-cyan-500/6 rounded-full blur-3xl pointer-events-none" />
@@ -55,18 +85,19 @@ export default function DashboardTab({
         <div className="relative z-10 p-6 sm:p-8">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
             {/* Left content */}
-            <div className="max-w-lg">
+            <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-3">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-bold tracking-widest uppercase bg-indigo-500/15 text-indigo-400 border border-indigo-500/25">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-2xs font-bold tracking-widest uppercase bg-indigo-500/15 text-indigo-400 border border-indigo-500/25 whitespace-nowrap">
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse-dot" />
                   {user?.role ?? "Academic Dashboard"}
                 </span>
               </div>
 
-              <h1 className="text-2xl sm:text-[28px] font-black leading-tight mb-2.5 text-white">
-                {greeting},{" "}
-                <span className="animate-shimmer-text">{user?.name ?? "Scholar"}</span>{" "}
-                <span className="inline-block animate-float">{greetingEmoji}</span>
+              <h1 className="text-2xl sm:text-[28px] font-black leading-tight mb-2.5 text-white flex flex-wrap items-center gap-2.5">
+                <span>{greeting}, <span className="animate-shimmer-text whitespace-nowrap">{user?.name ?? "Scholar"}</span></span>
+                <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-white/10 border border-white/15 text-amber-300 shrink-0">
+                  {hour < 17 ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4 text-indigo-300" />}
+                </span>
               </h1>
 
               <p className="text-scale-sm sm:text-scale-base text-zinc-400 leading-relaxed mb-5">
@@ -173,7 +204,7 @@ export default function DashboardTab({
             key={card.label}
             id={`stat-card-${card.tab}`}
             onClick={() => go(card.tab)}
-            className="glass-panel glass-panel-hover p-4 sm:p-5 cursor-pointer group hover-lift relative overflow-hidden"
+            className="dashboard-kpi-card glass-panel glass-panel-hover p-4 sm:p-5 cursor-pointer group hover-lift relative overflow-hidden"
           >
             {/* Subtle background accent */}
             <div className={`absolute -right-3 -top-3 w-16 h-16 rounded-full blur-2xl opacity-25 pointer-events-none ${card.iconCls.split(" ")[1]}`} />

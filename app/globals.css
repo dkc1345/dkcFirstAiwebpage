@@ -270,6 +270,9 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
   /* Prevent copying & selecting non-text-cursor elements */
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -278,6 +281,12 @@ body {
 }
 
 /* ─── Global Type Hierarchy ─── */
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: pretty;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
 h1 {
   font-size: var(--text-3xl);
   font-weight: 800;
@@ -552,6 +561,8 @@ html[data-theme="light"] .flashcard-face .text-slate-100 {
 }
 
 .animate-shimmer-text {
+  display: inline-block;
+  white-space: nowrap;
   background: linear-gradient(90deg, #818cf8, #38bdf8, #34d399, #c084fc, #818cf8);
   background-size: 200% auto;
   -webkit-background-clip: text;

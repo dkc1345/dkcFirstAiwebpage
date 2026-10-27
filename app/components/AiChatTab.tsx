@@ -73,13 +73,13 @@ interface PromptItem {
 }
 
 const PROMPT_CATEGORIES = [
-  { id: "all", label: "All Topics", emoji: "✨" },
-  { id: "basics", label: "Python & Coding", emoji: "🐍" },
-  { id: "concepts", label: "Explain Simply", emoji: "💡" },
-  { id: "dsa", label: "Data Structures", emoji: "⚡" },
-  { id: "database", label: "SQL & Databases", emoji: "🗄️" },
-  { id: "hardware", label: "CpE & Hardware", emoji: "⚙️" },
-  { id: "debug", label: "Debug Help", emoji: "🐞" },
+  { id: "all", label: "All Topics" },
+  { id: "basics", label: "Python & Coding" },
+  { id: "concepts", label: "Explain Simply" },
+  { id: "dsa", label: "Data Structures" },
+  { id: "database", label: "SQL & Databases" },
+  { id: "hardware", label: "CpE & Hardware" },
+  { id: "debug", label: "Debug Help" },
 ];
 
 const SUGGESTED_PROMPTS: PromptItem[] = [
@@ -158,10 +158,10 @@ const SUGGESTED_PROMPTS: PromptItem[] = [
 ];
 
 const BEGINNER_FOLLOW_UPS = [
-  { label: "💡 Explain simpler", prompt: "Could you please explain that in even simpler, beginner terms with an everyday analogy?" },
-  { label: "💻 Show code example", prompt: "Can you provide a clear, beginner-friendly code example with comments illustrating this?" },
-  { label: "❓ Quiz me on this", prompt: "Can you ask me 1 beginner-friendly multiple-choice quiz question to test my understanding of what you just explained?" },
-  { label: "📌 3 Key takeaways", prompt: "Please summarize the top 3 most important key takeaways from this in concise bullet points." },
+  { label: "Explain simpler", prompt: "Could you please explain that in even simpler, beginner terms with an everyday analogy?" },
+  { label: "Show code example", prompt: "Can you provide a clear, beginner-friendly code example with comments illustrating this?" },
+  { label: "Quiz me on this", prompt: "Can you ask me 1 beginner-friendly multiple-choice quiz question to test my understanding of what you just explained?" },
+  { label: "Key takeaways", prompt: "Please summarize the top 3 most important key takeaways from this in concise bullet points." },
 ];
 
 // ─── Code Block ───────────────────────────────────────────────────────────────
@@ -2107,7 +2107,6 @@ export default function AiChatTab({ onExit }: AiChatTabProps) {
                         setSelectedCategory(cat.id);
                       }}
                     >
-                      <span aria-hidden="true">{cat.emoji}</span>
                       <span>{cat.label}</span>
                     </button>
                   ))}

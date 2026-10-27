@@ -1,23 +1,78 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Search, Menu, Command } from "lucide-react";
+import {
+  Search,
+  Menu,
+  Command,
+  LayoutDashboard,
+  CheckSquare,
+  Timer,
+  BookOpen,
+  Calculator,
+  Compass,
+  Calendar,
+  FileText,
+  Bot,
+} from "lucide-react";
 import { TabKey } from "./Navbar";
 import { UserProfile } from "./AuthModal";
 import { sound } from "../audio";
 import NotificationCenter from "./NotificationCenter";
 import { AppNotification, NotificationType } from "../hooks/useNotifications";
 
-const pageInfo: Record<TabKey, { label: string; emoji: string; desc: string }> = {
-  dashboard:  { label: "Dashboard",       emoji: "🏠", desc: "Your academic overview" },
-  tasks:      { label: "Tasks & Homework", emoji: "📋", desc: "Manage your assignments" },
-  pomodoro:   { label: "Focus Lab",        emoji: "⏱️", desc: "Pomodoro timer & sessions" },
-  flashcards: { label: "Study & Quiz",     emoji: "📚", desc: "Flashcards & practice" },
-  gpa:        { label: "GPA Analytics",    emoji: "📊", desc: "Track your performance" },
-  stem:       { label: "STEM Toolkit",     emoji: "🔬", desc: "Science & math tools" },
-  schedule:   { label: "Class Schedule",   emoji: "📅", desc: "Your timetable" },
-  notes:      { label: "Scratchpad",       emoji: "📝", desc: "Quick notes & ideas" },
-  aichat:     { label: "ScholarBot AI",    emoji: "🤖", desc: "CS · IT · CpE Copilot" },
+interface PageMeta {
+  label: string;
+  desc: string;
+  icon: React.ReactNode;
+}
+
+const pageInfo: Record<TabKey, PageMeta> = {
+  dashboard: {
+    label: "Dashboard",
+    desc: "Your academic overview",
+    icon: <LayoutDashboard className="w-4 h-4 text-indigo-400" />,
+  },
+  tasks: {
+    label: "Tasks & Homework",
+    desc: "Manage your assignments",
+    icon: <CheckSquare className="w-4 h-4 text-amber-400" />,
+  },
+  pomodoro: {
+    label: "Focus Lab",
+    desc: "Pomodoro timer & sessions",
+    icon: <Timer className="w-4 h-4 text-cyan-400" />,
+  },
+  flashcards: {
+    label: "Study & Quiz",
+    desc: "Flashcards & practice",
+    icon: <BookOpen className="w-4 h-4 text-purple-400" />,
+  },
+  gpa: {
+    label: "GPA Analytics",
+    desc: "Track your performance",
+    icon: <Calculator className="w-4 h-4 text-emerald-400" />,
+  },
+  stem: {
+    label: "STEM Toolkit",
+    desc: "Science & math tools",
+    icon: <Compass className="w-4 h-4 text-blue-400" />,
+  },
+  schedule: {
+    label: "Class Schedule",
+    desc: "Your timetable",
+    icon: <Calendar className="w-4 h-4 text-rose-400" />,
+  },
+  notes: {
+    label: "Scratchpad",
+    desc: "Quick notes & ideas",
+    icon: <FileText className="w-4 h-4 text-teal-400" />,
+  },
+  aichat: {
+    label: "ScholarBot AI",
+    desc: "CS · IT · CpE Copilot",
+    icon: <Bot className="w-4 h-4 text-violet-400" />,
+  },
 };
 
 interface HeaderTopbarProps {
@@ -64,7 +119,7 @@ export default function HeaderTopbar({
     return () => clearInterval(id);
   }, []);
 
-  const { label, emoji, desc } = pageInfo[activeTab];
+  const { label, icon, desc } = pageInfo[activeTab];
 
   return (
     <header className="
@@ -85,7 +140,9 @@ export default function HeaderTopbar({
 
       {/* ── Page title ─── */}
       <div className="flex-1 min-w-0 flex items-center gap-2.5">
-        <span className="text-xl leading-none hidden sm:block animate-float">{emoji}</span>
+        <div className="hidden sm:flex items-center justify-center w-8 h-8 rounded-lg bg-[var(--bg-input)] border border-[var(--border)] shrink-0 shadow-xs">
+          {icon}
+        </div>
         <div className="min-w-0">
           <h1 className="text-scale-md font-bold text-[var(--text)] truncate leading-none">
             {label}

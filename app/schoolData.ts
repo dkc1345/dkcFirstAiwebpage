@@ -119,7 +119,7 @@ export const initialDecks: FlashcardDeck[] = [
     id: "deck-bio",
     title: "Cellular Biology & Genetics",
     subject: "AP Biology",
-    icon: "🔬",
+    icon: "biology",
     badge: "12 Cards",
     color: "#10b981",
     cards: [
@@ -153,7 +153,7 @@ export const initialDecks: FlashcardDeck[] = [
     id: "deck-calc",
     title: "Essential Calculus Derivatives & Integrals",
     subject: "AP Calculus",
-    icon: "📐",
+    icon: "math",
     badge: "10 Cards",
     color: "#6366f1",
     cards: [
@@ -187,7 +187,7 @@ export const initialDecks: FlashcardDeck[] = [
     id: "deck-hist",
     title: "Pivotal World History Milestones",
     subject: "World History",
-    icon: "🏛️",
+    icon: "history",
     badge: "8 Cards",
     color: "#f59e0b",
     cards: [
@@ -215,7 +215,7 @@ export const initialDecks: FlashcardDeck[] = [
     id: "deck-cs",
     title: "Data Structures & Algorithmic Complexity",
     subject: "Computer Science",
-    icon: "💻",
+    icon: "code",
     badge: "10 Cards",
     color: "#06b6d4",
     cards: [

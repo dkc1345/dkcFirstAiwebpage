@@ -17,6 +17,10 @@ import {
   Trophy,
   Brain,
   ListCheck,
+  Microscope,
+  Compass,
+  Landmark,
+  Laptop,
 } from "lucide-react";
 
 interface FlashcardsTabProps {
@@ -202,7 +206,24 @@ export default function FlashcardsTab({ decks }: FlashcardsTabProps) {
                 }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-2xl">{deck.icon}</span>
+                <span
+                  className="w-8 h-8 rounded-xl flex items-center justify-center border"
+                  style={{
+                    backgroundColor: `${deck.color}15`,
+                    borderColor: `${deck.color}35`,
+                    color: deck.color,
+                  }}
+                >
+                  {deck.id === "deck-bio" ? (
+                    <Microscope className="w-4 h-4" />
+                  ) : deck.id === "deck-calc" ? (
+                    <Compass className="w-4 h-4" />
+                  ) : deck.id === "deck-hist" ? (
+                    <Landmark className="w-4 h-4" />
+                  ) : (
+                    <Laptop className="w-4 h-4" />
+                  )}
+                </span>
                 <span
                   className="text-[10px] font-bold px-2 py-0.5 rounded-full"
                   style={{
@@ -276,7 +297,7 @@ export default function FlashcardsTab({ decks }: FlashcardsTabProps) {
                     </p>
                     {showHint && currentCard.hint && (
                       <div className="mt-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs inline-block animate-fadeIn">
-                        💡 <strong>Hint:</strong> {currentCard.hint}
+                        <strong>Hint:</strong> {currentCard.hint}
                       </div>
                     )}
                   </div>
