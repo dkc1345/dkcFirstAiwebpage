@@ -4,18 +4,20 @@
 :root,
 html[data-theme="dark"] {
   --sidebar-w: 256px;
-  --topbar-h: 56px;
+  --topbar-h: 60px;
   /* ── Spacing system ── */
-  --content-px: 24px;
+  --content-px: 32px;
   /* horizontal padding of main content */
-  --content-py: 20px;
+  --content-py: 30px;
   /* vertical padding of main content   */
-  --card-padding: 1.25rem;
+  --card-padding: 1.75rem;
   /* inner padding for bordered cards   */
-  --section-gap: 20px;
+  --section-gap: 28px;
   /* gap between page sections/cards   */
-  --card-gap: 16px;
+  --card-gap: 20px;
   /* gap between cards in a grid        */
+  --card-radius: 20px;
+  /* modern border radius for cards */
 
   /* ── Modern Fluid Type Scale (Desktop & Laptop Optimized) ── */
   /* Fluid clamp with baseline and viewport scaling */
@@ -64,7 +66,7 @@ html[data-theme="dark"] {
 
 html[data-theme="light"] {
   --sidebar-w: 256px;
-  --topbar-h: 56px;
+  --topbar-h: 60px;
   --bg: #f8fafc;
   --bg-secondary: #f1f5f9;
   --bg-sidebar: #ffffff;
@@ -88,7 +90,7 @@ html[data-theme="light"] {
 
 html[data-theme="midnight"] {
   --sidebar-w: 256px;
-  --topbar-h: 56px;
+  --topbar-h: 60px;
   --bg: #070d1e;
   --bg-secondary: #0b142c;
   --bg-sidebar: #091024;
@@ -112,7 +114,7 @@ html[data-theme="midnight"] {
 
 html[data-theme="emerald"] {
   --sidebar-w: 256px;
-  --topbar-h: 56px;
+  --topbar-h: 60px;
   --bg: #05140d;
   --bg-secondary: #081d13;
   --bg-sidebar: #071911;
@@ -136,7 +138,7 @@ html[data-theme="emerald"] {
 
 html[data-theme="amethyst"] {
   --sidebar-w: 256px;
-  --topbar-h: 56px;
+  --topbar-h: 60px;
   --bg: #11081a;
   --bg-secondary: #190d26;
   --bg-sidebar: #150a21;
@@ -169,11 +171,12 @@ html[data-theme="amethyst"] {
 /* Responsive spacing + type tokens */
 @media (min-width: 1536px) {
   :root {
-    --content-px: 32px;
-    --content-py: 24px;
-    --card-padding: 1.5rem;
-    --section-gap: 24px;
-    --card-gap: 20px;
+    --content-px: 40px;
+    --content-py: 36px;
+    --card-padding: 2.25rem;
+    --section-gap: 32px;
+    --card-gap: 24px;
+    --card-radius: 22px;
     /* Ultra-wide / 4K / large monitors */
     --text-2xs: 0.75rem;
     /* 12px */
@@ -200,11 +203,12 @@ html[data-theme="amethyst"] {
 
 @media (max-width: 1024px) {
   :root {
-    --content-px: 16px;
-    --content-py: 16px;
-    --card-padding: 1.125rem;
-    --section-gap: 16px;
-    --card-gap: 14px;
+    --content-px: 24px;
+    --content-py: 22px;
+    --card-padding: 1.5rem;
+    --section-gap: 22px;
+    --card-gap: 16px;
+    --card-radius: 16px;
     /* Tablet / small laptops: comfortable and readable */
     --text-2xs: 0.6875rem;
     /* 11px */
@@ -231,11 +235,12 @@ html[data-theme="amethyst"] {
 
 @media (max-width: 640px) {
   :root {
-    --content-px: 12px;
-    --content-py: 12px;
-    --card-padding: 0.875rem;
-    --section-gap: 12px;
-    --card-gap: 10px;
+    --content-px: 18px;
+    --content-py: 18px;
+    --card-padding: 1.25rem;
+    --section-gap: 18px;
+    --card-gap: 14px;
+    --card-radius: 14px;
     /* Mobile: compact but legible */
     --text-2xs: 0.6875rem;
     /* 11px */
@@ -381,17 +386,23 @@ small {
 .glass-panel {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--card-radius, 18px);
   padding: var(--card-padding);
   /* Consistent gap when cards are siblings */
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 20px -2px rgba(0, 0, 0, 0.15);
 }
 
 .glass-panel-hover:hover {
   background: var(--bg-card-hover);
-  border-color: rgba(99, 102, 241, 0.25);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.5);
+  border-color: rgba(99, 102, 241, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.35);
+}
+
+/* ─── Hero Banner Card ─── */
+.dashboard-hero-banner {
+  background: transparent;
 }
 
 /* ─── Subtle Grid Texture ─── */
@@ -468,7 +479,7 @@ html[data-theme="light"] textarea {
 }
 
 html[data-theme="light"] .glass-panel {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(79, 70, 229, 0.06);
 }
 
 html[data-theme="light"] .flashcard-face {
@@ -638,9 +649,37 @@ body {
 
 /* ─── Focus visible ring ─── */
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid rgba(0, 0, 0, 0.18);
   outline-offset: 2px;
-  border-radius: 6px;
+  border-radius: 12px;
+}
+
+html[data-theme="dark"] :focus-visible,
+html[data-theme="midnight"] :focus-visible,
+html[data-theme="emerald"] :focus-visible,
+html[data-theme="amethyst"] :focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Remove harsh default outline when clicking with mouse while keeping soft outline for keyboard navigation */
+aside button:focus,
+nav button:focus,
+button:focus {
+  outline: none;
+}
+
+aside button:focus-visible,
+nav button:focus-visible,
+button:focus-visible {
+  outline: 2px solid rgba(0, 0, 0, 0.15) !important;
+  outline-offset: 1px !important;
+  border-radius: 12px !important;
+}
+
+html[data-theme="dark"] aside button:focus-visible,
+html[data-theme="dark"] nav button:focus-visible,
+html[data-theme="dark"] button:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.2) !important;
 }
 
 /* ─── Extra animation keyframes ─── */
@@ -747,6 +786,27 @@ body {
 
 html[data-theme="light"] .glass-panel {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(79, 70, 229, 0.06);
+}
+
+html[data-theme="light"] aside button.bg-indigo-500\/10,
+html[data-theme="light"] nav button.bg-indigo-500\/10 {
+  background-color: #ffffff !important;
+  box-shadow:
+    0 1px 2px 0 rgba(0, 0, 0, 0.03),
+    0 4px 12px 0 rgba(0, 0, 0, 0.05),
+    0 10px 24px -4px rgba(99, 102, 241, 0.08) !important;
+  border: none !important;
+}
+
+aside nav button {
+  outline: none !important;
+  border: none !important;
+}
+
+/* Inactive button styles to avoid dark shadow/outline lag */
+aside nav button:not(.bg-indigo-500\/10) {
+  box-shadow: none !important;
+  border: none !important;
 }
 
 /* ─── Gradient Text ─── */

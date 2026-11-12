@@ -231,10 +231,10 @@ export default function Sidebar({
                   className={`
                     w-full flex items-center ${collapsed ? "justify-center" : "justify-start gap-[10px]"}
                     ${collapsed ? "h-11 px-0" : "px-3.5 py-2.5"} rounded-xl
-                    text-scale-sm font-medium transition-all duration-150 cursor-pointer relative group
+                    text-scale-sm font-medium transition-colors duration-150 cursor-pointer relative group focus:outline-none select-none border-none
                     ${active
-                      ? "text-[var(--text)] font-semibold bg-indigo-500/10 dark:bg-white/[0.08] shadow-sm ring-1 ring-indigo-500/30 dark:ring-white/[0.12]"
-                      : "text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-black/[0.03] dark:hover:bg-white/[0.04]"
+                      ? "text-[var(--text)] font-semibold bg-indigo-500/10 dark:bg-white/[0.08] shadow-[0_4px_16px_-2px_rgba(99,102,241,0.18),0_2px_6px_-1px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_20px_-2px_rgba(0,0,0,0.5)] ring-0 border-0"
+                      : "text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-black/[0.03] dark:hover:bg-white/[0.04] shadow-none ring-0 border-0"
                     }
                   `}
                 >
