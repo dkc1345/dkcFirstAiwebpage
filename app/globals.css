@@ -285,6 +285,30 @@ body {
   user-select: none;
 }
 
+/* ─── Global Button & Form Control Clearance & Padding ─── */
+button {
+  line-height: normal;
+}
+
+/* Ensure content inside buttons has at least 5px breathing room from the border on all sides */
+button:not(.p-0):not([class*="p-0\.5"]) {
+  padding-top: max(5px, 0.5rem);
+  padding-bottom: max(5px, 0.5rem);
+  padding-left: max(5px, 0.75rem);
+  padding-right: max(5px, 0.75rem);
+}
+
+/* Ensure content and placeholder text inside input fields, select, and textarea has ample breathing room */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+select,
+textarea {
+  padding-left: max(14px, 0.875rem) !important;
+  padding-right: max(14px, 0.875rem);
+  padding-top: max(8px, 0.5rem);
+  padding-bottom: max(8px, 0.5rem);
+  line-height: normal;
+}
+
 /* ─── Global Type Hierarchy ─── */
 h1, h2, h3, h4, h5, h6 {
   text-wrap: pretty;
@@ -388,7 +412,8 @@ small {
   border: 1px solid var(--border);
   border-radius: var(--card-radius, 18px);
   padding: var(--card-padding);
-  /* Consistent gap when cards are siblings */
+  /* Consistent gap and clearance from adjacent borders */
+  margin: 5px 0;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 20px -2px rgba(0, 0, 0, 0.15);
 }

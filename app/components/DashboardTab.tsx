@@ -367,7 +367,7 @@ export default function DashboardTab({
               <span className="ml-auto w-2 h-2 rounded-full bg-cyan-400 animate-pulse-dot" />
             </div>
 
-            <div className="p-4 sm:p-5 flex flex-col gap-2.5">
+            <div className="p-4 sm:p-5 flex flex-col gap-3">
               {[
                 { title: "Science Fair Signups", date: "Oct 15", color: "#818cf8", desc: "Submit lab proposals to Room 108 by 4 PM Friday." },
                 { title: "Extended Library Hours", date: "Midterms", color: "#22d3ee", desc: "Open until 9 PM with peer tutoring tables." },
@@ -375,18 +375,19 @@ export default function DashboardTab({
               ].map((a) => (
                 <div
                   key={a.title}
-                  className="p-3.5 rounded-xl bg-white/[0.025] border border-[var(--border)] hover:border-white/[0.12] hover:bg-white/[0.04] transition-all cursor-pointer group"
+                  className="p-3.5 pb-4 rounded-xl bg-white/[0.025] border border-[var(--border)] hover:border-white/[0.12] hover:bg-white/[0.04] transition-all cursor-pointer group"
+                  style={{ margin: "5px" }}
                 >
-                  <div className="flex items-center justify-between mb-1.5">
-                    <p className="text-[12px] font-bold" style={{ color: a.color }}>{a.title}</p>
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <p className="text-[12px] font-bold leading-normal" style={{ color: a.color }}>{a.title}</p>
                     <span
-                      className="text-[10px] font-bold px-2 py-0.5 rounded-md"
+                      className="text-[10px] font-bold px-2 py-1 leading-normal rounded-md inline-flex items-center shrink-0"
                       style={{ color: a.color, background: `${a.color}18`, border: `1px solid ${a.color}30` }}
                     >
                       {a.date}
                     </span>
                   </div>
-                  <p className="text-2xs text-zinc-400 leading-relaxed">{a.desc}</p>
+                  <p className="text-2xs text-zinc-400 leading-normal pb-0.5" style={{ marginBottom: "5px" }}>{a.desc}</p>
                 </div>
               ))}
             </div>
