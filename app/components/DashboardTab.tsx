@@ -231,21 +231,23 @@ export default function DashboardTab({
   {/* ── Main Content Grid ────────────────────────── */ }
   < div className = "grid grid-cols-1 lg:grid-cols-3 min-w-0" style = {{ gap: 'var(--section-gap)' }}>
 
-    {/* ── Priority Homework (2-col) ─── */ }
-    < div className = "lg:col-span-2 glass-panel min-w-0 overflow-hidden rounded-2xl" style = {{ padding: 0 }}>
-      {/* Card header */ }
-      < div className = "flex items-center justify-between px-6 py-4.5 border-b border-[var(--border)]" >
+    {/* ── Priority Homework (2-col) ─── */}
+  <div className="lg:col-span-2 glass-panel min-w-0 overflow-hidden rounded-2xl" style={{ padding: 0 }}>
+      {/* Card header */}
+      <div className="flex items-center justify-between px-6 py-4.5 border-b border-[var(--border)]">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
                 <CheckSquare className="w-4 h-4 text-indigo-400" />
               </div>
-              <div>
-                <h2 className="text-[14px] font-bold text-white leading-none">Priority Homework</h2>
-                <p className="text-[11px] text-zinc-400 mt-0.5">{completedTasks.length} of {tasks.length} completed</p>
+              <div className="flex items-center gap-2">
+                <div>
+                  <h2 className="text-[14px] font-bold text-white leading-normal">Priority Homework</h2>
+                  <p className="text-[11px] text-zinc-400 mt-0.5">{completedTasks.length} of {tasks.length} completed</p>
+                </div>
+                <span className="px-2.5 py-0.5 rounded-lg text-[11px] bg-indigo-500/12 text-indigo-400 border border-indigo-500/20 font-bold leading-normal inline-flex items-center">
+                  {pendingTasks.length}
+                </span>
               </div>
-              <span className="ml-1 px-2.5 py-0.5 rounded-lg text-[11px] bg-indigo-500/12 text-indigo-400 border border-indigo-500/20 font-bold">
-                {pendingTasks.length}
-              </span>
             </div>
             <button
               id="view-all-tasks-btn"
@@ -254,15 +256,16 @@ export default function DashboardTab({
             >
               View all <ChevronRight className="w-3.5 h-3.5" />
             </button>
-          </div >
+          </div>
 
-  {/* Task list */ }
-  < div className = "p-5 sm:p-6 flex flex-col gap-3" >
+  {/* Task list */}
+  <div className="p-5 sm:p-6 pb-6 sm:pb-7 flex flex-col gap-3">
   {
     pendingTasks.slice(0, 5).map((task, i) => (
       <div
         key={task.id}
         className="flex items-center gap-3.5 p-4 rounded-xl bg-white/[0.025] border border-[var(--border)] hover:border-indigo-500/30 hover:bg-white/[0.04] transition-all group stagger-item animate-slide-up"
+        style={{ margin: "5px 4px" }}
       >
         {/* Checkbox */}
         <button
@@ -270,7 +273,7 @@ export default function DashboardTab({
           onClick={() => { onToggleTask(task.id); sound.playSuccess(); }}
           className={`
                     w-5 h-5 shrink-0 rounded-[6px] flex items-center justify-center
-                    transition-all cursor-pointer
+                    transition-all cursor-pointer ml-1
                     ${task.completed
               ? "bg-emerald-500 border-0"
               : "border-[1.5px] border-zinc-600/80 hover:border-indigo-400 hover:bg-indigo-500/10"

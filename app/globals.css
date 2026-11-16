@@ -309,6 +309,37 @@ textarea {
   line-height: normal;
 }
 
+/* Ensure badges, tags, and status pills have ample margin inside their borders */
+span[class*="rounded-md"],
+span[class*="rounded-lg"],
+span[class*="rounded-full"] {
+  line-height: normal;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: max(4px, 0.25rem);
+  padding-bottom: max(4px, 0.25rem);
+  padding-left: max(8px, 0.5rem);
+  padding-right: max(8px, 0.5rem);
+}
+
+/* Priority & Status badges specifically */
+span[class*="tracking-widest"],
+span[class*="uppercase"] {
+  padding-top: max(5px, 0.35rem) !important;
+  padding-bottom: max(5px, 0.35rem) !important;
+  padding-left: max(10px, 0.65rem) !important;
+  padding-right: max(10px, 0.65rem) !important;
+  margin: 2px 0;
+}
+
+/* Task & list item cards clearance inside lists */
+div[class*="stagger-item"],
+div[class*="rounded-xl"][class*="border"] {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
 /* ─── Global Type Hierarchy ─── */
 h1, h2, h3, h4, h5, h6 {
   text-wrap: pretty;
