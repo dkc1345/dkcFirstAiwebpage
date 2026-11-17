@@ -309,28 +309,54 @@ textarea {
   line-height: normal;
 }
 
-/* Ensure badges, tags, and status pills have ample margin inside their borders */
-span[class*="rounded-md"],
-span[class*="rounded-lg"],
-span[class*="rounded-full"] {
+/* Notification dots, badge indicators, and pulse dots: always perfect circles with no text padding overrides */
+.notification-dot,
+span[class*="rounded-full"].w-2.h-2,
+span[class*="rounded-full"].w-1\.5.h-1\.5,
+span[class*="rounded-full"].w-2\.5.h-2\.5,
+span[class*="rounded-full"].w-3.h-3,
+span[class*="rounded-full"].w-3\.5.h-3\.5,
+span[class*="animate-pulse-dot"],
+button span.absolute.rounded-full {
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 9999px !important;
+  aspect-ratio: 1 / 1 !important;
+}
+
+/* Icon container badges (Topbar, Card headers, KPI cards): 8px horizontal margin */
+.w-8.h-8.rounded-lg,
+.w-8.h-8.rounded-xl,
+.w-9.h-9.rounded-xl,
+.w-10.h-10.rounded-2xl {
+  margin-left: 8px !important;
+  margin-right: 8px !important;
+}
+
+/* Ensure badges, tags, and status pills with text have ample margin inside their borders */
+span[class*="rounded-md"]:not(.w-2):not(.w-1\.5):not(.w-2\.5):not(.w-3),
+span[class*="rounded-lg"]:not(.w-2):not(.w-1\.5):not(.w-2\.5):not(.w-3),
+span[class*="rounded-full"]:not(.w-2):not(.w-1\.5):not(.w-2\.5):not(.w-3):not(.w-3\.5):not(.h-2):not(.h-1\.5):not(.h-2\.5):not(.h-3):not(.h-3\.5) {
   line-height: normal;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding-top: max(4px, 0.25rem);
-  padding-bottom: max(4px, 0.25rem);
-  padding-left: max(8px, 0.5rem);
-  padding-right: max(8px, 0.5rem);
+  padding-top: max(5px, 0.35rem) !important;
+  padding-bottom: max(5px, 0.35rem) !important;
+  padding-left: max(10px, 0.65rem) !important;
+  padding-right: max(10px, 0.65rem) !important;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 /* Priority & Status badges specifically */
 span[class*="tracking-widest"],
 span[class*="uppercase"] {
-  padding-top: max(5px, 0.35rem) !important;
-  padding-bottom: max(5px, 0.35rem) !important;
-  padding-left: max(10px, 0.65rem) !important;
-  padding-right: max(10px, 0.65rem) !important;
-  margin: 2px 0;
+  padding-top: max(6px, 0.4rem) !important;
+  padding-bottom: max(6px, 0.4rem) !important;
+  padding-left: max(14px, 0.85rem) !important;
+  padding-right: max(14px, 0.85rem) !important;
+  margin: 2px 5px !important;
 }
 
 /* Task & list item cards clearance inside lists */
@@ -341,7 +367,12 @@ div[class*="rounded-xl"][class*="border"] {
 }
 
 /* ─── Global Type Hierarchy ─── */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   text-wrap: pretty;
   word-break: normal;
   overflow-wrap: normal;
@@ -908,7 +939,6 @@ aside nav button:not(.bg-indigo-500\/10) {
   border-radius: 50%;
   background: #22c55e;
   border: 2px solid var(--bg-sidebar);
-  animation: pulse-dot 2.5s ease-in-out infinite;
 }
 
 /* ─── Sidebar Active Indicator ─── */

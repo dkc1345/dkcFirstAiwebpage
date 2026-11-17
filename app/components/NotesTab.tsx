@@ -220,7 +220,7 @@ export default function NotesTab({ userEmail }: NotesTabProps) {
           </div>
 
           <span className="text-emerald-400 text-2xs font-medium flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+            <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
             Auto-saved locally
           </span>
         </div>
