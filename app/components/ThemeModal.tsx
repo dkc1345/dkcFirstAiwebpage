@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { sound } from "../audio";
 import { X, Palette, Moon, Sun, Sparkles, Trees, Timer, Check } from "lucide-react";
 
@@ -93,7 +93,7 @@ interface ThemeModalProps {
   currentTheme: ThemeId;
   onSelectTheme: (theme: ThemeId) => void;
   showGridPattern?: boolean;
-  onToggleGridPattern?: () => void;
+  onSetGridPattern?: (enabled: boolean) => void;
 }
 
 export default function ThemeModal({
@@ -102,17 +102,61 @@ export default function ThemeModal({
   currentTheme,
   onSelectTheme,
   showGridPattern = true,
-  onToggleGridPattern,
+  onSetGridPattern,
 }: ThemeModalProps) {
+  // Local drafts: ONLY modified within this modal, NOT applied to the browser until "Done"
+  const [draftTheme, setDraftTheme] = useState<ThemeId>(currentTheme);
+  const [draftGrid, setDraftGrid] = useState<boolean>(showGridPattern);
+
+  // Sync draft whenever modal is opened
+  useEffect(() => {
+    if (isOpen) {
+      setDraftTheme(currentTheme);
+      setDraftGrid(showGridPattern);
+    }
+  }, [isOpen, currentTheme, showGridPattern]);
+
+  const handleCancel = () => {
+    sound.playClick();
+    // Discard any draft changes without touching the browser
+    setDraftTheme(currentTheme);
+    setDraftGrid(showGridPattern);
+    onClose();
+  };
+
+  const handleSave = () => {
+    sound.playClick();
+    // Apply changes to the browser only now
+    if (draftTheme !== currentTheme) {
+      onSelectTheme(draftTheme);
+    }
+    if (onSetGridPattern && draftGrid !== showGridPattern) {
+      onSetGridPattern(draftGrid);
+    }
+    onClose();
+  };
+
+  const handlePickTheme = (themeId: ThemeId) => {
+    sound.playClick();
+    // Only update local draft selection (does NOT apply to browser yet)
+    setDraftTheme(themeId);
+  };
+
+  const handleToggleGrid = () => {
+    sound.playClick();
+    // Only update local draft toggle (does NOT apply to browser yet)
+    setDraftGrid((prev) => !prev);
+  };
+
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
-        onClose();
+        handleCancel();
       }
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [isOpen, onClose]);
+  }, [isOpen, currentTheme, showGridPattern]);
 
   if (!isOpen) return null;
 
@@ -138,10 +182,7 @@ export default function ThemeModal({
             </div>
           </div>
           <button
-            onClick={() => {
-              sound.playClick();
-              onClose();
-            }}
+            onClick={handleCancel}
             className="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-white/[0.08] transition-colors cursor-pointer"
             aria-label="Close themes"
           >
@@ -153,14 +194,11 @@ export default function ThemeModal({
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
             {THEME_OPTIONS.map((option) => {
-              const isActive = currentTheme === option.id;
+              const isActive = draftTheme === option.id;
               return (
                 <button
                   key={option.id}
-                  onClick={() => {
-                    sound.playClick();
-                    onSelectTheme(option.id);
-                  }}
+                  onClick={() => handlePickTheme(option.id)}
                   className={`flex items-center gap-2.5 p-3 rounded-xl border text-left transition-all cursor-pointer ${
                     isActive
                       ? "border-[var(--accent)] bg-[var(--accent)]/15 text-[var(--text)] shadow-sm ring-1 ring-[var(--accent)]/40"
@@ -181,24 +219,21 @@ export default function ThemeModal({
           </div>
 
           {/* Background Grid Pattern Toggle */}
-          {onToggleGridPattern && (
+          {onSetGridPattern && (
             <div className="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--bg-input)] flex items-center justify-between">
               <div>
                 <p className="text-xs font-semibold text-[var(--text)]">Background Grid Pattern</p>
                 <p className="text-[11px] text-[var(--text-muted)]">Subtle structural engineering matrix lines on background</p>
               </div>
               <button
-                onClick={() => {
-                  sound.playClick();
-                  onToggleGridPattern();
-                }}
+                onClick={handleToggleGrid}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer border ${
-                  showGridPattern
+                  draftGrid
                     ? "bg-[var(--accent)] text-white border-[var(--accent)] shadow-sm"
                     : "bg-[var(--bg-card)] text-[var(--text-muted)] border-[var(--border)] hover:text-[var(--text)]"
                 }`}
               >
-                {showGridPattern ? "Enabled" : "Disabled"}
+                {draftGrid ? "Enabled" : "Disabled"}
               </button>
             </div>
           )}
@@ -206,16 +241,21 @@ export default function ThemeModal({
 
         {/* Footer */}
         <div className="px-6 py-3.5 border-t border-[var(--border)] bg-[var(--bg-header)] backdrop-blur-md flex items-center justify-between text-[12px] text-[var(--text-muted)] shrink-0">
-          <span>Theme settings save automatically.</span>
-          <button
-            onClick={() => {
-              sound.playClick();
-              onClose();
-            }}
-            className="px-4 py-1.5 rounded-lg bg-[var(--accent)] hover:opacity-90 text-white font-semibold text-[13px] transition-all cursor-pointer shadow-md"
-          >
-            Done
-          </button>
+          <span>Click Done to apply changes.</span>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleCancel}
+              className="px-3.5 py-1.5 rounded-lg border border-[var(--border)] hover:bg-white/[0.06] text-[var(--text-muted)] hover:text-[var(--text)] font-semibold text-[13px] transition-all cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSave}
+              className="px-4 py-1.5 rounded-lg bg-[var(--accent)] hover:opacity-90 text-white font-semibold text-[13px] transition-all cursor-pointer shadow-md"
+            >
+              Done
+            </button>
+          </div>
         </div>
       </div>
     </div>

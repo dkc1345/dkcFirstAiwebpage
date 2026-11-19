@@ -82,6 +82,13 @@ export default function Home() {
     } catch { }
   };
 
+  const handleSetGridPattern = (enabled: boolean) => {
+    setShowGridPattern(enabled);
+    try {
+      localStorage.setItem("scholarsync_grid", enabled.toString());
+    } catch { }
+  };
+
   const handleToggleGridPattern = () => {
     setShowGridPattern((prev) => {
       const next = !prev;
@@ -481,8 +488,6 @@ export default function Home() {
       <SettingsModal
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
-        showGridPattern={showGridPattern}
-        onToggleGridPattern={handleToggleGridPattern}
         pomodoroPresets={pomodoroPresets}
         onUpdatePomodoroPresets={handleUpdatePomodoroPresets}
       />
@@ -493,7 +498,7 @@ export default function Home() {
         currentTheme={currentTheme}
         onSelectTheme={handleSelectTheme}
         showGridPattern={showGridPattern}
-        onToggleGridPattern={handleToggleGridPattern}
+        onSetGridPattern={handleSetGridPattern}
       />
 
       <AuthModal
