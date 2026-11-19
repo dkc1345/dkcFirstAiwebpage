@@ -30,6 +30,7 @@ interface SidebarProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   onOpenSettings: () => void;
+  onOpenThemes?: () => void;
   isCollapsed?: boolean;
   setIsCollapsed?: (collapsed: boolean) => void;
 }
@@ -53,6 +54,7 @@ export default function Sidebar({
   isOpen,
   setIsOpen,
   onOpenSettings,
+  onOpenThemes,
   isCollapsed: controlledCollapsed,
   setIsCollapsed: setControlledCollapsed,
 }: SidebarProps) {
@@ -287,7 +289,11 @@ export default function Sidebar({
         <button
           onClick={() => {
             sound.playClick();
-            onOpenSettings();
+            if (onOpenThemes) {
+              onOpenThemes();
+            } else {
+              onOpenSettings();
+            }
             setIsOpen(false);
           }}
           className={`
@@ -302,7 +308,7 @@ export default function Sidebar({
           </div>
           {!collapsed && (
             <span className="text-[10px] font-bold text-indigo-400 px-1.5 py-0.5 rounded-md bg-indigo-500/10 border border-indigo-500/20 shrink-0">
-              5
+              6
             </span>
           )}
         </button>

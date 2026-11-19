@@ -17,6 +17,7 @@ import AiAssistantDrawer from "./components/AiAssistantDrawer";
 import AiChatTab from "./components/AiChatTab";
 import CommandPaletteModal from "./components/CommandPaletteModal";
 import SettingsModal, { ThemeId, PomodoroPresets, POMODORO_PRESET_PACKS } from "./components/SettingsModal";
+import ThemeModal from "./components/ThemeModal";
 import { useNotifications } from "./hooks/useNotifications";
 import {
   initialTasks,
@@ -56,6 +57,7 @@ export default function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
+  const [isThemeOpen, setIsThemeOpen] = useState<boolean>(false);
   const [currentTheme, setCurrentTheme] = useState<ThemeId>("dark");
   const [showGridPattern, setShowGridPattern] = useState<boolean>(true);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -300,6 +302,7 @@ export default function Home() {
         isCollapsed={isSidebarCollapsed}
         setIsCollapsed={setIsSidebarCollapsed}
         onOpenSettings={() => setIsSettingsOpen(true)}
+        onOpenThemes={() => setIsThemeOpen(true)}
       />
 
       {/* ── Content area ─── */}
@@ -450,7 +453,7 @@ export default function Home() {
               <span className="font-semibold text-[var(--text-subtle)]">ScholarSync Academic Hub</span>
               <div className="flex items-center gap-3">
                 <button
-                  onClick={() => setIsSettingsOpen(true)}
+                  onClick={() => setIsThemeOpen(true)}
                   className="hover:text-indigo-400 transition-colors cursor-pointer"
                 >
                   Theme: <span className="capitalize text-[var(--text)] font-medium">{currentTheme}</span>
@@ -478,12 +481,19 @@ export default function Home() {
       <SettingsModal
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
-        currentTheme={currentTheme}
-        onSelectTheme={handleSelectTheme}
         showGridPattern={showGridPattern}
         onToggleGridPattern={handleToggleGridPattern}
         pomodoroPresets={pomodoroPresets}
         onUpdatePomodoroPresets={handleUpdatePomodoroPresets}
+      />
+
+      <ThemeModal
+        isOpen={isThemeOpen}
+        onClose={() => setIsThemeOpen(false)}
+        currentTheme={currentTheme}
+        onSelectTheme={handleSelectTheme}
+        showGridPattern={showGridPattern}
+        onToggleGridPattern={handleToggleGridPattern}
       />
 
       <AuthModal
