@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import Script from "next/script";
 import CustomCursor from "./components/CustomCursor";
 
 export const viewport: Viewport = {
@@ -27,23 +28,25 @@ export default function RootLayout({
       className="h-full antialiased"
     >
       <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var saved = localStorage.getItem('scholarsync_theme') || 'dark';
-                  var resolved = saved;
-                  if (saved === 'system') {
-                    resolved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                  }
-                  document.documentElement.setAttribute('data-theme', resolved);
-                  document.documentElement.setAttribute('data-theme-setting', saved);
-                } catch(e) {}
-              })();
-            `,
-          }}
-        />
+        <Script
+  id="theme-loader"
+  strategy="beforeInteractive"
+  dangerouslySetInnerHTML={{
+    __html: `
+      (function() {
+        try {
+          var saved = localStorage.getItem('scholarsync_theme') || 'dark';
+          var resolved = saved;
+          if (saved === 'system') {
+            resolved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', resolved);
+          document.documentElement.setAttribute('data-theme-setting', saved);
+        } catch(e) {}
+      })();
+    `,
+  }}
+/>
       </head>
       <body className="min-h-full overflow-x-hidden bg-[var(--bg)] text-[var(--text)] selection:bg-indigo-500 selection:text-white transition-colors duration-300">
         <CustomCursor />

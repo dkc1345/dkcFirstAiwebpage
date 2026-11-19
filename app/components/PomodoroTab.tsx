@@ -163,7 +163,13 @@ export default function PomodoroTab({
 
   const completionPendingRef = useRef(false);
 
-  // Main timer tick effect
+  // Persist running state so other components (e.g., Sidebar) can show a badge
+  useEffect(() => {
+    // Store a simple flag – string "true"/"false" for easy reading
+    try {
+      localStorage.setItem('pomodoroRunning', isRunning ? 'true' : 'false');
+    } catch {}
+  }, [isRunning]);
   useEffect(() => {
     if (isRunning) {
       timerRef.current = setInterval(() => {

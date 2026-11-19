@@ -61,10 +61,7 @@ export default function SettingsModal({
 
   const handleTriggerReset = () => {
     sound.playClick();
-    if (onResetAll) {
-      onResetAll();
-    }
-    // Reset theme to Pure White (light) and grid pattern to enabled
+    // NOTE: Full user data reset is disabled. Only UI settings (theme & grid) are reset.
     setDraftTheme("light");
     onSelectTheme("light"); // apply immediately
     setDraftGrid(true);
@@ -72,7 +69,7 @@ export default function SettingsModal({
     setResetConfirm(false);
     onClose();
   };
-  
+
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
@@ -118,7 +115,7 @@ export default function SettingsModal({
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {/* Section: Themes & Colors */}
-          <div className="space-y-3">
+          <div className="space-y-5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold tracking-wider uppercase text-[var(--text-muted)] flex items-center gap-1.5">
                 <Palette className="w-3.5 h-3.5 text-[var(--accent)]" />
@@ -139,11 +136,10 @@ export default function SettingsModal({
                       sound.playClick();
                       setDraftTheme(option.id);
                     }}
-                    className={`flex items-center gap-2.5 p-3 rounded-xl border text-left transition-all cursor-pointer ${
-                      isActive
-                        ? "border-[var(--accent)] bg-[var(--accent)]/15 text-[var(--text)] shadow-sm ring-1 ring-[var(--accent)]/40"
-                        : "border-[var(--border)] bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text)] hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card-hover)]"
-                    }`}
+                    className={`flex items-center gap-2.5 p-3 rounded-xl border text-left transition-all cursor-pointer ${isActive
+                      ? "border-[var(--accent)] bg-[var(--accent)]/15 text-[var(--text)] shadow-sm ring-1 ring-[var(--accent)]/40"
+                      : "border-[var(--border)] bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text)] hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card-hover)]"
+                      }`}
                   >
                     <div className="p-1.5 bg-[var(--bg-card)] rounded-lg text-[var(--accent)] shrink-0 border border-[var(--border)]">
                       {option.icon}
@@ -163,7 +159,7 @@ export default function SettingsModal({
           <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-input)] flex items-center justify-between my-[5px]">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-[var(--bg-card)] border border-[var(--border)] text-[var(--accent)]">
-                <LayoutGrid className="w-4 h-4" />
+                <LayoutGrid className="w-4 h-4 my-[5px]" />
               </div>
               <div>
                 <p className="text-xs font-semibold text-[var(--text)]">Background Grid Pattern</p>
@@ -175,11 +171,10 @@ export default function SettingsModal({
                 sound.playClick();
                 setDraftGrid(!draftGrid);
               }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer border ${
-                draftGrid
-                  ? "bg-[var(--accent)] text-white border-[var(--accent)] shadow-sm"
-                  : "bg-[var(--bg-card)] text-[var(--text-muted)] border-[var(--border)] hover:text-[var(--text)]"
-              }`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer border ${draftGrid
+                ? "bg-[var(--accent)] text-white border-[var(--accent)] shadow-sm"
+                : "bg-[var(--bg-card)] text-[var(--text-muted)] border-[var(--border)] hover:text-[var(--text)]"
+                }`}
             >
               {draftGrid ? "Enabled" : "Disabled"}
             </button>
@@ -189,7 +184,7 @@ export default function SettingsModal({
           <div className="p-4 rounded-xl border border-red-500/20 bg-red-500/[0.04] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 my-[5px]">
             <div>
               <p className="text-xs font-bold text-red-500 flex items-center gap-1.5">
-                <RefreshCw className="w-3.5 h-3.5" />
+                <RefreshCw className="w-3.5 h-3.5 my-[5px]" />
                 Reset Webpage Settings
               </p>
               <p className="text-[11px] text-[var(--text-muted)] mt-0.5">

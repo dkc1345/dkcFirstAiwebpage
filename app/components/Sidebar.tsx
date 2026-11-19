@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { sound } from "../audio";
 import { TabKey } from "./Navbar";
@@ -56,7 +56,22 @@ export default function Sidebar({
   isCollapsed: controlledCollapsed,
   setIsCollapsed: setControlledCollapsed,
 }: SidebarProps) {
+  const [pomodoroRunning, setPomodoroRunning] = useState(false);
   const [internalCollapsed, setInternalCollapsed] = useState(true);
+
+  // Sync with localStorage flag set by PomodoroTab
+  useEffect(() => {
+    const updateFlag = () => {
+      try {
+        const val = localStorage.getItem('pomodoroRunning');
+        setPomodoroRunning(val === 'true');
+      } catch {}
+    };
+    updateFlag();
+    window.addEventListener('storage', updateFlag);
+    return () => window.removeEventListener('storage', updateFlag);
+  }, []);
+
   const isCollapsed = controlledCollapsed !== undefined ? controlledCollapsed : internalCollapsed;
   const setIsCollapsed = setControlledCollapsed || setInternalCollapsed;
 
@@ -70,25 +85,25 @@ export default function Sidebar({
     sectionTitle: string;
     items: NavItemConfig[];
   }[] = [
-    {
-      sectionTitle: "NAVIGATION",
-      items: [
-        { key: "dashboard", label: "Dashboard", icon: () => <LayoutDashboard className="w-[18px] h-[18px]" strokeWidth={1.8} /> },
-        { key: "tasks", label: "Tasks & Homework", icon: () => <CheckSquare className="w-[18px] h-[18px]" strokeWidth={1.8} />, badge: "task", badgeColor: "amber" },
-        { key: "pomodoro", label: "Focus Lab", icon: () => <Timer className="w-[18px] h-[18px]" strokeWidth={1.8} /> },
-        { key: "flashcards", label: "Study & Quiz", icon: () => <BookOpen className="w-[18px] h-[18px]" strokeWidth={1.8} /> },
-        { key: "gpa", label: "GPA Analytics", icon: () => <Calculator className="w-[18px] h-[18px]" strokeWidth={1.8} /> },
-        { key: "stem", label: "STEM Toolkit", icon: () => <Compass className="w-[18px] h-[18px]" strokeWidth={1.8} /> },
-      ],
-    },
-    {
-      sectionTitle: "INSIGHT",
-      items: [
-        { key: "schedule", label: "Class Schedule", icon: () => <Calendar className="w-[18px] h-[18px]" strokeWidth={1.8} /> },
-        { key: "notes", label: "Scratchpad", icon: () => <FileText className="w-[18px] h-[18px]" strokeWidth={1.8} /> },
-      ],
-    },
-  ];
+      {
+        sectionTitle: "NAVIGATION",
+        items: [
+          { key: "dashboard", label: "Dashboard", icon: () => <LayoutDashboard className="w-[18px] h-[18px]" strokeWidth={1.8} /> },
+          { key: "tasks", label: "Tasks & Homework", icon: () => <CheckSquare className="w-[18px] h-[18px]" strokeWidth={1.8} />, badge: "task", badgeColor: "amber" },
+          { key: "pomodoro", label: "Focus Lab", icon: () => <Timer className="w-[18px] h-[18px]" strokeWidth={1.8} /> },
+          { key: "flashcards", label: "Study & Quiz", icon: () => <BookOpen className="w-[18px] h-[18px]" strokeWidth={1.8} /> },
+          { key: "gpa", label: "GPA Analytics", icon: () => <Calculator className="w-[18px] h-[18px]" strokeWidth={1.8} /> },
+          { key: "stem", label: "STEM Toolkit", icon: () => <Compass className="w-[18px] h-[18px]" strokeWidth={1.8} /> },
+        ],
+      },
+      {
+        sectionTitle: "INSIGHT",
+        items: [
+          { key: "schedule", label: "Class Schedule", icon: () => <Calendar className="w-[18px] h-[18px]" strokeWidth={1.8} /> },
+          { key: "notes", label: "Scratchpad", icon: () => <FileText className="w-[18px] h-[18px]" strokeWidth={1.8} /> },
+        ],
+      },
+    ];
 
   const getBadgeClasses = (color?: string) => {
     switch (color) {
