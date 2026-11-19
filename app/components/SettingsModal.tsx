@@ -64,12 +64,15 @@ export default function SettingsModal({
     if (onResetAll) {
       onResetAll();
     }
-    setDraftTheme("dark");
+    // Reset theme to Pure White (light) and grid pattern to enabled
+    setDraftTheme("light");
+    onSelectTheme("light"); // apply immediately
     setDraftGrid(true);
+    onSetGridPattern && onSetGridPattern(true);
     setResetConfirm(false);
     onClose();
   };
-
+  
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
@@ -157,7 +160,7 @@ export default function SettingsModal({
           </div>
 
           {/* Section: Background Matrix Pattern */}
-          <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-input)] flex items-center justify-between">
+          <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-input)] flex items-center justify-between my-[5px]">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-[var(--bg-card)] border border-[var(--border)] text-[var(--accent)]">
                 <LayoutGrid className="w-4 h-4" />
@@ -183,7 +186,7 @@ export default function SettingsModal({
           </div>
 
           {/* Section: Reset to Default Settings */}
-          <div className="p-4 rounded-xl border border-red-500/20 bg-red-500/[0.04] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="p-4 rounded-xl border border-red-500/20 bg-red-500/[0.04] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 my-[5px]">
             <div>
               <p className="text-xs font-bold text-red-500 flex items-center gap-1.5">
                 <RefreshCw className="w-3.5 h-3.5" />
