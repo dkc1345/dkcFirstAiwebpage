@@ -16,8 +16,9 @@ import AuthModal, { UserProfile } from "./components/AuthModal";
 import AiAssistantDrawer from "./components/AiAssistantDrawer";
 import AiChatTab from "./components/AiChatTab";
 import CommandPaletteModal from "./components/CommandPaletteModal";
-import SettingsModal, { ThemeId, PomodoroPresets, POMODORO_PRESET_PACKS } from "./components/SettingsModal";
-import ThemeModal from "./components/ThemeModal";
+import SettingsModal from "./components/SettingsModal";
+import PomodoroSettingsModal, { PomodoroPresets, POMODORO_PRESET_PACKS } from "./components/PomodoroSettingsModal";
+import ThemeModal, { ThemeId } from "./components/ThemeModal";
 import { useNotifications } from "./hooks/useNotifications";
 import {
   initialTasks,
@@ -57,6 +58,7 @@ export default function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
+  const [isPomodoroSettingsOpen, setIsPomodoroSettingsOpen] = useState<boolean>(false);
   const [isThemeOpen, setIsThemeOpen] = useState<boolean>(false);
   const [currentTheme, setCurrentTheme] = useState<ThemeId>("dark");
   const [showGridPattern, setShowGridPattern] = useState<boolean>(true);
@@ -269,13 +271,28 @@ export default function Home() {
     } catch { }
   }, [pushNotif]);
   const handleResetData = () => {
-    setTasks(initialTasks); setCourses(initialCourses); setTodayFocusMinutes(75);
+    setTasks(initialTasks);
+    setCourses(initialCourses);
+    setTodayFocusMinutes(75);
     setPomodoroPresets(DEFAULT_POMODORO_PRESETS);
     localStorage.removeItem("scholarsync_tasks");
     localStorage.removeItem("scholarsync_courses");
     localStorage.removeItem("scholarsync_focus");
     localStorage.removeItem("scholarsync_pomodoro_presets");
     pushNotif("warning", "Data Reset", "All tasks, courses, and focus data have been reset to defaults.", "↺");
+  };
+
+  const handleResetAll = () => {
+    // Reset core data
+    handleResetData();
+    // Reset UI defaults but keep user logged in
+    const defaultTheme: ThemeId = "dark";
+    setCurrentTheme(defaultTheme);
+    applyThemeToDOM(defaultTheme);
+    try { localStorage.setItem("scholarsync_theme", defaultTheme); } catch {}
+    setShowGridPattern(true);
+    try { localStorage.setItem("scholarsync_grid", "true"); } catch {}
+    pushNotif("info", "Settings Reset", "All settings restored to defaults.", "↺");
   };
 
   // GPA calculation
@@ -309,7 +326,6 @@ export default function Home() {
         isCollapsed={isSidebarCollapsed}
         setIsCollapsed={setIsSidebarCollapsed}
         onOpenSettings={() => setIsSettingsOpen(true)}
-        onOpenThemes={() => setIsThemeOpen(true)}
       />
 
       {/* ── Content area ─── */}
@@ -389,7 +405,7 @@ export default function Home() {
               onAddFocusMinutes={handleAddFocusMinutes}
               pomodoroPresets={pomodoroPresets}
               onUpdatePomodoroPresets={handleUpdatePomodoroPresets}
-              onOpenSettings={() => setIsSettingsOpen(true)}
+              onOpenSettings={() => setIsPomodoroSettingsOpen(true)}
               currentTheme={currentTheme}
               onNotify={pushNotif}
             />
@@ -488,6 +504,16 @@ export default function Home() {
       <SettingsModal
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
+        currentTheme={currentTheme}
+        onSelectTheme={handleSelectTheme}
+        showGridPattern={showGridPattern}
+        onSetGridPattern={handleSetGridPattern}
+        onResetAll={handleResetAll}
+      />
+
+      <PomodoroSettingsModal
+        isOpen={isPomodoroSettingsOpen}
+        onClose={() => setIsPomodoroSettingsOpen(false)}
         pomodoroPresets={pomodoroPresets}
         onUpdatePomodoroPresets={handleUpdatePomodoroPresets}
       />

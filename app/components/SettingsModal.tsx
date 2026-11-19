@@ -2,125 +2,71 @@
 
 import React, { useState, useEffect } from "react";
 import { sound } from "../audio";
-import { X, Timer, Infinity as InfinityIcon, Plus, Minus, Check } from "lucide-react";
-
-export type ThemeId = "system" | "dark" | "light" | "midnight" | "emerald" | "amethyst";
-
-export interface ThemeOption {
-  id: ThemeId;
-  name: string;
-  badge: string;
-  description: string;
-  icon: React.ReactNode;
-  bgHex: string;
-  cardHex: string;
-  accentHex: string;
-  previewClass: string;
-}
-
-export interface PomodoroPresets {
-  focus: number;
-  shortBreak: number;
-  longBreak: number;
-  unlimitedTarget: number;
-  unlimitedDefaultType: "countup" | "countdown";
-  presetName: string;
-}
-
-export const POMODORO_PRESET_PACKS: Array<{
-  name: string;
-  badge: string;
-  description: string;
-  focus: number;
-  shortBreak: number;
-  longBreak: number;
-  unlimitedTarget: number;
-  unlimitedDefaultType: "countup" | "countdown";
-}> = [
-  {
-    name: "Classic Pomodoro",
-    badge: "25 / 5 / 15m",
-    description: "Standard interval for balanced, fatigue-free study sprints.",
-    focus: 25,
-    shortBreak: 5,
-    longBreak: 15,
-    unlimitedTarget: 60,
-    unlimitedDefaultType: "countup",
-  },
-  {
-    name: "Deep Work Sprint",
-    badge: "50 / 10 / 30m",
-    description: "Extended double blocks ideal for complex STEM problems and essays.",
-    focus: 50,
-    shortBreak: 10,
-    longBreak: 30,
-    unlimitedTarget: 90,
-    unlimitedDefaultType: "countup",
-  },
-  {
-    name: "Quick Drill",
-    badge: "15 / 3 / 10m",
-    description: "Fast high-intensity bursts for flashcards and rapid memorization.",
-    focus: 15,
-    shortBreak: 3,
-    longBreak: 10,
-    unlimitedTarget: 45,
-    unlimitedDefaultType: "countup",
-  },
-  {
-    name: "Ultradian Flow",
-    badge: "90 / 15 / 30m",
-    description: "Synchronized with 90-minute human biological peak cognitive cycles.",
-    focus: 90,
-    shortBreak: 15,
-    longBreak: 30,
-    unlimitedTarget: 120,
-    unlimitedDefaultType: "countup",
-  },
-  {
-    name: "Unlimited Stopwatch",
-    badge: "∞ Open Flow",
-    description: "Open-ended stopwatch session with zero time limits or pressure.",
-    focus: 60,
-    shortBreak: 10,
-    longBreak: 20,
-    unlimitedTarget: 60,
-    unlimitedDefaultType: "countup",
-  },
-];
+import { X, Settings, Palette, Check, RefreshCw, LayoutGrid } from "lucide-react";
+import { ThemeId, THEME_OPTIONS } from "./ThemeModal";
+export type { ThemeId, ThemeOption } from "./ThemeModal";
+export type { PomodoroPresets } from "./PomodoroSettingsModal";
+export { POMODORO_PRESET_PACKS } from "./PomodoroSettingsModal";
 
 interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  pomodoroPresets: PomodoroPresets;
-  onUpdatePomodoroPresets: (presets: PomodoroPresets) => void;
+  currentTheme: ThemeId;
+  onSelectTheme: (theme: ThemeId) => void;
+  showGridPattern: boolean;
+  onSetGridPattern: (enabled: boolean) => void;
+  onResetAll?: () => void;
 }
 
 export default function SettingsModal({
   isOpen,
   onClose,
-  pomodoroPresets,
-  onUpdatePomodoroPresets,
+  currentTheme,
+  onSelectTheme,
+  showGridPattern,
+  onSetGridPattern,
+  onResetAll,
 }: SettingsModalProps) {
-  // Local draft state initialized to incoming props
-  const [draftPresets, setDraftPresets] = useState<PomodoroPresets>(pomodoroPresets);
+  // Local draft state — only applies upon clicking "Done"
+  const [draftTheme, setDraftTheme] = useState<ThemeId>(currentTheme);
+  const [draftGrid, setDraftGrid] = useState<boolean>(showGridPattern);
+  const [resetConfirm, setResetConfirm] = useState<boolean>(false);
 
-  // Sync draft state whenever the modal opens
   useEffect(() => {
     if (isOpen) {
-      setDraftPresets(pomodoroPresets);
+      setDraftTheme(currentTheme);
+      setDraftGrid(showGridPattern);
+      setResetConfirm(false);
     }
-  }, [isOpen, pomodoroPresets]);
+  }, [isOpen, currentTheme, showGridPattern]);
 
   const handleCancel = () => {
     sound.playClick();
-    setDraftPresets(pomodoroPresets);
+    setDraftTheme(currentTheme);
+    setDraftGrid(showGridPattern);
+    setResetConfirm(false);
     onClose();
   };
 
   const handleSave = () => {
     sound.playClick();
-    onUpdatePomodoroPresets(draftPresets);
+    if (draftTheme !== currentTheme) {
+      onSelectTheme(draftTheme);
+    }
+    if (draftGrid !== showGridPattern) {
+      onSetGridPattern(draftGrid);
+    }
+    onClose();
+  };
+
+  const handleTriggerReset = () => {
+    sound.playClick();
+    if (onResetAll) {
+      onResetAll();
+    }
+    setDraftTheme("dark");
+    setDraftGrid(true);
+    setResetConfirm(false);
     onClose();
   };
 
@@ -132,43 +78,9 @@ export default function SettingsModal({
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [isOpen, pomodoroPresets]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
-
-  const handleSelectPresetPack = (pack: typeof POMODORO_PRESET_PACKS[number]) => {
-    sound.playClick();
-    setDraftPresets({
-      focus: pack.focus,
-      shortBreak: pack.shortBreak,
-      longBreak: pack.longBreak,
-      unlimitedTarget: pack.unlimitedTarget,
-      unlimitedDefaultType: pack.unlimitedDefaultType,
-      presetName: pack.name,
-    });
-  };
-
-  const handleAdjustPreset = (
-    field: "focus" | "shortBreak" | "longBreak" | "unlimitedTarget",
-    delta: number
-  ) => {
-    sound.playClick();
-    const current = draftPresets[field];
-    const next = Math.max(1, Math.min(180, current + delta));
-    setDraftPresets((prev) => ({
-      ...prev,
-      [field]: next,
-      presetName: "Custom Preset",
-    }));
-  };
-
-  const handleToggleUnlimitedType = (type: "countup" | "countdown") => {
-    sound.playClick();
-    setDraftPresets((prev) => ({
-      ...prev,
-      unlimitedDefaultType: type,
-    }));
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fadeIn">
@@ -180,14 +92,14 @@ export default function SettingsModal({
         <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border)] bg-[var(--bg-header)] backdrop-blur-md shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-[var(--accent)]">
-              <Timer className="w-5 h-5" />
+              <Settings className="w-5 h-5" />
             </div>
             <div>
               <h2 className="text-base sm:text-lg font-bold text-[var(--text)] leading-none">
-                Pomodoro Settings
+                Settings
               </h2>
               <p className="text-[12px] text-[var(--text-muted)] mt-1">
-                Configure focus sprint intervals and break durations
+                Manage webpage appearance, themes, and global preferences
               </p>
             </div>
           </div>
@@ -201,150 +113,118 @@ export default function SettingsModal({
         </div>
 
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold tracking-wider uppercase text-[var(--text-muted)] flex items-center gap-1.5">
-              <Timer className="w-3.5 h-3.5 text-[var(--accent)]" />
-              <span>POMODORO PRESETS</span>
-            </span>
-            <span className="text-[11px] text-[var(--accent)] font-semibold">
-              Active: {draftPresets.presetName}
-            </span>
-          </div>
+        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          {/* Section: Themes & Colors */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold tracking-wider uppercase text-[var(--text-muted)] flex items-center gap-1.5">
+                <Palette className="w-3.5 h-3.5 text-[var(--accent)]" />
+                <span>Themes & Appearance</span>
+              </span>
+              <span className="text-[11px] text-[var(--accent)] font-semibold">
+                6 Curated Palettes
+              </span>
+            </div>
 
-          {/* Quick Preset Packs */}
-          <div>
-            <span className="text-[11px] font-bold text-[var(--text-muted)] mb-2 block">Quick Preset Packs:</span>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {POMODORO_PRESET_PACKS.map((pack) => {
-                const isPackActive = draftPresets.presetName === pack.name;
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+              {THEME_OPTIONS.map((option) => {
+                const isActive = draftTheme === option.id;
                 return (
                   <button
-                    key={pack.name}
-                    onClick={() => handleSelectPresetPack(pack)}
-                    className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${isPackActive
-                      ? "border-[var(--accent)] bg-[var(--accent)]/15 text-[var(--text)] shadow-sm"
-                      : "border-[var(--border)] bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text)] hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card-hover)]"}`}
+                    key={option.id}
+                    onClick={() => {
+                      sound.playClick();
+                      setDraftTheme(option.id);
+                    }}
+                    className={`flex items-center gap-2.5 p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                      isActive
+                        ? "border-[var(--accent)] bg-[var(--accent)]/15 text-[var(--text)] shadow-sm ring-1 ring-[var(--accent)]/40"
+                        : "border-[var(--border)] bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--text)] hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card-hover)]"
+                    }`}
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-[var(--text)]">{pack.name}</span>
-                      {isPackActive && <Check className="w-3 h-3 text-[var(--accent)] stroke-[3]" />}
+                    <div className="p-1.5 bg-[var(--bg-card)] rounded-lg text-[var(--accent)] shrink-0 border border-[var(--border)]">
+                      {option.icon}
                     </div>
-                    <span className="inline-block text-[10px] font-semibold text-[var(--accent)] mt-0.5">{pack.badge}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold text-[var(--text)] truncate">{option.name}</p>
+                      <p className="text-[10px] text-[var(--text-muted)] truncate">{option.badge}</p>
+                    </div>
+                    {isActive && <Check className="w-4 h-4 text-[var(--accent)] shrink-0 stroke-[2.5]" />}
                   </button>
                 );
               })}
             </div>
           </div>
 
-          {/* Fine-Tuning Preset Durations */}
-          <div className="space-y-2.5 pt-1">
-            <span className="text-[11px] font-bold text-[var(--text-muted)] block">Fine-Tune Preset Durations:</span>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-              {/* Focus Duration */}
-              <div className="p-3 rounded-xl border border-[var(--border)] bg-[var(--bg-input)] flex items-center justify-between">
-                <div>
-                  <p className="text-[11px] font-semibold text-[var(--text)]">Focus Sprint</p>
-                  <span className="text-[10px] text-[var(--text-muted)]">Work block</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <button onClick={() => handleAdjustPreset("focus", -5)} className="p-1 rounded-md bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] transition-colors cursor-pointer" title="-5 min">
-                    <Minus className="w-3 h-3" />
-                  </button>
-                  <span className="font-mono text-xs font-bold text-[var(--text)] w-9 text-center">{draftPresets.focus}m</span>
-                  <button onClick={() => handleAdjustPreset("focus", 5)} className="p-1 rounded-md bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] transition-colors cursor-pointer" title="+5 min">
-                    <Plus className="w-3 h-3" />
-                  </button>
-                </div>
+          {/* Section: Background Matrix Pattern */}
+          <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-input)] flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-[var(--bg-card)] border border-[var(--border)] text-[var(--accent)]">
+                <LayoutGrid className="w-4 h-4" />
               </div>
-              {/* Short Break Duration */}
-              <div className="p-3 rounded-xl border border-[var(--border)] bg-[var(--bg-input)] flex items-center justify-between">
-                <div>
-                  <p className="text-[11px] font-semibold text-[var(--text)]">Short Break</p>
-                  <span className="text-[10px] text-[var(--text-muted)]">Rest block</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <button onClick={() => handleAdjustPreset("shortBreak", -1)} className="p-1 rounded-md bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] transition-colors cursor-pointer" title="-1 min">
-                    <Minus className="w-3 h-3" />
-                  </button>
-                  <span className="font-mono text-xs font-bold text-[var(--text)] w-9 text-center">{draftPresets.shortBreak}m</span>
-                  <button onClick={() => handleAdjustPreset("shortBreak", 1)} className="p-1 rounded-md bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] transition-colors cursor-pointer" title="+1 min">
-                    <Plus className="w-3 h-3" />
-                  </button>
-                </div>
-              </div>
-              {/* Long Rest Duration */}
-              <div className="p-3 rounded-xl border border-[var(--border)] bg-[var(--bg-input)] flex items-center justify-between">
-                <div>
-                  <p className="text-[11px] font-semibold text-[var(--text)]">Long Rest</p>
-                  <span className="text-[10px] text-[var(--text-muted)]">Deep recharge</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <button onClick={() => handleAdjustPreset("longBreak", -5)} className="p-1 rounded-md bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] transition-colors cursor-pointer" title="-5 min">
-                    <Minus className="w-3 h-3" />
-                  </button>
-                  <span className="font-mono text-xs font-bold text-[var(--text)] w-9 text-center">{draftPresets.longBreak}m</span>
-                  <button onClick={() => handleAdjustPreset("longBreak", 5)} className="p-1 rounded-md bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] transition-colors cursor-pointer" title="+5 min">
-                    <Plus className="w-3 h-3" />
-                  </button>
-                </div>
+              <div>
+                <p className="text-xs font-semibold text-[var(--text)]">Background Grid Pattern</p>
+                <p className="text-[11px] text-[var(--text-muted)]">Subtle structural engineering matrix lines on workspace background</p>
               </div>
             </div>
+            <button
+              onClick={() => {
+                sound.playClick();
+                setDraftGrid(!draftGrid);
+              }}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer border ${
+                draftGrid
+                  ? "bg-[var(--accent)] text-white border-[var(--accent)] shadow-sm"
+                  : "bg-[var(--bg-card)] text-[var(--text-muted)] border-[var(--border)] hover:text-[var(--text)]"
+              }`}
+            >
+              {draftGrid ? "Enabled" : "Disabled"}
+            </button>
           </div>
 
-          {/* Unlimited Preset Default Mode */}
-          <div className="p-3 rounded-xl border border-[var(--border)] bg-[var(--bg-input)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5">
-            <div className="flex items-center gap-2">
-              <InfinityIcon className="w-4 h-4 text-amber-400" />
-              <div>
-                <p className="text-[11px] font-semibold text-[var(--text)]">Unlimited Preset Default</p>
-                <p className="text-[10px] text-[var(--text-muted)]">Choose between infinite stopwatch count-up or custom target</p>
-              </div>
+          {/* Section: Reset to Default Settings */}
+          <div className="p-4 rounded-xl border border-red-500/20 bg-red-500/[0.04] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-bold text-red-500 flex items-center gap-1.5">
+                <RefreshCw className="w-3.5 h-3.5" />
+                Reset Webpage Settings
+              </p>
+              <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
+                Restore theme and UI settings back to factory defaults without affecting your signed-in user session.
+              </p>
             </div>
-            <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
-              <div className="flex items-center gap-1 bg-black/20 p-0.5 rounded-lg border border-white/5">
+            {resetConfirm ? (
+              <div className="flex items-center gap-2 w-full sm:w-auto">
                 <button
-                  onClick={() => handleToggleUnlimitedType("countup")}
-                  className={`px-2 py-1 rounded-md text-[10px] font-bold transition-all cursor-pointer ${draftPresets.unlimitedDefaultType === "countup"
-                    ? "bg-amber-500 text-slate-950 shadow-sm"
-                    : "text-[var(--text-muted)] hover:text-[var(--text)]"}`}
+                  onClick={() => setResetConfirm(false)}
+                  className="px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--bg-card)] text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--text)] transition-colors cursor-pointer"
                 >
-                  Count Up (∞)
+                  Cancel
                 </button>
                 <button
-                  onClick={() => handleToggleUnlimitedType("countdown")}
-                  className={`px-2 py-1 rounded-md text-[10px] font-bold transition-all cursor-pointer ${draftPresets.unlimitedDefaultType === "countdown"
-                    ? "bg-amber-500 text-slate-950 shadow-sm"
-                    : "text-[var(--text-muted)] hover:text-[var(--text)]"}`}
+                  onClick={handleTriggerReset}
+                  className="px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-white text-xs font-semibold shadow transition-all cursor-pointer"
                 >
-                  Custom ({draftPresets.unlimitedTarget}m)
+                  Confirm Reset
                 </button>
               </div>
-              {draftPresets.unlimitedDefaultType === "countdown" && (
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => handleAdjustPreset("unlimitedTarget", -15)}
-                    className="p-1 rounded-md bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] cursor-pointer"
-                    title="-15m"
-                  >
-                    <Minus className="w-3 h-3" />
-                  </button>
-                  <button
-                    onClick={() => handleAdjustPreset("unlimitedTarget", 15)}
-                    className="p-1 rounded-md bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] cursor-pointer"
-                    title="+15m"
-                  >
-                    <Plus className="w-3 h-3" />
-                  </button>
-                </div>
-              )}
-            </div>
+            ) : (
+              <button
+                onClick={() => {
+                  sound.playClick();
+                  setResetConfirm(true);
+                }}
+                className="px-3 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-500 text-xs font-semibold transition-all cursor-pointer shrink-0"
+              >
+                Reset to Defaults
+              </button>
+            )}
           </div>
         </div>
 
         {/* Footer */}
         <div className="px-6 py-3.5 border-t border-[var(--border)] bg-[var(--bg-header)] backdrop-blur-md flex items-center justify-between text-[12px] text-[var(--text-muted)] shrink-0">
-          <span>Pomodoro presets save instantly to your browser.</span>
+          <span>Click Done to apply changes.</span>
           <div className="flex items-center gap-2">
             <button
               onClick={handleCancel}
