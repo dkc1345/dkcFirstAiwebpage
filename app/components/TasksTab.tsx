@@ -361,7 +361,7 @@ export default function TasksTab({
 
       {/* Add Task Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 animate-fadeIn">
           <div className="glass-panel w-full max-w-md p-6 bg-[#0f172a] border border-white/15 shadow-2xl relative">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <h3 className="text-lg font-bold text-white flex items-center gap-2">

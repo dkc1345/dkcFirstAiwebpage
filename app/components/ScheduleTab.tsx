@@ -229,7 +229,7 @@ export default function ScheduleTab() {
 
       {/* Class Detail Modal */}
       {selectedPeriodDetail && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 animate-fadeIn">
           <div className="glass-panel w-full max-w-md p-6 bg-[#0f172a] border border-white/15 shadow-2xl relative space-y-4">
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div>

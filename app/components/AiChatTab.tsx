@@ -486,13 +486,6 @@ export default function AiChatTab({ onExit }: AiChatTabProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
-  // Auto-open sidebar on wide screens (desktop) and keep closed on mobile/tablet
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.innerWidth >= 1024) {
-      setSidebarOpen(true);
-    }
-  }, []);
-
   // Load saved history
   useEffect(() => {
     setConversations(loadConversations());
@@ -692,7 +685,7 @@ export default function AiChatTab({ onExit }: AiChatTabProps) {
           flex-direction: column;
           transition: width 0.25s ease, min-width 0.25s ease, opacity 0.2s ease;
           overflow: hidden;
-          z-index: 15;
+          z-index: 50;
         }
         .chat-sidebar.closed {
           width: 0;
@@ -735,7 +728,7 @@ export default function AiChatTab({ onExit }: AiChatTabProps) {
         .chat-sidebar-backdrop {
           position: fixed;
           inset: 0;
-          background: rgba(0, 0, 0, 0.65);
+          background: transparent;
           backdrop-filter: blur(4px);
           z-index: 45;
           animation: fadeIn 0.2s ease-out;
@@ -873,7 +866,7 @@ export default function AiChatTab({ onExit }: AiChatTabProps) {
           background: var(--bg-header);
           backdrop-filter: blur(14px);
           flex-shrink: 0;
-          z-index: 10;
+          z-index: 46;
         }
         .chat-topbar-left {
           display: flex;

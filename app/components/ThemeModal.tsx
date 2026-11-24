@@ -161,13 +161,13 @@ export default function ThemeModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 animate-fadeIn">
       <div
         className="w-full max-w-xl glass-panel bg-[var(--bg-card)] border border-[var(--border)] shadow-2xl rounded-2xl overflow-hidden flex flex-col max-h-[90vh] transition-colors duration-300"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border)] bg-[var(--bg-header)] backdrop-blur-md shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border)] bg-[var(--bg-header)] shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-[var(--accent)]">
               <Palette className="w-5 h-5" />
@@ -240,7 +240,7 @@ export default function ThemeModal({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3.5 border-t border-[var(--border)] bg-[var(--bg-header)] backdrop-blur-md flex items-center justify-between text-[12px] text-[var(--text-muted)] shrink-0">
+        <div className="px-6 py-3.5 border-t border-[var(--border)] bg-[var(--bg-header)] flex items-center justify-between text-[12px] text-[var(--text-muted)] shrink-0">
           <span>Click Done to apply changes.</span>
           <div className="flex items-center gap-2">
             <button

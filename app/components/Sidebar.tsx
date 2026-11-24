@@ -338,7 +338,7 @@ export default function Sidebar({
 
       {/* Mobile overlay */}
       {isOpen && (
-        <div onClick={() => setIsOpen(false)} className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden transition-opacity" />
+        <div onClick={() => setIsOpen(false)} className="fixed inset-0 z-40 bg-black/60 lg:hidden transition-opacity" />
       )}
 
       {/* Mobile drawer */}

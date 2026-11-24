@@ -126,7 +126,7 @@ export default function HeaderTopbar({
       sticky top-0 z-20 w-full
       h-[var(--topbar-h)] flex items-center gap-2 px-4 sm:px-6
       bg-[var(--bg-header)] border-b border-[var(--border)]
-      backdrop-blur-xl min-w-0 transition-colors duration-300
+      min-w-0 transition-colors duration-300
     ">
       {/* ── Mobile menu ─── */}
       <button

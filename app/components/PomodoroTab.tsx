@@ -460,7 +460,7 @@ export default function PomodoroTab({
         <div className="lg:col-span-2 glass-panel p-6 sm:p-10 flex flex-col items-center justify-center relative overflow-hidden bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl shadow-xl transition-colors duration-300">
           {/* Subtle toast alert */}
           {feedbackToast && (
-            <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 px-3.5 py-1.5 rounded-full bg-[var(--bg-card)] border border-[var(--accent)]/50 text-[var(--text)] text-xs font-semibold shadow-2xl backdrop-blur-md animate-fadeIn flex items-center gap-1.5">
+            <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 px-3.5 py-1.5 rounded-full bg-[var(--bg-card)] border border-[var(--accent)]/50 text-[var(--text)] text-xs font-semibold shadow-2xl animate-fadeIn flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-[var(--accent)]" />
               <span>{feedbackToast}</span>
             </div>
@@ -541,7 +541,7 @@ export default function PomodoroTab({
 
           {/* Unlimited Preset Configuration Toolbar */}
           {mode === "unlimited" && (
-            <div className="w-full max-w-xl mb-4 p-3 rounded-2xl bg-[var(--bg-input)] border border-[var(--border)] backdrop-blur-sm animate-fadeIn flex flex-col gap-2.5 transition-colors duration-300">
+            <div className="w-full max-w-xl mb-4 p-3 rounded-2xl bg-[var(--bg-input)] border border-[var(--border)] animate-fadeIn flex flex-col gap-2.5 transition-colors duration-300">
               <div className="flex items-center justify-between text-xs flex-wrap gap-2">
                 <div className="flex items-center gap-1.5 text-amber-500 font-semibold">
                   <Sliders className="w-3.5 h-3.5" />
@@ -654,7 +654,7 @@ export default function PomodoroTab({
             {/* Central Time Display */}
             <div className="absolute flex flex-col items-center justify-center text-center">
               {isEditingTime ? (
-                <div className="flex items-center gap-2 z-20 bg-[var(--bg-card)] border border-[var(--accent)]/40 p-2.5 rounded-2xl shadow-2xl backdrop-blur-md animate-fadeIn">
+                <div className="flex items-center gap-2 z-20 bg-[var(--bg-card)] border border-[var(--accent)]/40 p-2.5 rounded-2xl shadow-2xl animate-fadeIn">
                   <div className="flex items-center gap-1 font-mono text-2xl font-bold">
                     <input
                       type="number"

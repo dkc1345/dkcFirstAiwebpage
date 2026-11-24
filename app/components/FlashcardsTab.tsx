@@ -274,7 +274,7 @@ export default function FlashcardsTab({ decks }: FlashcardsTabProps) {
                   }`}
               >
                 {/* Front Side */}
-                <div className="flashcard-face absolute inset-0 w-full h-full rounded-3xl p-8 flex flex-col justify-between backface-hidden border border-white/15 bg-gradient-to-br from-slate-900/90 via-indigo-950/40 to-slate-900/90 backdrop-blur-xl">
+                <div className="flashcard-face absolute inset-0 w-full h-full rounded-3xl p-8 flex flex-col justify-between backface-hidden border border-white/15 bg-gradient-to-br from-slate-900/90 via-indigo-950/40 to-slate-900/90 ">
                   <div className="flex items-center justify-between">
                     <span
                       className="text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider"
@@ -323,7 +323,7 @@ export default function FlashcardsTab({ decks }: FlashcardsTabProps) {
                 </div>
 
                 {/* Back Side */}
-                <div className="flashcard-face absolute inset-0 w-full h-full rounded-3xl p-8 flex flex-col justify-between backface-hidden rotate-y-180 border border-indigo-500/30 bg-gradient-to-br from-[#0e172a] via-[#1e1b4b] to-[#0e172a] backdrop-blur-xl">
+                <div className="flashcard-face absolute inset-0 w-full h-full rounded-3xl p-8 flex flex-col justify-between backface-hidden rotate-y-180 border border-indigo-500/30 bg-gradient-to-br from-[#0e172a] via-[#1e1b4b] to-[#0e172a] ">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-500/40">
                       Explanation & Solution

@@ -138,7 +138,7 @@ export default function DashboardTab({
             </div>
 
             {/* Right: Mini stats summary card */}
-            <div className="flex sm:flex-col gap-4 sm:gap-3.5 items-center justify-center shrink-0 p-5 sm:p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-xs min-w-[150px] text-center">
+            <div className="flex sm:flex-col gap-4 sm:gap-3.5 items-center justify-center shrink-0 p-5 sm:p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] min-w-[150px] text-center">
               {/* Streak */}
               <div className="w-full flex flex-col items-center text-center">
                 <p className="text-2xs font-bold uppercase tracking-widest text-zinc-500 mb-1">Study Streak</p>

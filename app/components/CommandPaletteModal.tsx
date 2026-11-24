@@ -190,7 +190,7 @@ export default function CommandPaletteModal({
   );
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4 bg-black/75 backdrop-blur-md animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4 bg-black/75 animate-fadeIn">
       <div className="glass-panel w-full max-w-xl bg-[#0b101d] border border-white/15 shadow-2xl overflow-hidden rounded-3xl">
         {/* Search Header */}
         <div className="p-4 border-b border-white/10 flex items-center gap-3">

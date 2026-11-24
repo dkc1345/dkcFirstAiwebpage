@@ -222,7 +222,7 @@ export default function AiAssistantDrawer({ onNavigateTab }: AiAssistantProps) {
         {/* Tooltip badge label on hover */}
         {!isDragging && (
           <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 translate-y-1 group-hover:translate-y-0 whitespace-nowrap z-50">
-            <div className="px-2.5 py-1 rounded-lg bg-neutral-900 border border-white/20 shadow-2xl backdrop-blur-md flex items-center gap-1.5">
+            <div className="px-2.5 py-1 rounded-lg bg-neutral-900 border border-white/20 shadow-2xl flex items-center gap-1.5">
               <span className="text-white font-bold text-[11px] keep-white" style={{ color: "#ffffff" }}>
                 ScholarBot AI
               </span>
