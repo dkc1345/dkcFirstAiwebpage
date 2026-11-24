@@ -326,9 +326,6 @@ export default function DashboardTab({
             {
               pendingTasks.length === 0 && (
                 <div className="py-12 text-center animate-scaleIn">
-                  <div className="w-14 h-14 rounded-2xl mx-auto mb-3 flex items-center justify-center bg-emerald-500/10 border border-emerald-500/20">
-                    <CheckCircle2 className="w-7 h-7 text-emerald-400" />
-                  </div>
                   <p className="text-scale-base font-bold text-white mb-1">All caught up!</p>
                   <p className="text-scale-xs text-zinc-500">No pending homework tasks. Great work!</p>
                 </div>
