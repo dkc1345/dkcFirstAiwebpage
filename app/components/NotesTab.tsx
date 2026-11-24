@@ -7,9 +7,10 @@ import {
   Copy,
   Check,
   Download,
-  RotateCcw,
-  Sparkles,
-  BookOpen,
+  Plus,
+  Trash2,
+  Pencil,
+  Save,
 } from "lucide-react";
 
 const templates: Record<string, string> = {
@@ -78,41 +79,157 @@ Determine the relationship between pendulum string length (L) and oscillation pe
 - Reaction time latency on stopwatch release`,
 };
 
+interface NoteItem {
+  id: string;
+  title: string;
+  content: string;
+  updatedAt: number;
+}
+
 interface NotesTabProps {
   userEmail?: string;
 }
 
 export default function NotesTab({ userEmail }: NotesTabProps) {
-  const [content, setContent] = useState<string>("");
+  const [notes, setNotes] = useState<NoteItem[]>([]);
+  const [activeNoteId, setActiveNoteId] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [draftTitle, setDraftTitle] = useState("");
+  const [draftContent, setDraftContent] = useState("");
+  const [justSaved, setJustSaved] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const notesStorageKey = userEmail
     ? `scholarsync_notes_${userEmail.trim().toLowerCase()}`
     : "scholarsync_notes";
+  const notesListKey = `${notesStorageKey}_list`;
 
   useEffect(() => {
-    const saved = localStorage.getItem(notesStorageKey);
-    if (saved !== null) {
-      setContent(saved);
-    } else {
-      setContent(templates.cornell);
+    try {
+      const savedList = localStorage.getItem(notesListKey);
+      if (savedList) {
+        const parsed: NoteItem[] = JSON.parse(savedList);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setNotes(parsed);
+          setActiveNoteId(parsed[0].id);
+          return;
+        }
+      }
+    } catch {
+      // Fallback to legacy single note or template
     }
-  }, [notesStorageKey]);
+
+    const legacy = localStorage.getItem(notesStorageKey);
+    const initialNote: NoteItem = {
+      id: `note_${Date.now()}`,
+      title: "Cornell Method Lecture Notes",
+      content: legacy !== null ? legacy : templates.cornell,
+      updatedAt: Date.now(),
+    };
+    setNotes([initialNote]);
+    setActiveNoteId(initialNote.id);
+    localStorage.setItem(notesListKey, JSON.stringify([initialNote]));
+  }, [notesStorageKey, notesListKey]);
+
+  const persistNotes = (updated: NoteItem[]) => {
+    setNotes(updated);
+    localStorage.setItem(notesListKey, JSON.stringify(updated));
+  };
+
+  const activeNote = notes.find((n) => n.id === activeNoteId) || notes[0] || null;
+  const content = isEditing ? draftContent : (activeNote?.content ?? "");
+  const titleValue = isEditing ? draftTitle : (activeNote?.title ?? "");
+
+  const handleSelectNote = (note: NoteItem) => {
+    sound.playClick();
+    setActiveNoteId(note.id);
+    setIsEditing(false);
+    setDraftTitle(note.title);
+    setDraftContent(note.content);
+  };
+
+  const handleStartEdit = (note: NoteItem, e: React.MouseEvent) => {
+    e.stopPropagation();
+    sound.playClick();
+    setActiveNoteId(note.id);
+    setDraftTitle(note.title);
+    setDraftContent(note.content);
+    setIsEditing(true);
+  };
+
+  const handleSaveNote = () => {
+    if (!activeNote) return;
+    sound.playClick();
+    const updated = notes.map((n) =>
+      n.id === activeNote.id
+        ? { ...n, title: draftTitle.trim() || "Untitled Note", content: draftContent, updatedAt: Date.now() }
+        : n
+    );
+    persistNotes(updated);
+    setIsEditing(false);
+    setJustSaved(true);
+    setTimeout(() => setJustSaved(false), 2000);
+  };
+
+  const handleAddNote = () => {
+    sound.playClick();
+    const newNote: NoteItem = {
+      id: `note_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      title: "Untitled Note",
+      content: "",
+      updatedAt: Date.now(),
+    };
+    const updated = [newNote, ...notes];
+    persistNotes(updated);
+    setActiveNoteId(newNote.id);
+    setDraftTitle(newNote.title);
+    setDraftContent(newNote.content);
+    setIsEditing(true);
+  };
+
+  const handleDeleteNote = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    sound.playClick();
+    const filtered = notes.filter((n) => n.id !== id);
+    if (filtered.length === 0) {
+      const fallback: NoteItem = {
+        id: `note_${Date.now()}`,
+        title: "Untitled Note",
+        content: "",
+        updatedAt: Date.now(),
+      };
+      persistNotes([fallback]);
+      setActiveNoteId(fallback.id);
+      setIsEditing(false);
+      return;
+    }
+    persistNotes(filtered);
+    if (activeNoteId === id) {
+      setActiveNoteId(filtered[0].id);
+      setIsEditing(false);
+    }
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isEditing) return;
+    setDraftTitle(e.target.value);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const val = e.target.value;
-    setContent(val);
-    localStorage.setItem(notesStorageKey, val);
+    if (!isEditing) return;
+    setDraftContent(e.target.value);
   };
 
   const loadTemplate = (key: string) => {
     sound.playClick();
-    if (content.length > 50 && !confirm("Replace current scratchpad with this template?")) {
+    if (!activeNote) return;
+    if (content.length > 50 && !confirm("Replace current note with this template?")) {
       return;
     }
     const tmpl = templates[key] || "";
-    setContent(tmpl);
-    localStorage.setItem(notesStorageKey, tmpl);
+    setDraftTitle(activeNote.title);
+    setDraftContent(tmpl);
+    setIsEditing(true);
   };
 
   const handleCopy = () => {
@@ -154,7 +271,15 @@ export default function NotesTab({ userEmail }: NotesTabProps) {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            onClick={handleAddNote}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md transition-colors"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>New Note</span>
+          </button>
+
           <button
             onClick={handleCopy}
             className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/[0.05] hover:bg-white/10 text-slate-300 text-xs font-semibold border border-white/10 transition-colors"
@@ -196,33 +321,141 @@ export default function NotesTab({ userEmail }: NotesTabProps) {
         </button>
       </div>
 
-      {/* Editor Panel */}
-      <div className="glass-panel space-y-4" style={{ padding: 'var(--card-padding)' }}>
-        <textarea
-          value={content}
-          onChange={handleChange}
-          rows={18}
-          placeholder="Jot down formulas, lecture insights, essay outlines, or study reminders..."
-          className="w-full p-4 rounded-xl bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text)] font-mono text-scale-xs sm:text-scale-sm leading-relaxed focus:outline-none focus:border-[var(--border-focus)] focus:ring-1 focus:ring-[var(--border-focus)] resize-y"
-        />
-
-        <div className="flex items-center justify-between text-scale-xs text-[var(--text-muted)] pt-2 border-t border-[var(--border)]">
-          <div className="flex items-center gap-4">
-            <span>
-              Words: <strong className="text-[var(--text)]">{words}</strong>
-            </span>
-            <span>
-              Characters: <strong className="text-[var(--text)]">{chars}</strong>
-            </span>
-            <span>
-              Reading Time: ~<strong className="text-[var(--text)]">{readTimeMin} min</strong>
-            </span>
+      {/* Notes List + Editor Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        {/* Saved Notes Sidebar */}
+        <div className="lg:col-span-4 glass-panel space-y-3" style={{ padding: 'var(--card-padding)' }}>
+          <div className="flex items-center justify-between">
+            <h2 className="text-scale-sm font-bold text-[var(--text)]">
+              Saved Notes ({notes.length})
+            </h2>
           </div>
 
-          <span className="text-emerald-400 text-2xs font-medium flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
-            Auto-saved locally
-          </span>
+          <div className="flex flex-col gap-2 max-h-[420px] overflow-y-auto pr-1">
+            {notes.map((note) => {
+              const isActive = activeNote?.id === note.id;
+              const preview = note.content.replace(/[#*_`>-]/g, "").trim().slice(0, 60);
+              return (
+                <div
+                  key={note.id}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => handleSelectNote(note)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSelectNote(note);
+                    }
+                  }}
+                  className={`group flex items-center justify-between gap-2 p-3 rounded-xl border cursor-pointer transition-all ${
+                    isActive
+                      ? "bg-indigo-500/10 border-indigo-500/40"
+                      : "bg-[var(--bg-input)] border-[var(--border)] hover:bg-[var(--bg-card-hover)]"
+                  }`}
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="text-scale-xs font-bold text-[var(--text)] truncate">
+                      {note.title || "Untitled Note"}
+                    </p>
+                    <p className="text-2xs text-[var(--text-muted)] truncate mt-0.5">
+                      {preview || "Empty note..."}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      type="button"
+                      onClick={(e) => handleDeleteNote(note.id, e)}
+                      title="Delete note"
+                      aria-label={`Delete ${note.title || "note"}`}
+                      className="p-1.5 rounded-lg text-[var(--text-subtle)] hover:text-rose-400 hover:bg-rose-500/10 opacity-70 group-hover:opacity-100 transition-colors shrink-0"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Editor Panel */}
+        <div className="lg:col-span-8 glass-panel space-y-4" style={{ padding: 'var(--card-padding)' }}>
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={titleValue}
+              onChange={handleTitleChange}
+              readOnly={!isEditing}
+              placeholder="Note title..."
+              className={`flex-1 px-4 py-2.5 rounded-xl bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text)] font-bold text-scale-base focus:outline-none ${
+                isEditing ? "focus:border-[var(--border-focus)]" : "opacity-85 cursor-default"
+              }`}
+            />
+            {isEditing ? (
+              <button
+                type="button"
+                onClick={handleSaveNote}
+                className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md transition-colors shrink-0"
+              >
+                <Save className="w-3.5 h-3.5" />
+                <span>Save</span>
+              </button>
+            ) : (
+              activeNote && (
+                <button
+                  type="button"
+                  onClick={(e) => handleStartEdit(activeNote, e)}
+                  className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md transition-colors shrink-0"
+                >
+                  <Pencil className="w-3.5 h-3.5" />
+                  <span>Edit</span>
+                </button>
+              )
+            )}
+          </div>
+
+          <textarea
+            value={content}
+            onChange={handleChange}
+            readOnly={!isEditing}
+            rows={16}
+            placeholder={
+              isEditing
+                ? "Jot down formulas, lecture insights, essay outlines, or study reminders..."
+                : "Click Edit to modify this note..."
+            }
+            className={`w-full p-4 rounded-xl bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text)] font-mono text-scale-xs sm:text-scale-sm leading-relaxed focus:outline-none resize-y ${
+              isEditing
+                ? "focus:border-[var(--border-focus)] focus:ring-1 focus:ring-[var(--border-focus)]"
+                : "opacity-85 cursor-default"
+            }`}
+          />
+
+          <div className="flex items-center justify-between text-scale-xs text-[var(--text-muted)] pt-2 border-t border-[var(--border)]">
+            <div className="flex items-center gap-4">
+              <span>
+                Words: <strong className="text-[var(--text)]">{words}</strong>
+              </span>
+              <span>
+                Characters: <strong className="text-[var(--text)]">{chars}</strong>
+              </span>
+              <span>
+                Reading Time: ~<strong className="text-[var(--text)]">{readTimeMin} min</strong>
+              </span>
+            </div>
+
+            {isEditing ? (
+              <span className="text-amber-400 text-2xs font-medium flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
+                Editing — click Save to keep changes
+              </span>
+            ) : (
+              <span className="text-emerald-400 text-2xs font-medium flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+                {justSaved ? "Saved!" : "Saved locally"}
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </div>
