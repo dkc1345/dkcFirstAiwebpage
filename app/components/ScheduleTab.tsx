@@ -502,43 +502,6 @@ export default function ScheduleTab() {
         })}
       </div>
 
-      {/* Teacher Directory & Office Hours */}
-      <div className="glass-panel space-y-4" style={{ padding: 'var(--card-padding)' }}>
-        <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
-          <div className="flex items-center gap-2">
-            <GraduationCap className="w-5 h-5 text-indigo-400" />
-            <h3 className="text-scale-lg font-bold text-[var(--text)]">Faculty Directory &amp; Help Hours</h3>
-          </div>
-          <span className="text-scale-xs text-[var(--text-muted)]">Semester 1 Faculty</span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {teachers.map((t, idx) => (
-            <div
-              key={idx}
-              className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2 hover:bg-white/[0.04] transition-all"
-            >
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-bold text-white">{t.name}</p>
-                <span className="text-[10px] text-indigo-300 font-medium">{t.subject}</span>
-              </div>
-              <div className="text-xs text-slate-400 space-y-1">
-                <div className="flex items-center gap-1 text-slate-300">
-                  <Mail className="w-3 h-3 text-cyan-400" />
-                  <a href={`mailto:${t.email}`} className="hover:underline">
-                    {t.email}
-                  </a>
-                </div>
-                <div className="flex items-center gap-1 text-slate-400">
-                  <Clock className="w-3 h-3 text-amber-400" />
-                  <span>Office Hours: {t.officeHours}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* Class Detail Modal */}
       {selectedPeriodDetail && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 animate-fadeIn">

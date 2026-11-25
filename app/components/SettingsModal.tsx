@@ -155,31 +155,6 @@ export default function SettingsModal({
             </div>
           </div>
 
-          {/* Section: Background Matrix Pattern */}
-          <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-input)] flex items-center justify-between my-[5px]">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-[var(--bg-card)] border border-[var(--border)] text-[var(--accent)]">
-                <LayoutGrid className="w-4 h-4 my-[5px]" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-[var(--text)]">Background Grid Pattern</p>
-                <p className="text-[11px] text-[var(--text-muted)]">Subtle structural engineering matrix lines on workspace background</p>
-              </div>
-            </div>
-            <button
-              onClick={() => {
-                sound.playClick();
-                setDraftGrid(!draftGrid);
-              }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer border ${draftGrid
-                ? "bg-[var(--accent)] text-white border-[var(--accent)] shadow-sm"
-                : "bg-[var(--bg-card)] text-[var(--text-muted)] border-[var(--border)] hover:text-[var(--text)]"
-                }`}
-            >
-              {draftGrid ? "Enabled" : "Disabled"}
-            </button>
-          </div>
-
           {/* Section: Reset to Default Settings */}
           <div className="p-4 rounded-xl border border-red-500/20 bg-red-500/[0.04] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 my-[5px]">
             <div>

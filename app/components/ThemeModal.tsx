@@ -218,25 +218,6 @@ export default function ThemeModal({
             })}
           </div>
 
-          {/* Background Grid Pattern Toggle */}
-          {onSetGridPattern && (
-            <div className="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--bg-input)] flex items-center justify-between">
-              <div>
-                <p className="text-xs font-semibold text-[var(--text)]">Background Grid Pattern</p>
-                <p className="text-[11px] text-[var(--text-muted)]">Subtle structural engineering matrix lines on background</p>
-              </div>
-              <button
-                onClick={handleToggleGrid}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer border ${
-                  draftGrid
-                    ? "bg-[var(--accent)] text-white border-[var(--accent)] shadow-sm"
-                    : "bg-[var(--bg-card)] text-[var(--text-muted)] border-[var(--border)] hover:text-[var(--text)]"
-                }`}
-              >
-                {draftGrid ? "Enabled" : "Disabled"}
-              </button>
-            </div>
-          )}
         </div>
 
         {/* Footer */}
