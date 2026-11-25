@@ -364,45 +364,6 @@ export default function DashboardTab({
             </blockquote>
             <p className="text-right text-scale-xs font-semibold text-indigo-400">— {currentQuote.author}</p>
           </div >
-
-          {/* Campus Bulletin */}
-          <div className="glass-panel overflow-hidden rounded-2xl min-w-0" style={{ padding: 0 }}>
-            <div className="flex items-center gap-3 px-5 sm:px-6 py-4 border-b border-[var(--border)]">
-              <div
-                className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0"
-                style={{ marginLeft: "5px", marginTop: "5px", marginBottom: "5px" }}
-              >
-                <BellRing className="w-4 h-4 text-cyan-400" />
-              </div>
-              <h3 className="text-[13px] font-bold text-white leading-normal">Campus Bulletin</h3>
-              <span className="ml-auto w-2 h-2 rounded-full bg-cyan-400 shrink-0" />
-            </div>
-
-            <div className="p-4 sm:p-5 flex flex-col gap-3">
-              {[
-                { title: "Science Fair Signups", date: "Oct 15", color: "#818cf8", desc: "Submit lab proposals to Room 108 by 4 PM Friday." },
-                { title: "Extended Library Hours", date: "Midterms", color: "#22d3ee", desc: "Open until 9 PM with peer tutoring tables." },
-                { title: "AP Pre-Registration", date: "Counseling", color: "#fbbf24", desc: "Verify AP student IDs with your counselor." },
-              ].map((a) => (
-                <div
-                  key={a.title}
-                  className="rounded-xl bg-white/[0.025] border border-[var(--border)] hover:border-white/[0.12] hover:bg-white/[0.04] transition-all cursor-pointer group"
-                  style={{ margin: "5px", padding: "14px 14px 18px 14px" }}
-                >
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <p className="text-[12px] font-bold leading-normal" style={{ color: a.color }}>{a.title}</p>
-                    <span
-                      className="text-[10px] font-bold leading-normal rounded-md inline-flex items-center shrink-0"
-                      style={{ color: a.color, background: `${a.color}18`, border: `1px solid ${a.color}30`, padding: "5px 10px", margin: "0 0 0 5px" }}
-                    >
-                      {a.date}
-                    </span>
-                  </div>
-                  <p className="text-2xs text-zinc-400 leading-normal" style={{ marginTop: "5px", marginBottom: "5px" }}>{a.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div >
         </div >
       </div >
 

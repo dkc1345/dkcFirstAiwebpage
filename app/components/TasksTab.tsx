@@ -274,6 +274,7 @@ export default function TasksTab({
             <div className="flex items-start gap-3.5 min-w-0 flex-1">
               <button
                 onClick={() => handleToggle(task.id)}
+                style={{ padding: 0 }}
                 className={`mt-1 w-6 h-6 rounded-lg border flex items-center justify-center transition-all ${task.completed
                     ? "bg-emerald-500/20 border-emerald-500 text-emerald-400"
                     : "border-slate-500 hover:border-indigo-400 bg-white/[0.03]"
