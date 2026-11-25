@@ -347,11 +347,11 @@ export default function NotesTab({ userEmail }: NotesTabProps) {
                       handleSelectNote(note);
                     }
                   }}
-                  className={`group flex items-center justify-between gap-2 p-3 rounded-xl border cursor-pointer transition-all ${
-                    isActive
-                      ? "bg-indigo-500/10 border-indigo-500/40"
-                      : "bg-[var(--bg-input)] border-[var(--border)] hover:bg-[var(--bg-card-hover)]"
-                  }`}
+                  style={{ padding: "14px 16px" }}
+                  className={`group flex items-center justify-between gap-3 rounded-xl border cursor-pointer transition-all ${isActive
+                    ? "bg-indigo-500/10 border-indigo-500/40"
+                    : "bg-[var(--bg-input)] border-[var(--border)] hover:bg-[var(--bg-card-hover)]"
+                    }`}
                 >
                   <div className="min-w-0 flex-1">
                     <p className="text-scale-xs font-bold text-[var(--text)] truncate">
@@ -380,16 +380,15 @@ export default function NotesTab({ userEmail }: NotesTabProps) {
 
         {/* Editor Panel */}
         <div className="lg:col-span-8 glass-panel space-y-4" style={{ padding: 'var(--card-padding)' }}>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3" style={{ marginBottom: "14px" }}>
             <input
               type="text"
               value={titleValue}
               onChange={handleTitleChange}
               readOnly={!isEditing}
               placeholder="Note title..."
-              className={`flex-1 px-4 py-2.5 rounded-xl bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text)] font-bold text-scale-base focus:outline-none ${
-                isEditing ? "focus:border-[var(--border-focus)]" : "opacity-85 cursor-default"
-              }`}
+              className={`flex-1 px-4 py-2.5 rounded-xl bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text)] font-bold text-scale-base focus:outline-none ${isEditing ? "focus:border-[var(--border-focus)]" : "opacity-85 cursor-default"
+                }`}
             />
             {isEditing ? (
               <button
@@ -424,11 +423,10 @@ export default function NotesTab({ userEmail }: NotesTabProps) {
                 ? "Jot down formulas, lecture insights, essay outlines, or study reminders..."
                 : "Click Edit to modify this note..."
             }
-            className={`w-full p-4 rounded-xl bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text)] font-mono text-scale-xs sm:text-scale-sm leading-relaxed focus:outline-none resize-y ${
-              isEditing
-                ? "focus:border-[var(--border-focus)] focus:ring-1 focus:ring-[var(--border-focus)]"
-                : "opacity-85 cursor-default"
-            }`}
+            className={`w-full p-4 rounded-xl bg-[var(--bg-input)] border border-[var(--border)] text-[var(--text)] font-mono text-scale-xs sm:text-scale-sm leading-relaxed focus:outline-none resize-y ${isEditing
+              ? "focus:border-[var(--border-focus)] focus:ring-1 focus:ring-[var(--border-focus)]"
+              : "opacity-85 cursor-default"
+              }`}
           />
 
           <div className="flex items-center justify-between text-scale-xs text-[var(--text-muted)] pt-2 border-t border-[var(--border)]">
